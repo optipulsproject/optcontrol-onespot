@@ -1,6 +1,6 @@
 # A Template for Publications
 
-The numapde/Publications/numapde-template repository serves as a template for new publications.
+The numapde/Publications/numapde-template> repository serves as a template for new publications.
 
 ## Setup a new Publication Repository from the Template
 * Visit numapde/Publications/numapde-template> (preferably in a new browser tab or window), and fork it into a new (temporary) repository in your own personal namespace.
