@@ -1,0 +1,3 @@
+[submodule "numapde-latex"]
+	path = numapde-latex
+	url = git@gitlab.hrz.tu-chemnitz.de:numapde-public/numapde-latex.git
