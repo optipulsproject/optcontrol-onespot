@@ -1,9 +1,9 @@
 # A Template for Publications
 
-The https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/numapde-template repository serves as a template for new publications.
+The numapde/Publications/numapde-template repository serves as a template for new publications.
 
 ## Setup a new Publication Repository from the Template
-* Visit https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/numapde-template and fork it into a new repository in your own personal namespace.
+* Visit numapde/Publications/numapde-template> and fork it into a new repository in your own personal namespace.
 You will be taken to this new repository in your browser.
 * Visit _Settings / General_ and change the **Project name** to something reflecting the intended topic of the publication.
 Hit _Save changes_.
