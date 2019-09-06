@@ -1,9 +1,4 @@
-# A template using git submodules for publications
+# A Template for Publications
 
-Please clone the repository using
+See [HOWTO.md](HOWTO.md) for how to use.
 
-````
-git clone --recurse-submodules git@gitlab.hrz.tu-chemnitz.de:numapde/Publications/template.git 
-````
-
-such that all sub modules get automatically cloned and are up to date.
