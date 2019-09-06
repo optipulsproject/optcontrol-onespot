@@ -22,7 +22,7 @@ Give them _Developer_ permissions.
 (Notice that @numapde group members are automatically added by virtue of the namespace policy.)
 
 :scissors:
-```markdown
+``````markdown
 # @Publication Title@
 Authors:
 
@@ -47,5 +47,5 @@ Run
     bin/numapde-submodules-updates.sh
 ```
 regularly to update the submodules.
-```
+``````
 :scissors:
