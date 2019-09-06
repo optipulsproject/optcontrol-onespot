@@ -25,18 +25,21 @@ Authors:
 ## Cloning
 Clone this repository using either
 ```bash
-    git clone --recurse-submodules git@gitlab.hrz.tu-chemnitz.de:numapde/Publications/numapde-template.git 
+    git clone --recurse-submodules git@gitlab.hrz.tu-chemnitz.de:numapde/Publications/@project-name@.git 
 ```
 if you have placed an SSH key in https://gitlab.hrz.tu-chemnitz.de/profile/keys, or 
 ```bash
-    git clone --recurse-submodules https://gitlab.hrz.tu-chemnitz.de:numapde/Publications/numapde-template.git 
+    git clone --recurse-submodules https://gitlab.hrz.tu-chemnitz.de:numapde/Publications/@project-name@.git 
 ```
 Then run 
 ```bash
     bin/numapde-submodules-updates.sh
 ```
-to update the submodules numapde-public/numapde-latex> and https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-bibliography.
+to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
 
 ## Daily Workflow
-:scissors:
-
+Run 
+```bash
+    bin/numapde-submodules-updates.sh
+```
+regularly to update the submodules.
