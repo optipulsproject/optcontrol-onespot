@@ -1,15 +1,25 @@
 # A Template for Publications
 
-## Initial step
-We provide the python script bin/numapde-create-new-publication.py which forkes this repository and provides a basic README.md. The simplest call provides a long and a short title, i.e.
+This is a template repository to fork publication repositories from.
+
+## How to Use This Repository
+* Clone this repository into some working directory. We assume `~/Work/Publications/numapde-template`.
+* Pull the latest changes to this repository:
+````bash
+    cd ~/Work/Publications/numapde-template
+    git pull
 ````
-    python3 bin/numapde-create-new-publication.py "I am the long title" "i am the short title"
+* Call the [bin/numapde-create-new-publication.py](bin/numapde-create-new-publication.py) script which initiates the fork & rename and sets up a basic `README.me` file in the new repository.
+````bash
+    # The following will fork into https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/Riemannian-ADMM
+    bin/numapde-create-new-publication.py "Intrinsic ADMM on Riemannian Manifolds" "Riemannian ADMM"
+    # The following will fork into https://gitlab.hrz.tu-chemnitz.de/numapde/Sandbox/Riemannian-ADMM
+    bin/numapde-create-new-publication.py "Intrinsic ADMM on Riemannian Manifolds" "Riemannian ADMM" --namespace numapde/Sandbox 
 ````
 
-The script requires  the following environment variables:
-*  NUMAPDE_GITLAB_SERVER : the url of this gitlab server (gitlab.hrz.tu-dresden.de)
-*  NUMAPDE_GITLAB_TOKEN  : Your personal gitlab-access token. See the [numapde-wiki](https://www.tu-chemnitz.de/mathematik/numawiki/index.php/Incoming#Account_for_numapde_Gitlab_Repositories) for the generation of the personal access token.
+The script relies on the following standard environment variables to be set:
+*  NUMAPDE_GITLAB_SERVER : the URL of this gitlab server (gitlab.hrz.tu-chemnitz.de)
+*  NUMAPDE_GITLAB_TOKEN  : Your personal gitlab-access token; see the [numapde-wiki](https://www.tu-chemnitz.de/mathematik/numawiki/index.php/Incoming#Account_for_numapde_Gitlab_Repositories) for the generation of the personal access token.
 
 The script has the following option:
-*  --namespace : provide a new gitlab namespace. The default namespace is numapde/Publications
-
+*  `--namespace`: provides a Gitlab namespace. The default namespace is `numapde/Publications`.
