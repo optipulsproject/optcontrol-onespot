@@ -5,11 +5,11 @@ Authors:
 ## Cloning
 Clone this repository using either
 ```bash
-    git clone --recurse-submodules %(ssh_url_to_repo)s 
+    git clone --recurse-submodules %(SSH_URL_TO_REPO)s 
 ```
 if you have placed an SSH key in https://gitlab.hrz.tu-chemnitz.de/profile/keys, or 
 ```bash
-    git clone --recurse-submodules %(http_url_to_repo)s 
+    git clone --recurse-submodules %(HTTP_URL_TO_REPO)s 
 ```
 Then run 
 ```bash
