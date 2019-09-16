@@ -25,8 +25,8 @@ if gitlabServer is None:
 urlFormat = 'https://' + gitlabServer + '/api/v4/projects/%(projectId)d'
 
 # Specify the default name space 
-namespace = 'numapde/sandbox'
-# namespace = 'numapde/Publications'
+# namespace = 'numapde/sandbox'
+namespace = 'numapde/Publications'
 
 # Set the repository id for the template to be forked
 # https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/numapde-template
