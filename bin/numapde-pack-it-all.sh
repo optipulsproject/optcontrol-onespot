@@ -45,19 +45,16 @@ while (( "$#" )); do
 		--with-biblatex)
 			INCLUDEBIBLATEX=true
 			shift
-			break
 			;;
 
 		--with-pdf)
 			INCLUDEPDFFILE=true
 			shift
-			break
 			;;
 
 		--without-bibfiles)
 			INCLUDEBIBFILES=false
 			shift
-			break
 			;;
 
 		--arxiv)
@@ -65,13 +62,11 @@ while (( "$#" )); do
 			INCLUDEBIBFILES=false
 			INCLUDEARXIVHEADER=true
 			shift
-			break
 			;;
 
 		--verbose)
 			_DEBUG=true
 			shift
-			break
 			;;
 
 		--help|-*)
@@ -80,10 +75,11 @@ while (( "$#" )); do
 			;;
 
 		*)
-			# An argument starting with a 'non-' represents master.tex.
+			# An argument starting with anything but '-' represents master.tex.
 			# Only one such argument can be given.
 			if [ -z ${TEXFILE+x} ]; then
-				TEXFILE="$1"
+				TEXFILE=$1
+				DEBUG echo $TEXFILE
 				shift
 			else
 				usage
@@ -104,6 +100,7 @@ if [ -z "$TEXFILE" ]; then
 	if [ "$NOOFFILES" != 1 ]; then
 		usage
 		echo
+		echo $(findmastertexfiles)
 		echo "ERROR: Unable to locate master file. Please specify it."
 		echo
 		exit 1
@@ -238,7 +235,7 @@ function validate() {
 		latexmk -interaction=nonstopmode -pdf $BIBTEXFLAG $TEXFILE; \
 		RESULT=$?; \
 		if [ -f ${TMPDIR}/$PDFFILE ]; \
-			then okular ${TMPDIR}/$PDFFILE; \
+			then (okular ${TMPDIR}/$PDFFILE &); \
 		fi; \
 		exit $RESULT' > /dev/null
 
