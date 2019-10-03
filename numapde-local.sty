@@ -1,24 +1,9 @@
-%
-% local_definitions.sty – collect local definitions for a manuscript/file
-%
+% This package loads packages in addition to those included in
+% numapde-packages.sty. It also defines additional commands
+% specific to the publication.
 
-%
-% Metadata
-\newcommand*{\email}[1]{\href{mailto:#1}{#1}}
-\author{Max Musterheinzel%
-    \thanks{
-     Mustersche Musteruniversität, AG Musteranalyse, D--27498 Musterhausen, Germany
-     (MM: \url{maxm@m.m},
-     \url{https://www.m.m/maxm/};
-     EM: \url{erim@m.m},
-     \url{https://www.m.m/erim/})} 
-     \and Erik Musterheinzel\footnotemark[1]%
-     \and Ada Pattern\thanks{Pattern University, Patonia}%
-}
-\title{A Pattern Analysis}
-\date{\today}
-\hypersetup{
-  pdftitle={},
-  pdfauthor={M. Musterheinzel, E. Musterheinzel, A. Pattern}
-}
-\addbibresource{World.bib}
+% Load and configure packages
+\usepackage{lipsum}
+
+% Define additional commands
+
