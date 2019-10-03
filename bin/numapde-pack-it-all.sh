@@ -26,7 +26,7 @@ _DEBUG=false
 # from http://www.cyberciti.biz/tips/debugging-shell-script.html
 function DEBUG()
 {
- [ "$_DEBUG" = "true" ] &&  $@
+ [ "$_DEBUG" = "true" ] && $@
 }
 
 # Set the default options
@@ -77,7 +77,7 @@ while (( "$#" )); do
 		*)
 			# An argument starting with anything but '-' represents master.tex.
 			# Only one such argument can be given.
-			if [ -z ${TEXFILE+x} ]; then
+			if [ -z "${TEXFILE+x}" ]; then
 				TEXFILE=$1
 				DEBUG echo $TEXFILE
 				shift
@@ -110,8 +110,8 @@ if [ -z "$TEXFILE" ]; then
 fi
 
 # Append .tex to $TEXFILE and remove ./ if necessary
-TEXFILE=${TEXFILE/%.tex/}.tex
-TEXFILE=${TEXFILE/#.\//}
+TEXFILE="${TEXFILE/%.tex/}.tex"
+TEXFILE="${TEXFILE/#.\//}"
 echo "Using master file $TEXFILE."
 
 # Check whether $TEXFILE is readable
@@ -121,15 +121,15 @@ if [ ! -r "$TEXFILE" ]; then
 fi
 
 # Create other derived file names
-AUXFILE=${TEXFILE/%.tex/}.aux
-BCFFILE=${TEXFILE/%.tex/}.bcf
-FLSFILE=${TEXFILE/%.tex/}.fls
-PDFFILE=${TEXFILE/%.tex/}.pdf
-ZIPFILE=${TEXFILE/%.tex/}.zip
+AUXFILE="${TEXFILE/%.tex/}.aux"
+BCFFILE="${TEXFILE/%.tex/}.bcf"
+FLSFILE="${TEXFILE/%.tex/}.fls"
+PDFFILE="${TEXFILE/%.tex/}.pdf"
+ZIPFILE="${TEXFILE/%.tex/}.zip"
 
 # Resolve $FILE's dependencies by having LaTeX generate an .fls file
 echo "Generating list of dependencies $FLSFILE"
-latexmk -g -pdf -silent -recorder $TEXFILE >/dev/null
+latexmk -g -pdf -silent -recorder "$TEXFILE" >/dev/null
 
 # Check whether $FLSFILE is readable
 if [ ! -r "$FLSFILE" ]; then
@@ -142,12 +142,12 @@ fi
 RELATIVEFILES=$(mktemp)
 
 # Include all INPUT files which have relative path names
-awk '/^INPUT [^/]/ {if (match($0,/^INPUT (\.\/)?(.*)/,a)) print a[2]}' $FLSFILE >> $RELATIVEFILES
+awk '/^INPUT [^/]/ {if (match($0,/^INPUT (\.\/)?(.*)/,a)) print a[2]}' "$FLSFILE" >> $RELATIVEFILES
 
 # Remove certain files
-grep -v ${TEXFILE/%.tex/}.aux $RELATIVEFILES | sponge $RELATIVEFILES
-grep -v ${TEXFILE/%.tex/}.out $RELATIVEFILES | sponge $RELATIVEFILES
-grep -v ${TEXFILE/%.tex/}.run.xml $RELATIVEFILES | sponge $RELATIVEFILES
+grep -v "${TEXFILE/%.tex/}.aux" $RELATIVEFILES | sponge $RELATIVEFILES
+grep -v "${TEXFILE/%.tex/}.out" $RELATIVEFILES | sponge $RELATIVEFILES
+grep -v "${TEXFILE/%.tex/}.run.xml" $RELATIVEFILES | sponge $RELATIVEFILES
 if [ "$INCLUDEPDFFILE" = "true" ]; then
 	echo "$PDFFILE" >> $RELATIVEFILES
 fi
@@ -160,7 +160,7 @@ sort -u $RELATIVEFILES | sponge $RELATIVEFILES
 JUNKEDFILES=$(mktemp)
 
 # Include all INPUT files which have /home path names
-awk '{if (match($0,/^INPUT (\/home\/.*)/,a)) print a[1]}' $FLSFILE >> $JUNKEDFILES
+awk '{if (match($0,/^INPUT (\/home\/.*)/,a)) print a[1]}' "$FLSFILE" >> $JUNKEDFILES
 
 # Remove duplicate lines
 sort -u $JUNKEDFILES | sponge $JUNKEDFILES
@@ -168,26 +168,28 @@ sort -u $JUNKEDFILES | sponge $JUNKEDFILES
 
 # Include .bib files if desired; these may have absolute or relative path names
 if [ "$INCLUDEBIBFILES" = "true" ]; then
-	if [ -r $BCFFILE ]; then
+	if [ -r "$BCFFILE" ]; then
 		# Search the .bcf file for .bib sources (biblatex)
 		# <bcf:datasource type="file" datatype="bibtex">World.bib</bcf:datasource>
-		awk '{if (match($0,/<bcf:datasource type="file" datatype="bibtex">(.*)<\/bcf:datasource>/,a)) print a[1]}' $BCFFILE | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
-		awk '{if (match($0,/<bcf:datasource type="file" datatype="bibtex">(.*)<\/bcf:datasource>/,a)) print a[1]}' $BCFFILE | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
-	elif  [ -r $AUXFILE ]; then
+		awk '{if (match($0,/<bcf:datasource type="file" datatype="bibtex">(.*)<\/bcf:datasource>/,a)) print a[1]}' "$BCFFILE" | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
+		awk '{if (match($0,/<bcf:datasource type="file" datatype="bibtex">(.*)<\/bcf:datasource>/,a)) print a[1]}' "$BCFFILE" | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
+	elif  [ -r "$AUXFILE" ]; then
 		# Search the .aux file for .bib sources (bibtex)
-		# \bibdata{World}
-		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' $AUXFILE | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
-		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' $AUXFILE | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
+		# example: \bibdata{World}
+		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' "$AUXFILE" | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
+		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' "$AUXFILE" | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
 		echo
 	else
 		echo ".bib files are to be included but neither $BCFFILE nor $AUXFILE are readable."
+		echo "Please make sure $BCFFILE (in case of biblatex) or $AUXFILE (in case of bibtex) exist."
+		echo "Stopping because of unclear .bib sources."
 		exit 1
 	fi
 fi
 
 # Include biblatex dependencies if desired
 if [ "$INCLUDEBIBLATEX" = "true" ]; then
-	awk '{if (match($0,/^INPUT (.*\/biblatex\/.*)/,a)) print a[1]}' $FLSFILE >> $JUNKEDFILES
+	awk '{if (match($0,/^INPUT (.*\/biblatex\/.*)/,a)) print a[1]}' "$FLSFILE" >> $JUNKEDFILES
 fi
 
 # Create and include arXiv header if desired
@@ -209,9 +211,19 @@ DEBUG cat $JUNKEDFILES
 DEBUG echo
 
 # Clear and create the zip file
-rm -f $ZIPFILE
-zip --quiet $ZIPFILE $(cat $RELATIVEFILES)
-zip --quiet -j $ZIPFILE $(cat $JUNKEDFILES)
+rm -f "$ZIPFILE"
+if [ -s $RELATIVEFILES ]; then
+	while read FILE; do
+		DEBUG echo zip --quiet "$ZIPFILE" "$FILE"
+		zip --quiet "$ZIPFILE" "$FILE"
+	done <$RELATIVEFILES
+fi
+if [ -s $JUNKEDFILES ]; then
+	while read FILE; do
+		DEBUG echo zip --quiet -j "$ZIPFILE" "$FILE"
+		zip --quiet -j "$ZIPFILE" "$FILE"
+	done <$JUNKEDFILES
+fi
 
 
 # Create a function to unpack and process the file in a sterile environment
@@ -224,18 +236,18 @@ function validate() {
 
 	# Call a new bash with $TEXINPUTS, $BIBINPUTS, $BSTINPUTS unset;
 	# unzip the .zip file, and try to process it using latexmk
-	env -u TEXINPUTS -u BIBINPUTS -u BSTINPUTS ZIPFILE=$1 TEXFILE=$2 PDFFILE=${2/%.tex/}.pdf INCLUDEBIBFILES=$3 TMPDIR=$TMPDIR \
-		bash -c 'unzip $ZIPFILE -d $TMPDIR && \
-		cd $TMPDIR && \
+	env -u TEXINPUTS -u BIBINPUTS -u BSTINPUTS ZIPFILE="$1" TEXFILE="$2" PDFFILE="${2/%.tex/}.pdf" INCLUDEBIBFILES="$3" TMPDIR="$TMPDIR" \
+		bash -c 'unzip "$ZIPFILE" -d "$TMPDIR" && \
+		cd "$TMPDIR" && \
 		if [ "$INCLUDEBIBFILES" = "true" ]; then \
 			BIBTEXFLAG="-bibtex"; \
 		else \
 			BIBTEXFLAG="-bibtex-"; \
 		fi && \
-		latexmk -interaction=nonstopmode -pdf $BIBTEXFLAG $TEXFILE; \
+		latexmk -interaction=nonstopmode -pdf "$BIBTEXFLAG" "$TEXFILE"; \
 		RESULT=$?; \
-		if [ -f ${TMPDIR}/$PDFFILE ]; \
-			then (okular ${TMPDIR}/$PDFFILE &); \
+		if [ -f "${TMPDIR}/$PDFFILE" ]; \
+			then (okular "${TMPDIR}/$PDFFILE" &); \
 		fi; \
 		exit $RESULT' > /dev/null
 
@@ -250,5 +262,7 @@ function validate() {
 }
 
 # Validate the zip file contents
-validate $ZIPFILE $TEXFILE $INCLUDEBIBFILES
-
+DEBUG echo validate "$ZIPFILE" "$TEXFILE" "$INCLUDEBIBFILES"
+validate "$ZIPFILE" "$TEXFILE" "$INCLUDEBIBFILES"
+echo $JUNKEDFILES
+echo $RELATIVEFILES
