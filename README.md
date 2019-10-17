@@ -1,5 +1,4 @@
 # A Template for Publications
-
 This is a template repository to fork publication repositories from.
 
 ## How to Use This Repository
