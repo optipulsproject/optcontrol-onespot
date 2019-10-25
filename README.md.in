@@ -3,24 +3,35 @@
 Authors:
 
 ## Cloning
-Clone this repository using either
-```bash
-    git clone --recurse-submodules %(SSH_URL_TO_REPO)s 
-```
-if you have placed an SSH key in https://gitlab.hrz.tu-chemnitz.de/profile/keys, or 
-```bash
-    git clone --recurse-submodules %(HTTP_URL_TO_REPO)s 
-```
-Then run 
-```bash
-    bin/numapde-submodules-updates.sh
-```
-to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
+* Clone this repository using either
+  ```bash
+  git clone --recurse-submodules %(SSH_URL_TO_REPO)s 
+  ```
+  if you have placed an SSH key in https://gitlab.hrz.tu-chemnitz.de/profile/keys (the preferred method), or else
+  ```bash
+  git clone --recurse-submodules %(HTTP_URL_TO_REPO)s 
+  ```
+* Then run 
+  ```bash
+  bin/numapde-submodules-updates.sh
+  ```
+  to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
 
-## Daily Workflow
-Run 
-```bash
-    bin/numapde-submodules-updates.sh
-```
-regularly to update the submodules.
+## Daily workflow
+* Run 
+  ```bash
+  bin/numapde-submodules-updates.sh
+  ```
+  regularly to update the submodules.
+* Run
+  ```bash
+  bin/numapde-pack-it-all.sh --help
+  ```
+  to learn about the script and its options which will pack the main `.tex` file and its depenencies into a `.zip` file, e.g., for submission to https://arxiv.org.
+* Run
+  ```bash
+  bin/numapde-setup-paths.sh
+  ```
+  to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
+  It is safe to run this script multiple times since paths will be amended only if necessary.
 
