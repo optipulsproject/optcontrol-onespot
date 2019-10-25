@@ -1,0 +1,19 @@
+% Parse the .soc file (if it exists) for active changes
+\makeatletter
+\IfFileExists{\jobname.soc}{
+	\ifnum\pdfshellescape=1
+	\newread\numapdeinput
+	\immediate\write18{grep -vq '0;0;0$' \jobname.soc; echo $? > '\jobname.haschanges'}
+	\openin\numapdeinput=\jobname.haschanges
+	\bgroup
+	\endlinechar=-1
+	\read\numapdeinput to \localline
+	\global\let\NoActiveChanges\localline
+	\egroup
+	\closein\numapdeinput
+	% In case of active changes, configure hyperref to all black colors
+	\@ifpackageloaded{hyperref}{\ifthenelse{\equal{\NoActiveChanges}{1}}{}{\hypersetup{allcolors=black}}}{}
+\else
+\fi
+}{}
+\makeatother

@@ -126,7 +126,7 @@ sshURLToRepo = newProject['ssh_url_to_repo']
 httpURLToRepo = newProject['http_url_to_repo']
 
 # Prepare the new README.md file by string substitution
-readme = readme % { 'PUBLICATION_TITLE': longTitle, 'HTTP_URL_TO_REPO': httpURLToRepo, 'SSH_URL_TO_REPO': sshURLToRepo}
+readme = readme % {'PUBLICATION_TITLE': longTitle, 'HTTP_URL_TO_REPO': httpURLToRepo, 'SSH_URL_TO_REPO': sshURLToRepo}
 
 # Assemble the URL payload for the README.md commit request
 payload = {'file_path': 'README%2Emd', 'branch': 'master', 'content': readme, 'commit_message': '%s auto-generates README.md' % sys.argv[0]}
