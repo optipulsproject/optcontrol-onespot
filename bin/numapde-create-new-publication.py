@@ -6,6 +6,9 @@
 # * assigns the new repository to a Gitlab namespace different from the default numade/sandbox if desired (namespace)
 # * creates a new README.md from the template README.md.in by substitution.
 
+# Define the person(s) responsible for maintenance
+maintainers = ('Andreas Naumann, Roland Herzog')
+
 # The Gitlab API access token is obtained from the environment variable NUMAPDE_GITLAB_TOKEN.
 
 import requests
@@ -38,9 +41,9 @@ PUT_OK = 200
 GET_OK = PUT_OK
 
 # Provide the command line arguments to the parser
-parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.')
-parser.add_argument('longTitle', metavar = 'longTitle', help = 'long publication title')
-parser.add_argument('shortTitle', metavar = 'shortTitle', help = 'short publication title')
+parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.', epilog = "\n\nExamples:\n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" \n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" --namespace numapde/Sandbox\n\nMaintainers: %s" % (sys.argv[0], sys.argv[0], maintainers), formatter_class = argparse.RawTextHelpFormatter)
+parser.add_argument('longTitle', metavar = 'longTitle', help = 'long publication title (will go into the project name on Gitlab)')
+parser.add_argument('shortTitle', metavar = 'shortTitle', help = 'short publication title (will determine the repository address on Gitlab)')
 parser.add_argument('--namespace', metavar = 'namespace', help = 'Gitlab namespace with default %s.' % namespace, nargs = '?', default = namespace)
 args = parser.parse_args()
 
@@ -126,7 +129,7 @@ sshURLToRepo = newProject['ssh_url_to_repo']
 httpURLToRepo = newProject['http_url_to_repo']
 
 # Prepare the new README.md file by string substitution
-readme = readme % { 'PUBLICATION_TITLE': longTitle, 'HTTP_URL_TO_REPO': httpURLToRepo, 'SSH_URL_TO_REPO': sshURLToRepo}
+readme = readme % {'PUBLICATION_TITLE': longTitle, 'HTTP_URL_TO_REPO': httpURLToRepo, 'SSH_URL_TO_REPO': sshURLToRepo}
 
 # Assemble the URL payload for the README.md commit request
 payload = {'file_path': 'README%2Emd', 'branch': 'master', 'content': readme, 'commit_message': '%s auto-generates README.md' % sys.argv[0]}
