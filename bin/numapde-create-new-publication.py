@@ -41,10 +41,20 @@ PUT_OK = 200
 GET_OK = PUT_OK
 
 # Provide the command line arguments to the parser
-parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.', epilog = "\n\nExamples:\n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" \n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" --namespace numapde/Sandbox\n\nMaintainers: %s" % (sys.argv[0], sys.argv[0], maintainers), formatter_class = argparse.RawTextHelpFormatter)
+epilog = r"""
+
+Examples:
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" 
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" --namespace numapde/Sandbox
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" --namespace numapde/Sandbox --description "I will describe how to apply ADMM on Riemannian manifolds"
+    
+Maintainers: {maintainers}""".format(scriptName=sys.argv[0], maintainers=maintainers)
+parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.', epilog =  epilog , formatter_class = argparse.RawTextHelpFormatter)
 parser.add_argument('longTitle', metavar = 'longTitle', help = 'long publication title (will go into the project name on Gitlab)')
 parser.add_argument('shortTitle', metavar = 'shortTitle', help = 'short publication title (will determine the repository address on Gitlab)')
 parser.add_argument('--namespace', metavar = 'namespace', help = 'Gitlab namespace with default %s.' % namespace, nargs = '?', default = namespace)
+parser.add_argument('--description', metavar = 'description', help = 'A short project description for the gitlab web interface. The default is an empty description.', nargs = '?', default = '')
+
 args = parser.parse_args()
 
 # Get the API access token from the environment variable NUMAPDE_GITLAB_TOKEN
@@ -62,6 +72,9 @@ shortTitle = shortTitle.replace(' ','-')
 
 # Set the namespace
 namespace = args.namespace
+
+# Update (empty) the project description
+newDescription = args.description
 
 # Define the common header for all API operations
 headers = {'Private-Token': privateToken} 
@@ -95,9 +108,6 @@ newUrl = urlFormat %{'projectId': newId}
 print('Waiting some seconds to allow Gitlab to create the project...')
 time.sleep(5)
 
-
-# Update (empty) the project description
-newDescription = '' 
 
 # Assemble the URL payload for the project description update request
 payload = {'id': newId, 'description': newDescription}
