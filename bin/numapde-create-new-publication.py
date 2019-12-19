@@ -89,8 +89,7 @@ payload = {'namespace': namespace, 'name': longTitle, 'id': templateId, 'path': 
 # print(payload)
 
 # Submit the fork request
-# TODO: Make this output more verbose and anticipate the name of the target repository URL
-print('Requesting the Gitlab server to fork %s.' % url)
+print('Requesting the Gitlab server to fork %s into %s%s/%s/%s.' % (url,"https://", gitlabServer, namespace,shortTitle))
 r = requests.post(url, headers = headers, data = payload)
 # print(r.text)
 if(r.status_code != POST_OK):
