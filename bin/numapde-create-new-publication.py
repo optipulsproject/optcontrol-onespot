@@ -89,7 +89,7 @@ payload = {'namespace': namespace, 'name': longTitle, 'id': templateId, 'path': 
 # print(payload)
 
 # Submit the fork request
-print('Requesting the Gitlab server to fork %s into %s%s/%s/%s.' % (url,"https://", gitlabServer, namespace,shortTitle))
+print('Requesting the Gitlab server to fork %s into %s%s/%s/%s.' % (url,'https://', gitlabServer, namespace,shortTitle))
 r = requests.post(url, headers = headers, data = payload)
 # print(r.text)
 if(r.status_code != POST_OK):
@@ -103,10 +103,23 @@ newUrl = urlFormat %{'projectId': newId}
 
 
 # Allow the Gitlab server to create the project
-# TODO: check if the project is ready after each pause
-print('Waiting some seconds to allow Gitlab to create the project...')
-time.sleep(5)
+nWaitMax = 5
+nWaitTime = 2
+print('Waiting at most %d seconds to allow Gitlab to create the project...' % (nWaitMax*nWaitTime))
+# check if the project exists by inspecting its properties
+# if the project has a default branch, we assume it is available 
+projInfo = requests.get(newUrl, headers = headers)
+projInfo = json.loads(projInfo.text)
+# we test at most 5 times, afterwards the non-existence is an error
+while projInfo['default_branch'] is None and nWaitMax > 0:
+    time.sleep(nWaitTime)
+    projInfo = requests.get(newUrl, headers = headers)
+    projInfo = json.loads(projInfo.text)
+    nWaitMax -= 1
 
+if projInfo['default_branch'] is None:
+    print('the project creation took a too long time. Please check yourself if a project with your short title exists at %s%s/%s' %('https://', gitlabServer, namespace))
+    sys.exit(1)
 
 # Assemble the URL payload for the project description update request
 payload = {'id': newId, 'description': newDescription}
