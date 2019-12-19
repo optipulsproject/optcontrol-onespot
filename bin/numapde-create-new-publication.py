@@ -135,8 +135,7 @@ if(rDescription.status_code != PUT_OK):
 # Prepare the new README.md
 # https://docs.gitlab.com/ee/api/repository_files.html 
 # Prepare the URL for the README.md file in the new repository
-# TODO: do this url-encoding in the right way..
-readmeUrl = newUrl + '/repository/files/README%2Emd'
+readmeUrl = newUrl + '/repository/files/README.md'
 
 # Get path to README.md.in, relative to the directory from where the present script is located
 readmePath = os.path.dirname(os.path.abspath(__file__)) + '/../README.md.in'
