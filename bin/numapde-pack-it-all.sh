@@ -160,7 +160,8 @@ sort -u $RELATIVEFILES | sponge $RELATIVEFILES
 JUNKEDFILES=$(mktemp)
 
 # Include all INPUT files which have /home path names
-awk '{if (match($0,/^INPUT (\/home\/.*)/,a)) print a[1]}' "$FLSFILE" >> $JUNKEDFILES
+HOME_ESCAPED=$(echo "$HOME" | sed 's/\//\\\//g')
+awk "{if (match(\$0,/^INPUT ($HOME_ESCAPED\/.*)/,a)) print a[1]}" "$FLSFILE" >> $JUNKEDFILES
 
 # Remove duplicate lines
 sort -u $JUNKEDFILES | sponge $JUNKEDFILES

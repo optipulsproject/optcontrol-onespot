@@ -41,10 +41,20 @@ PUT_OK = 200
 GET_OK = PUT_OK
 
 # Provide the command line arguments to the parser
-parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.', epilog = "\n\nExamples:\n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" \n  %s \"ADMM on Riemannian manifolds\" \"Riemannian-ADMM\" --namespace numapde/Sandbox\n\nMaintainers: %s" % (sys.argv[0], sys.argv[0], maintainers), formatter_class = argparse.RawTextHelpFormatter)
+epilog = r"""
+
+Examples:
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" 
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" --namespace numapde/Sandbox
+    {scriptName} "ADMM on Riemannian manifolds" "Riemannian-ADMM" --namespace numapde/Sandbox --description "I will describe how to apply ADMM on Riemannian manifolds"
+    
+Maintainers: {maintainers}""".format(scriptName=sys.argv[0], maintainers=maintainers)
+parser = argparse.ArgumentParser(description = 'This script forks the numapde Gitlab template repository for a new publication and provides an initial README.md.', epilog =  epilog , formatter_class = argparse.RawTextHelpFormatter)
 parser.add_argument('longTitle', metavar = 'longTitle', help = 'long publication title (will go into the project name on Gitlab)')
 parser.add_argument('shortTitle', metavar = 'shortTitle', help = 'short publication title (will determine the repository address on Gitlab)')
 parser.add_argument('--namespace', metavar = 'namespace', help = 'Gitlab namespace with default %s.' % namespace, nargs = '?', default = namespace)
+parser.add_argument('--description', metavar = 'description', help = 'A short project description for the gitlab web interface. The default is an empty description.', nargs = '?', default = '')
+
 args = parser.parse_args()
 
 # Get the API access token from the environment variable NUMAPDE_GITLAB_TOKEN
@@ -63,6 +73,9 @@ shortTitle = shortTitle.replace(' ','-')
 # Set the namespace
 namespace = args.namespace
 
+# Update (empty) the project description
+newDescription = args.description
+
 # Define the common header for all API operations
 headers = {'Private-Token': privateToken} 
 
@@ -76,8 +89,7 @@ payload = {'namespace': namespace, 'name': longTitle, 'id': templateId, 'path': 
 # print(payload)
 
 # Submit the fork request
-# TODO: Make this output more verbose and anticipate the name of the target repository URL
-print('Requesting the Gitlab server to fork %s.' % url)
+print('Requesting the Gitlab server to fork %s into %s%s/%s/%s.' % (url,'https://', gitlabServer, namespace,shortTitle))
 r = requests.post(url, headers = headers, data = payload)
 # print(r.text)
 if(r.status_code != POST_OK):
@@ -91,13 +103,23 @@ newUrl = urlFormat %{'projectId': newId}
 
 
 # Allow the Gitlab server to create the project
-# TODO: check if the project is ready after each pause
-print('Waiting some seconds to allow Gitlab to create the project...')
-time.sleep(5)
+nWaitMax = 5
+nWaitTime = 2
+print('Waiting at most %d seconds to allow Gitlab to create the project...' % (nWaitMax*nWaitTime))
+# check if the project exists by inspecting its properties
+# if the project has a default branch, we assume it is available 
+projInfo = requests.get(newUrl, headers = headers)
+projInfo = json.loads(projInfo.text)
+# we test at most 5 times, afterwards the non-existence is an error
+while projInfo['default_branch'] is None and nWaitMax > 0:
+    time.sleep(nWaitTime)
+    projInfo = requests.get(newUrl, headers = headers)
+    projInfo = json.loads(projInfo.text)
+    nWaitMax -= 1
 
-
-# Update (empty) the project description
-newDescription = '' 
+if projInfo['default_branch'] is None:
+    print('the project creation took a too long time. Please check yourself if a project with your short title exists at %s%s/%s' %('https://', gitlabServer, namespace))
+    sys.exit(1)
 
 # Assemble the URL payload for the project description update request
 payload = {'id': newId, 'description': newDescription}
@@ -113,8 +135,7 @@ if(rDescription.status_code != PUT_OK):
 # Prepare the new README.md
 # https://docs.gitlab.com/ee/api/repository_files.html 
 # Prepare the URL for the README.md file in the new repository
-# TODO: do this url-encoding in the right way..
-readmeUrl = newUrl + '/repository/files/README%2Emd'
+readmeUrl = newUrl + '/repository/files/README.md'
 
 # Get path to README.md.in, relative to the directory from where the present script is located
 readmePath = os.path.dirname(os.path.abspath(__file__)) + '/../README.md.in'

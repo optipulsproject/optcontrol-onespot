@@ -40,7 +40,7 @@ manuscript:
   title: Total Variation of the Normal Vector Field as Shape Prior
   subtitle: ""
   shortTitle: TV of the Normal as Shape Prior
-  bibliography: [ World.bib ]
+  bibliography: [World.bib]
   keywords: [ keyword 1, keyword 2 ]
   msc: [ 35J61 semilinear elliptic equations, 49K20 optimality conditions; problems involving partial differential equations ]
   abstract: |+ 
