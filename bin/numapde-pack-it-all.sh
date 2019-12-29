@@ -8,12 +8,14 @@
 function usage() {
 	echo "Usage: $0 [OPTIONS] [--help] [master.tex]"
 	echo "where OPTIONS can be"
+	echo "  --append-files      include an additional list of files specified by subsequent arguments"
 	echo "  --with-biblatex     includes system's biblatex package"
 	echo "  --with-pdf          includes master.pdf file"
 	echo "  --without-bibfiles  excludes .bib files"
 	echo "  --arxiv             implies --with-biblatex --without-bibfiles"
 	echo "                      and adds 00README.XXX"
 	echo "  --verbose           be verbose"
+	echo "  --                  specifies the end of command options"
 	echo
 	echo "If master.tex is not given, the likely .tex master file in the current directory"
 	echo "will be determined automatically." 
@@ -34,6 +36,7 @@ INCLUDEBIBLATEX=false
 INCLUDEBIBFILES=true
 INCLUDEPDFFILE=false
 INCLUDEARXIVHEADER=false
+APPENDFILES=()
 VERBOSE=false
 
 # Parse the command line arguments
@@ -42,6 +45,14 @@ VERBOSE=false
 while (( "$#" )); do
 
 	case "$1" in
+		--append-files)
+			shift
+			while [ "$#" -gt 0 -a "${1:0:2}" != "--" ]; do
+				APPENDFILES+=("$1")
+				shift
+			done
+			;;
+
 		--with-biblatex)
 			INCLUDEBIBLATEX=true
 			shift
@@ -66,6 +77,10 @@ while (( "$#" )); do
 
 		--verbose)
 			_DEBUG=true
+			shift
+			;;
+
+		--)
 			shift
 			;;
 
@@ -201,6 +216,11 @@ if [ "$INCLUDEARXIVHEADER" = "true" ]; then
 	echo 00README.XXX >> $RELATIVEFILES
 fi
 
+# Include additional files
+for FILE in "${APPENDFILES[@]}"
+do
+	echo "$FILE" >> $RELATIVEFILES
+done
 
 DEBUG echo
 DEBUG echo "The following files will be included with relative path names (as printed):"
