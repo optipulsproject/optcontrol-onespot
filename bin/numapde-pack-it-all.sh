@@ -1,24 +1,30 @@
 #!/bin/bash
-# This script takes a .tex document, identifies its dependencies and packs
-# them, by default, into a .zip file.
-#
-# Usage:    numapde-pack-it-all.sh [--options] [master.tex]
 
 # Define the usage function
 function usage() {
 	echo "Usage: $0 [OPTIONS] [--help] [master.tex]"
-	echo "where OPTIONS can be"
-	echo "  --append-files      include an additional list of files specified by subsequent arguments"
+	echo "Identifies dependencies of a .tex file and packs them into a .zip file."
+	echo "Moreover, the .zip file is tested whether its contents compile in a"
+	echo "clean environment. In some cases, dependencies are not automatically"
+	echo "detected and need to be added manually using --extra-files."
+	echo
+	echo "OPTIONS can be"
 	echo "  --with-biblatex     includes system's biblatex package"
 	echo "  --with-pdf          includes master.pdf file"
 	echo "  --without-bibfiles  excludes .bib files"
 	echo "  --arxiv             implies --with-biblatex --without-bibfiles"
 	echo "                      and adds 00README.XXX"
+	echo "  --extra-files       include an additional list of files specified by subsequent arguments"
 	echo "  --verbose           be verbose"
+	echo "  --help              print help and exit"
 	echo "  --                  specifies the end of command options"
 	echo
 	echo "If master.tex is not given, the likely .tex master file in the current directory"
 	echo "will be determined automatically." 
+	echo
+	echo "Examples:"
+	echo "$0 --arxiv manuscript-numapde-preprint.tex" 
+	echo "$0 --extra-files data/run1.csv data/run2.csv -- manuscript-numapde-preprint.tex"
 }
 
 # Set debugging flag
@@ -36,7 +42,7 @@ INCLUDEBIBLATEX=false
 INCLUDEBIBFILES=true
 INCLUDEPDFFILE=false
 INCLUDEARXIVHEADER=false
-APPENDFILES=()
+EXTRAFILES=()
 VERBOSE=false
 
 # Parse the command line arguments
@@ -45,10 +51,10 @@ VERBOSE=false
 while (( "$#" )); do
 
 	case "$1" in
-		--append-files)
+		--extra-files)
 			shift
 			while [ "$#" -gt 0 -a "${1:0:2}" != "--" ]; do
-				APPENDFILES+=("$1")
+				EXTRAFILES+=("$1")
 				shift
 			done
 			;;
@@ -217,7 +223,7 @@ if [ "$INCLUDEARXIVHEADER" = "true" ]; then
 fi
 
 # Include additional files
-for FILE in "${APPENDFILES[@]}"
+for FILE in "${EXTRAFILES[@]}"
 do
 	echo "$FILE" >> $RELATIVEFILES
 done
