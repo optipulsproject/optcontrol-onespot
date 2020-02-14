@@ -25,7 +25,7 @@ The script has the following option:
 
 ## After forking
 * When finishing, the script will report the address to clone the newly created repository.
-* You may use `bin/numapde-submodules-updates.sh` at any time to update the dependent submodules.
+* You may use `bin/numapde-submodules-update.sh` at any time to update the dependent submodules.
 * If necessary, you may use `source bin/numapde-set-paths.sh` to setup the `TEXINPUTS` and `BIBINPUTS` environment variables.
   This script will only amend paths if necessary.
 * The script `bin/numapde-pack-it-all.sh` can be used to pack the manuscript files into a `.zip` file, e.g., for submission to https://arxiv.org.
