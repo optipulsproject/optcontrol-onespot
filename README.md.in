@@ -24,10 +24,12 @@ Authors:
   ```
   to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
   It is safe to run this script multiple times since paths will be amended only if necessary.
-* The file `numapde.bib` should be the primary source of references.
+* The file `numapde-bibliography/numapde.bib` should be your primary source of references.
 Missing references should be added to `numapde-local.bib`.
-* Please use commands as documented in https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-latex/blob/master/numapde-latex-documentation.pdf. 
-For instance, write $`\|A\|`$ as `\norm[A}` and not as `\|A\|`.
+* Please use commands as documented in https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-latex/raw/master/numapde-latex-documentation.pdf?inline=false.
+For instance, write $`\|\mathcal{A}\|`$ as `\norm[\AA}` and not as `\|\mathcal{A}\|`.
+* Declare additional commands as necessary in `numapde-local.sty`.
+Additional packages should also be loaded there.
 
 ## Daily workflow
 * Run 
