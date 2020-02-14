@@ -2,7 +2,7 @@
 
 Authors:
 
-## Cloning
+## Initial cloning
 * Clone this repository using either
   ```bash
   git clone --recurse-submodules %(SSH_URL_TO_REPO)s 
@@ -17,6 +17,18 @@ Authors:
   ```
   to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
 
+## LaTeX
+* Run
+  ```bash
+  bin/numapde-setup-paths.sh
+  ```
+  to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
+  It is safe to run this script multiple times since paths will be amended only if necessary.
+* The file `numapde.bib` should be the primary source of references.
+Missing references should be added to `numapde-local.bib`.
+* Please use commands as documented in https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-latex/blob/master/numapde-latex-documentation.pdf. 
+For instance, write $`\|A\|`$ as `\norm[A}` and not as `\|A\|`.
+
 ## Daily workflow
 * Run 
   ```bash
@@ -28,10 +40,3 @@ Authors:
   bin/numapde-pack-it-all.sh --help
   ```
   to learn about the script and its options which will pack the main `.tex` file and its depenencies into a `.zip` file, e.g., for submission to https://arxiv.org.
-* Run
-  ```bash
-  bin/numapde-setup-paths.sh
-  ```
-  to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
-  It is safe to run this script multiple times since paths will be amended only if necessary.
-
