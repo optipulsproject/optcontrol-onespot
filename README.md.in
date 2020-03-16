@@ -13,14 +13,14 @@ Authors:
   ```
 * Then run 
   ```bash
-  bin/numapde-submodules-updates.sh
+  bin/numapde-submodules-update.sh
   ```
   to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
 
 ## LaTeX
 * Run
   ```bash
-  bin/numapde-setup-paths.sh
+  source bin/numapde-setup-paths.sh
   ```
   to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
   It is safe to run this script multiple times since paths will be amended only if necessary.
@@ -34,7 +34,7 @@ Additional packages should also be loaded there.
 ## Daily workflow
 * Run 
   ```bash
-  bin/numapde-submodules-updates.sh
+  bin/numapde-submodules-update.sh
   ```
   regularly to update the submodules.
 * Run
