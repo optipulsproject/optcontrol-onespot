@@ -27,7 +27,7 @@ Authors:
 * The file `numapde-bibliography/numapde.bib` should be your primary source of references.
 Missing references should be added to `numapde-local.bib`.
 * Please use commands as documented in https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-latex/raw/master/numapde-latex-documentation.pdf?inline=false.
-For instance, write $`\|\mathcal{A}\|`$ as `\norm[\AA}` and not as `\|\mathcal{A}\|`.
+For instance, write $`\|\mathcal{A}\|`$ as `\norm{\AA}` and not as `\|\mathcal{A}\|`.
 * Declare additional commands as necessary in `numapde-local.sty`.
 Additional packages should also be loaded there.
 
