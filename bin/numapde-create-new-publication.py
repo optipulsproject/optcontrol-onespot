@@ -3,7 +3,7 @@
 # This script is meant to facilitate the creation of a new Gitlab repository for a publication.
 # To this end, it
 # * forks numapde-template into a new Gitlab repository with a specified name (shortTitle), 
-# * assigns the new repository to a Gitlab namespace different from the default numade/sandbox if desired (namespace)
+# * assigns the new repository to a Gitlab namespace different from the default numapde/Publications if desired (namespace)
 # * creates a new README.md from the template README.md.in by substitution.
 
 # Define the person(s) responsible for maintenance
@@ -28,7 +28,6 @@ if gitlabServer is None:
 urlFormat = 'https://' + gitlabServer + '/api/v4/projects/%(projectId)d'
 
 # Specify the default name space 
-# namespace = 'numapde/sandbox'
 namespace = 'numapde/Publications'
 
 # Set the repository id for the template to be forked
