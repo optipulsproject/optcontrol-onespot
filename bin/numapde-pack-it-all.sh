@@ -12,8 +12,7 @@ function usage() {
 	echo "  --with-biblatex     includes system's biblatex package"
 	echo "  --with-pdf          includes master.pdf file"
 	echo "  --without-bibfiles  excludes .bib files"
-	echo "  --arxiv             implies --with-biblatex --without-bibfiles"
-	echo "                      and adds 00README.XXX"
+	echo "  --arxiv             implies --without-bibfiles and adds 00README.XXX"
 	echo "  --extra-files       include an additional list of files specified by subsequent arguments"
 	echo "  --verbose           be verbose"
 	echo "  --help              print help and exit"
@@ -75,7 +74,7 @@ while (( "$#" )); do
 			;;
 
 		--arxiv)
-			INCLUDEBIBLATEX=true
+			INCLUDEBIBLATEX=false
 			INCLUDEBIBFILES=false
 			INCLUDEARXIVHEADER=true
 			shift
