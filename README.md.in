@@ -20,7 +20,7 @@ Authors:
 ## LaTeX
 * Run
   ```bash
-  source bin/numapde-setup-paths.sh
+  source bin/numapde-set-paths.sh
   ```
   to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
   It is safe to run this script multiple times since paths will be amended only if necessary.
