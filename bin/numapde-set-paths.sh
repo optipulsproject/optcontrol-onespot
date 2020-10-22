@@ -21,7 +21,7 @@ else
 fi
 
 # Append ./numapde-bibliography to BIBINPUTS if necessary
-if kpsewhich World.bib; then
+if kpsewhich numapde.bib; then
 	echo "  found so BIBINPUTS appears to be properly set."
 	echo
 else
