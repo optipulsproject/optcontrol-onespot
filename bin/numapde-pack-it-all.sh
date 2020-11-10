@@ -9,11 +9,12 @@ function usage() {
 	echo "detected and need to be added manually using --extra-files."
 	echo
 	echo "OPTIONS can be"
+	echo "  --arxiv             implies --without-bibfiles, --force-pdf and adds 00README.XXX"
+	echo "  --extra-files       include an additional list of files specified by subsequent arguments"
+	echo "  --force-pdf         injects \pdfoutput=1 into master.tex to enfore pdflatex processing"
 	echo "  --with-biblatex     includes system's biblatex package"
 	echo "  --with-pdf          includes master.pdf file"
 	echo "  --without-bibfiles  excludes .bib files"
-	echo "  --arxiv             implies --without-bibfiles and adds 00README.XXX"
-	echo "  --extra-files       include an additional list of files specified by subsequent arguments"
 	echo "  --verbose           be verbose"
 	echo "  --help              print help and exit"
 	echo "  --                  specifies the end of command options"
@@ -37,6 +38,7 @@ function DEBUG()
 }
 
 # Set the default options
+FORCEPDF=false
 INCLUDEBIBLATEX=false
 INCLUDEBIBFILES=true
 INCLUDEPDFFILE=false
@@ -58,6 +60,11 @@ while (( "$#" )); do
 			done
 			;;
 
+		--force-pdf)
+			FORCEPDF=true
+			shift
+			;;
+
 		--with-biblatex)
 			INCLUDEBIBLATEX=true
 			shift
@@ -74,6 +81,7 @@ while (( "$#" )); do
 			;;
 
 		--arxiv)
+			FORCEPDF=true
 			INCLUDEBIBLATEX=false
 			INCLUDEBIBFILES=false
 			INCLUDEARXIVHEADER=true
@@ -237,6 +245,7 @@ DEBUG cat $JUNKEDFILES
 DEBUG echo
 
 # Clear and create the zip file
+DEBUG echo "Creating the zip file $ZIPFILE"
 rm -f "$ZIPFILE"
 if [ -s $RELATIVEFILES ]; then
 	while read FILE; do
@@ -249,6 +258,29 @@ if [ -s $JUNKEDFILES ]; then
 		DEBUG echo zip --quiet -j "$ZIPFILE" "$FILE"
 		zip --quiet -j "$ZIPFILE" "$FILE"
 	done <$JUNKEDFILES
+fi
+DEBUG echo
+
+# In retrospect, change the master.tex file by injecting '\pdfoutput=1' if required
+if [ "$FORCEPDF" = "true" ]; then
+	DEBUG echo "Modifying $TEXFILE to force pdflatex processing"
+
+	# Prepare the modified master file
+	MODIFIEDTEXFILE=$(mktemp)
+	echo "\pdfoutput=1" > "$MODIFIEDTEXFILE"
+	cat "$TEXFILE" >> "$MODIFIEDTEXFILE"
+
+	# Remove the original master file from the zip archive
+	DEBUG echo zip --quiet -d "$ZIPFILE" "$TEXFILE"
+	zip --quiet -d "$ZIPFILE" "$TEXFILE"
+
+	# Add the modified master file, with path junked
+	DEBUG echo zip --quiet -j "$ZIPFILE" "$MODIFIEDTEXFILE"
+	zip --quiet -j "$ZIPFILE" "$MODIFIEDTEXFILE"
+
+	# Rename the modified master file inside the zip arcive
+	DEBUG echo "Renaming $(basename $MODIFIEDTEXFILE) to $TEXFILE"
+	printf '@ %s\n@=%s\n' "$(basename $MODIFIEDTEXFILE)" "$TEXFILE" | zipnote -w "$ZIPFILE"
 fi
 
 
