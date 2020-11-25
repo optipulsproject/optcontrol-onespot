@@ -24,8 +24,7 @@ The script has the following option:
 *  `--namespace`: provides a Gitlab namespace. The default namespace is `numapde/Publications`.
 
 ## After forking
-* When finishing, the script will report the address to clone the newly created repository.
-* You may use `bin/numapde-submodules-update.sh` at any time to update the dependent submodules.
-* The script `bin/numapde-pack-it-all.sh` can be used to pack the manuscript files into a `.zip` file, e.g., for submission to https://arxiv.org.
-* Invite coauthors external to the group through https://gitlab.hrz.tu-chemnitz.de.
-
+When finishing, the script will report the address to clone the newly created repository. In the newly created repository,
+* you may use `bin/numapde-submodules-update.sh` at any time to update the dependent submodules.
+* the script `bin/numapde-pack-it-all.sh` can be used to pack the manuscript files into a `.zip` file, e.g., for submission to https://arxiv.org.
+* you may invite coauthors external to the group through https://gitlab.hrz.tu-chemnitz.de.
