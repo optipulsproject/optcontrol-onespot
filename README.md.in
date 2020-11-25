@@ -18,16 +18,10 @@ Authors:
   to update the submodules numapde-public/numapde-latex> and numapde-public/numapde-bibliography>.
 
 ## LaTeX
-* Run
-  ```bash
-  source bin/numapde-set-paths.sh
-  ```
-  to setup the `TEXINPUTS` and `BIBINPUTS` environment variables, as necessary.
-  It is safe to run this script multiple times since paths will be amended only if necessary.
 * The file `numapde-bibliography/numapde.bib` should be your primary source of references.
-Missing references should be added to `numapde-local.bib`.
+Additional references should be added to `numapde-local.bib`.
 * Please use commands as documented in https://gitlab.hrz.tu-chemnitz.de/numapde-public/numapde-latex/raw/master/numapde-latex-documentation.pdf?inline=false.
-For instance, write $`\|\mathcal{A}\|`$ as `\norm{\AA}` and not as `\|\mathcal{A}\|`.
+For instance, write $`\|\mathcal{A}\|`$ as `\norm{\cA}` and not as `\|\mathcal{A}\|`.
 * Declare additional commands as necessary in `numapde-local.sty`.
 Additional packages should also be loaded there.
 
@@ -65,4 +59,4 @@ In this case, you will have to call `numapde-preprare-manuscript.py` with additi
   ```bash
   bin/numapde-pack-it-all.sh --help
   ```
-  to learn about the script and its options which will pack the main `.tex` file and its depenencies into a `.zip` file, e.g., for submission to https://arxiv.org.
+  to learn about the script and its options which will pack the main `.tex` file and its depenencies into a `.zip` file, e.g., for submission to https://arxiv.org and to provide the source files of an accepted journal version.
