@@ -14,7 +14,7 @@ function usage() {
 	echo "  --force-pdf         injects \pdfoutput=1 into master.tex to enfore pdflatex processing"
 	echo "  --with-biblatex     includes system's biblatex package"
 	echo "  --with-pdf          includes master.pdf file"
-	echo "  --without-bibfiles  excludes .bib files"
+	echo "  --without-bibfiles  excludes .bib and .bst files"
 	echo "  --verbose           be verbose"
 	echo "  --help              print help and exit"
 	echo "  --                  specifies the end of command options"
@@ -151,6 +151,7 @@ fi
 # Create other derived file names
 AUXFILE="${TEXFILE/%.tex/}.aux"
 BCFFILE="${TEXFILE/%.tex/}.bcf"
+BLGFILE="${TEXFILE/%.tex/}.blg"
 FLSFILE="${TEXFILE/%.tex/}.fls"
 PDFFILE="${TEXFILE/%.tex/}.pdf"
 ZIPFILE="${TEXFILE/%.tex/}.zip"
@@ -207,6 +208,16 @@ if [ "$INCLUDEBIBFILES" = "true" ]; then
 		# example: \bibdata{World}
 		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' "$AUXFILE" | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
 		for bibfile in $(awk '{if (match($0,/\\bibdata{(.*)}/,a)) print a[1]}' "$AUXFILE" | tr "," "\n"); do echo ${bibfile/%.bib/}.bib; done | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
+		if [ -r "$BLGFILE" ]; then
+			# Search the .blg file for .bst sources (bibtex)
+			# example: achemso.bst
+			for bstfile in $(awk '{if (match($0,/\<[a-z]*\.bst\>/,a)) print a[0]}' "$BLGFILE"); do echo "$bstfile"; done | sort -u | xargs kpsewhich | grep '^./' >> $RELATIVEFILES
+			for bstfile in $(awk '{if (match($0,/\<[a-z]*\.bst\>/,a)) print a[0]}' "$BLGFILE"); do echo "$bstfile"; done | sort -u | xargs kpsewhich | grep '^/' >> $JUNKEDFILES
+		else
+			echo ".bst file is to be included but $BLGFILE is not readable."
+			echo "Stopping because of unclear .bst source."
+			exit 1
+		fi
 		echo
 	else
 		echo ".bib files are to be included but neither $BCFFILE nor $AUXFILE are readable."
