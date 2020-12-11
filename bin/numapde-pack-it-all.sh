@@ -177,6 +177,8 @@ awk '/^INPUT [^/]/ {if (match($0,/^INPUT (\.\/)?(.*)/,a)) print a[2]}' "$FLSFILE
 grep -v "${TEXFILE/%.tex/}.aux" $RELATIVEFILES | sponge $RELATIVEFILES
 grep -v "${TEXFILE/%.tex/}.out" $RELATIVEFILES | sponge $RELATIVEFILES
 grep -v "${TEXFILE/%.tex/}.run.xml" $RELATIVEFILES | sponge $RELATIVEFILES
+grep -v '\.bib$' $RELATIVEFILES | sponge $RELATIVEFILES
+grep -v texmf.cnf $RELATIVEFILES | sponge $RELATIVEFILES
 if [ "$INCLUDEPDFFILE" = "true" ]; then
 	echo "$PDFFILE" >> $RELATIVEFILES
 fi
@@ -191,6 +193,10 @@ JUNKEDFILES=$(mktemp)
 # Include all INPUT files which have /home path names
 HOME_ESCAPED=$(echo "$HOME" | sed 's/\//\\\//g')
 awk "{if (match(\$0,/^INPUT ($HOME_ESCAPED\/.*)/,a)) print a[1]}" "$FLSFILE" >> $JUNKEDFILES
+
+# Remove certain files
+grep -v '\.bib$' $JUNKEDFILES | sponge $JUNKEDFILES
+grep -v texmf.cnf $JUNKEDFILES | sponge $JUNKEDFILES
 
 # Remove duplicate lines
 sort -u $JUNKEDFILES | sponge $JUNKEDFILES
