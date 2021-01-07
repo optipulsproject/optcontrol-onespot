@@ -1,4 +1,70 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\lipsum
+\section{Model Equations}
+\label{sec:modelling}
+
+{\color{ TolHighContrastBlue}
+Here we are using a sligtly modified mathematical model, which was previously developed in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.
+The key differences are:
+\begin{enumerate}
+	\item The heat capacity function $c(\theta)$ now includes the melting enthalpy, which was missing in the previous paper.
+	\item The temperature-dependent coefficients $c(\theta)$, $\rho(\theta)$, and $\kappa(\theta)$ are now constructed more accurate using spline fitting to the measured data.
+	\item The velocity component of the objective functional now takes into consideration all the internal points of the solidification corridor, not only the top surface as in the previous paper.
+	\item The boundary condition on the laser spot has been modified.
+	\item The thermal conductivity coefficient $\kappa(\theta)$ (prev. $\lambda(\theta)$) is a matrix-valued function in this paper.
+\end{enumerate}
+}
+
+Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\partial\Omega$ be its surface. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
+\begin{equation} \label{eq:heat_eq}
+	c(\theta(x,t)) \rho(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
+\end{equation}
+which coefficients $c$, $\rho$, and $\kappa$ are temperature-dependent and defined in subsection~\ref{subsec:coefficients}.
+% = \diag(\kappa_\text{rad}, \kappa_\text{ax})
+
+While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
+The boundary conditions are
+\begin{equation}
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = \left\{
+		\begin{array}{ll}
+			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)) + P_{\max} u(t), & \text{on}\ \Gamma_1, \\
+			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)), & \text{on}\ \Gamma_2, \\
+			0, & \text{on}\ \Gamma_3%
+			\footnote{On $\Gamma_3$ the Dirichlet boundary condition $\theta(x,t) = \theta_0$ can be used as well, however, it is does not make any essential difference if the radius of $\Omega$ is chosen big enough.}.
+		\end{array} \right.
+\end{equation}
+Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
+The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
+
+
+\subsection{Heat Capacity, Density, and Thermal Conductivity}
+\label{subsec:coefficients}
+
+Due to the mixed composition of the material, we have a temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider $\text{solidus} = 858$~\si{\K} and $\text{liquidus} = 923$~\si{K}.
+
+Considering the above, we can embed the melting enthalpy, i.e. the additional energy required for the phase transition to happen, into the heat capacity (cf. the classical two-phase Stefan problem, \cite{BernauerHerzog:2011:1}). The latter means that the heat capacity $c(\theta)$ significantly increases in the solidus-liquidus temperature corridor.
+
+The temperature dependent coefficients $c$, $\rho$, and $\kappa$ are defined using spline fitting to the experimental data.
+
+In fact, in the part of $\Omega$ which temperature is above the liquidus threshold an additional heat transfer takes place due to convection in the liquid metal. However, consideration of the convective heat transfer would significantly increase the complexity of the model. One of the possible ways to deal with this issue is assuming no convection on the liquid phase, but defining a fake thermal conductivity coefficient $\kappa(\theta)$ instead.
+
+{\color{TolHighContrastBlue}
+Despite the actual thermal conductivity in the solid material is essentially uniform, $\kappa(\theta)$ becomes a matrix-valued function \ldots
+Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
+
+\textbf{TODO:} insert 3 plots into this subsection.
+}
+
+\section{Optimal Control Problem}
+\label{sec:objective}
+
+\section{Discretization}
+\label{sec:discretization}
+
+\section{Numerical Results}
+\label{sec:numerical_results}
+
+\appendix
+
+\section{Implementation Details}
