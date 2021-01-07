@@ -1,0 +1,6 @@
+tex:
+  image: numapde/publications
+  script: latexmk -pdf manuscript-numapde-preprint.tex
+  artifacts:
+    paths:
+      - manuscript-numapde-preprint.pdf
