@@ -60,3 +60,8 @@ In this case, you will have to call `numapde-preprare-manuscript.py` with additi
   bin/numapde-pack-it-all.sh --help
   ```
   to learn about the script and its options which will pack the main `.tex` file and its depenencies into a `.zip` file, e.g., for submission to https://arxiv.org and to provide the source files of an accepted journal version.
+  
+
+## Artifacts
+
+The latest automatically built artifact `manuscript-numapde-preprint.pdf` can be viewed [here](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/file/manuscript-numapde-preprint.pdf?job=tex) or downloaded via this [direct link](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/raw/manuscript-numapde-preprint.pdf?job=tex).
