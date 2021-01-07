@@ -12,12 +12,12 @@ authors:
   url: https://www.tu-chemnitz.de/mathematik/part_dgl/people/herzog
   orcid: 0000-0003-2164-6575
 
-- name: Schmidt
-  firstName: Stephan
-  institution: Würzburg
-  email: stephan.schmidt@mathematik.uni-wuerzburg.de
-  url: https://www.mathematik.uni-wuerzburg.de/\~schmidt
-  orcid: 
+- name: Strelnikov
+  firstName: Dmytro
+  institution: numapde
+  email: dmytro.strelnikov@mathematik.tu-chemnitz.de
+  url: https://www.tu-chemnitz.de/mathematik/part_dgl/people/strelnikov
+  orcid: 0000-0002-7668-3640
 
 institutions:
   numapde:
@@ -27,26 +27,17 @@ institutions:
       09107 Chemnitz,
       Germany
 
-  Würzburg:
-    address: >-
-      Julius-Maximilians-Universität Würzburg,
-      Faculty of Mathematics and Computer Science,
-      Lehrstuhl für Mathematik~VI,
-      Emil-Fischer-Straße~40,
-      97074 Würzburg,
-      Germany
-
 manuscript: 
-  title: Total Variation of the Normal Vector Field as Shape Prior
+  title: Optimal Control of Single Spot Pulsed Laser Welding
   subtitle: ""
-  shortTitle: TV of the Normal as Shape Prior
+  shortTitle: ""
   bibliography: [ numapde-local.bib, numapde.bib ]
-  keywords: [ keyword 1, keyword 2 ]
-  msc: [ 35J61 semilinear elliptic equations, 49K20 optimality conditions; problems involving partial differential equations ]
+  keywords: [ optimal control, pulsed laser welding, quasilinear heat equation, phase transition ]
+  msc: [ 49K20 optimality conditions; problems involving partial differential equations ]
   abstract: |+ 
     First paragraph of abstract.
 
     Second paragraph of abstract.
-  dedication: We dedicate this work to XY on the occasion of his 60th birthday.
+  dedication: ""
   funding: This work was partially supported by a DFG grant.
 
