@@ -17,7 +17,9 @@
 \section{Modelling}
 \label{sec:modelling}
 
-{\color{ TolHighContrastBlue}
+In this section we are going to build a mathematical model for a single spot pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series.
+
+{\color{TolHighContrastBlue}
 Here we are using a sligtly modified mathematical model, which was previously developed in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.
 The key differences are:
 \begin{enumerate}
@@ -29,11 +31,55 @@ The key differences are:
 \end{enumerate}
 }
 
-Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\partial\Omega$ be its surface. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
+
+\subsection{Enthalpy of Fusion and Effective Heat Capacity}
+
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its phisicall properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{(latent) heat of fusion}. For the opposite a liquid to a solid transition the \emph{heat of solidification} has the same absolute value but its sign is the opposite.
+
+The classical Stefan problem [citation needed] is a particular kind of a boundary value problem, which describes the evolution of the boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
+
+However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\Si{858}{\K} and liquidus~=~\Si{923}{K} as the reference values.
+
+Considering the above, it becomes more natural in our case to embed the enthalpy of fusion, into the heat capacity coefficient, i.e. to substitute (in the heat equation) the heat capacity with \emph{the effective heat capacity}. The latter coefficient is a temperature dependent function, which coincides with the standard heat capacity outside the solidus-liquidus temperature corridor but has significantly higher values inside. In fact, its integral over the temperature interval $(\theta_0, \theta_1)$ describes the total amount of energy (including the enthalpy of fusion if applicable) required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$, which is one of the underlying principles of the heat equation.
+
+
+\subsection{Density and Volumetric Heat Capacity}
+
+In our case it turns out that the density of the material changes depending on the temperature not only slightly (due to thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model. In fact both the heat capacity and the density are presented in the problem and its numerical implementation only as their product $s(\theta) = c(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{volumetric (efficient) heat capacity} coefficient $s(\theta)$.
+
+
+\subsection{Effective Thermal Conductivity}
+
+Convective heat transfer in the liquid phase (see the Marangoni effect [citation needed]) becomes the next modelling challenge caused by the phase transition. In order to not include the convection term into the core equation we extrapolate in a special way the thermal conductivity coefficient $\kappa(\theta)$ outside its experimentally measured values in the solid state. While heating, once the solidus point is passed, \emph{the effective thermal conductivity} becomes unequal in different directions resulting in a matrix valued function. The matrix $\kappa(\theta)$ is diagonal if the chosen coordinate system coincides with the main directions of the effective thermal conductivity.
+
+{\color{TolHighContrastBlue}
+Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
+}
+
+% In fact, in the part of $\Omega$ which temperature is above the liquidus threshold an additional heat transfer takes place due to convection in the liquid metal. However, consideration of the convective heat transfer would significantly increase the complexity of the model. One of the possible ways to deal with this issue is assuming no convection on the liquid phase, but defining a fake thermal conductivity coefficient $\kappa(\theta)$ instead.
+
+
+\subsection{Boundary Conditions}
+
+
+\subsection{Model Equations}
+
+\begin{figure}[ht]
+	\centering
+	\input{plots/cylinder}
+	\caption{I don't like this plot much \ldots}
+	\label{fig:cylinder}
+\end{figure}
+
+{\color{TolHighContrastBlue}
+I guess we need some plot of the cylinder $\Omega$, but I don't like much the one I put here. I'm not 100\% sure we need the coordinate system on the plot. The boundaries could be marked with colors instead of letters.
+}
+
+Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
-	c(\theta(x,t)) \rho(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
+	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
 \end{equation}
-which coefficients $c$, $\rho$, and $\kappa$ are temperature-dependent and defined in subsection~\ref{subsec:coefficients}.
+which temperature-dependent coefficients $s(\theta(x,t)) = c(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ were duscussed in the previous subsections.
 % = \diag(\kappa_\text{rad}, \kappa_\text{ax})
 
 While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
@@ -42,7 +88,7 @@ The boundary conditions are
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = \left\{
 		\begin{array}{ll}
 			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)) + P_{\max} u(t), & \text{on}\ \Gamma_1, \\
-			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)), & \text{on}\ \Gamma_2, \\
+			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)), & \text{on}\ \Gamma_2 \cup \Gamma_4, \\
 			0, & \text{on}\ \Gamma_3%
 			\footnote{On $\Gamma_3$ the Dirichlet boundary condition $\theta(x,t) = \theta_0$ can be used as well, however, it is does not make any essential difference if the radius of $\Omega$ is chosen big enough.}.
 		\end{array} \right.
@@ -50,11 +96,15 @@ The boundary conditions are
 Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
 The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
 
+The temperature dependent coefficients $s(\theta)$ and $\kappa(\theta)$ are defined using spline fitting to the experimental data, based on the above considerations in the current section, see Figure~\ref{fig:coef}. The exact formulas can be found in [cite numerical implementation].
 
-\subsection{Heat Capacity, Density, and Thermal Conductivity}
-\label{subsec:coefficients}
+\begin{figure}[ht]
+	\centering
+	% \input{plots/coefficients}
+	\caption{\ldots}
+	\label{fig:coef}
+\end{figure}
 
-Due to the mixed composition of the material, we have a temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider $\text{solidus} = 858$~\si{\K} and $\text{liquidus} = 923$~\si{K}.
 
 Considering the above, we can embed the melting enthalpy, i.e. the additional energy required for the phase transition to happen, into the heat capacity (cf. the classical two-phase Stefan problem, \cite{BernauerHerzog:2011:1}). The latter means that the heat capacity $c(\theta)$ significantly increases in the solidus-liquidus temperature corridor.
 
