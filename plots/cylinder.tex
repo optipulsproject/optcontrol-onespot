@@ -1,0 +1,52 @@
+\newcommand{\varR}{3.0}
+\newcommand{\varr}{1.0}
+\newcommand{\varZ}{2.5}
+
+% top view (xy)
+% \tdplotsetmaincoords{0}{0}
+% side view (xz)
+% \tdplotsetmaincoords{90}{0}
+% custom view
+\tdplotsetmaincoords{70}{0}
+
+\begin{tikzpicture}[tdplot_main_coords]
+
+	% bottom disk
+	\begin{scope}[canvas is xy plane at z=0]
+		% \draw [fill] node{.} (0, 0);
+		\draw (\varR, 0) arc [radius=\varR, start angle=0, end angle=-180];
+		\draw [very thin, dashed] (\varR, 0) arc [radius=\varR, start angle=0, end angle=180];
+	\end{scope}
+
+	% top disk
+	\begin{scope}[canvas is xy plane at z=\varZ]
+		\draw [fill] node{.} (0,0);
+		\draw (0, 0) circle [radius=\varR];
+		\draw [very thin, fill=red, fill opacity=0.2] (0, 0) circle [radius=\varr];
+	\end{scope}
+
+	% sides
+	\draw ( \varR, 0, 0) -- ( \varR, 0, \varZ);
+	\draw (-\varR, 0, 0) -- (-\varR, 0, \varZ);
+
+
+	% axes
+	\tdplotsetcoord{P1}{ .5*\varR}{90}{-60}
+	\tdplotsetcoord{P2}{    \varR}{90}{-60}
+	\tdplotsetcoord{P3}{1.4*\varR}{90}{-60}
+
+	\draw [very thin] (0, 0, 0) -- (P2);
+	\draw [->, very thin] (P2) -- (P3) node [above] {$r$};
+	\draw [very thin] (0, 0, 0) -- (0, 0, \varZ);
+	\draw [->, very thin] (0, 0, \varZ) -- (0, 0, 1.6*\varZ) node [left] {$z$};
+	\draw [very thin] (0, 0, 0) -- (.6*\varR, 0, 0);
+	\tdplotdrawarc[->, very thin]{(0, 0, 0)}{.5*\varR}{-60}{0}{anchor=north west}{$\varphi$}
+
+
+	% labels
+	\node[left] at (0, 0, \varZ) {$\Gamma_1$};
+	\node[left] at (-.5*\varR, 0,  \varZ) {$\Gamma_2$};
+	\node[left] at (-.8*\varR, 0, .5*\varZ) {$\Gamma_3$};
+	\node[left] at (-.5*\varR, 0,  0) {$\Gamma_4$};
+
+\end{tikzpicture}
