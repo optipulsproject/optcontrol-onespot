@@ -28,9 +28,9 @@ institutions:
       Germany
 
 manuscript: 
-  title: Optimal Control of Single Spot Pulsed Laser Welding
+  title: An Optimal Control Problem for Single Spot Laser Pulse Welding 
   subtitle: ""
-  shortTitle: ""
+  shortTitle: Optimal Control of Single Spot Laser Pulse Welding
   bibliography: [ numapde-local.bib, numapde.bib ]
   keywords: [ optimal control, pulsed laser welding, quasilinear heat equation, phase transition ]
   msc: [ 49K20 optimality conditions; problems involving partial differential equations ]
@@ -39,5 +39,5 @@ manuscript:
 
     Second paragraph of abstract.
   dedication: ""
-  funding: This work was partially supported by a DFG grant.
+  funding: This work was funded by the Federal Ministry for Economic Affairs and Energy (BMWi) of Germany through IGF grant 20.826~B (project OptiPuls), which is gratefully acknowledged.
 
