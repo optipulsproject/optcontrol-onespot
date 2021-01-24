@@ -32,7 +32,8 @@ The key differences are:
 }
 
 
-\subsection{Enthalpy of Fusion and Effective Heat Capacity}
+\subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
+\label{subsec:capacity}
 
 Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its phisicall properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{(latent) heat of fusion}. For the opposite a liquid to a solid transition the \emph{heat of solidification} has the same absolute value but its sign is the opposite.
 
@@ -40,15 +41,34 @@ The classical Stefan problem [citation needed] is a particular kind of a boundar
 
 However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
 
-Considering the above, it becomes more natural in our case to embed the enthalpy of fusion, into the heat capacity coefficient, i.e. to substitute (in the heat equation) the heat capacity with \emph{the effective heat capacity}. The latter coefficient is a temperature dependent function, which coincides with the standard heat capacity outside the solidus-liquidus temperature corridor but has significantly higher values inside. In fact, its integral over the temperature interval $(\theta_0, \theta_1)$ describes the total amount of energy (including the enthalpy of fusion if applicable) required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$, which is one of the underlying principles of the heat equation.
+Considering the above, it becomes more natural in our case to embed the enthalpy of fusion, into the heat capacity coefficient, i.e. to substitute (in the heat equation) the heat capacity $c(\theta)$ with \emph{the effective heat capacity} $c_{\text{eff}}(\theta)$. The latter coefficient is a temperature dependent function, which coincides with the standard heat capacity outside the solidus-liquidus temperature corridor but has significantly higher values inside. In fact, its integral over the temperature interval $(\theta_0, \theta_1)$ describes the total amount of energy (including the enthalpy of fusion if applicable) required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$, which is one of the underlying principles of the heat equation.
+\begin{equation}
+	\int_\text{solidus}^\text{liquidus} (c_\text{eff}(\theta) - c(\theta))\, d\theta = \text{enthalpy of fusion}. 
+\end{equation}
 
+Making the problem even more sophisticated, it turns out that the density of the material changes depending on the temperature not only slightly (due to thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the heat capacity $c(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{volumetric (effective) heat capacity} coefficient $s(\theta)$.
 
-\subsection{Density and Volumetric Heat Capacity}
+We construct the effective volumetric heat capacity $s(\theta)$ using the following procedure:
+\begin{enumerate}
+	\item Make a linear least square approximation to the experimental data independently for the solid and in the liquid state of matter.
+	\item Connect obtained linear function by a cubic polynomial making a $C^1$ cubic spline.
+	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the alloy.
+\end{enumerate}
 
-In our case it turns out that the density of the material changes depending on the temperature not only slightly (due to thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model. In fact both the heat capacity and the density are presented in the problem and its numerical implementation only as their product $s(\theta) = c(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{volumetric (efficient) heat capacity} coefficient $s(\theta)$.
+% \begin{equation}
+% \label{eq:vhc}
+% 	s(\theta) = \left\{
+% 		\begin{array}{ll}
+% 			2324405.2778992266 + 557.7960597360886 x & x < \text{solidus},\\
+% 			x^3 ..., & \text{solidus} \le x < \text{liquidus},\\
+% 			x^3 ..., & \text{liquidus} \le x,
+% 		\end{array} \right.
+% \end{equation}
 
+For a sketch of $s(\theta)$ see Figure~\ref{fig:coef}.
 
 \subsection{Effective Thermal Conductivity}
+\label{subsec:conductivity}
 
 Convective heat transfer in the liquid phase (see the Marangoni effect [citation needed]) becomes the next modelling challenge caused by the phase transition. In order to not include the convection term into the core equation we extrapolate in a special way the thermal conductivity coefficient $\kappa(\theta)$ outside its experimentally measured values in the solid state. While heating, once the solidus point is passed, \emph{the effective thermal conductivity} becomes unequal in different directions resulting in a matrix valued function. The matrix $\kappa(\theta)$ is diagonal if the chosen coordinate system coincides with the main directions of the effective thermal conductivity.
 
@@ -56,24 +76,39 @@ Convective heat transfer in the liquid phase (see the Marangoni effect [citation
 Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
 }
 
+\begin{figure}[ht]
+	\centering
+	\input{plots/vhc.pgf}
+	\input{plots/kappa.pgf}
+	\caption{Volumetric heat capacity $s(\theta)$ and thermal conductivity $\kappa(\theta)$.}
+	\label{fig:coef}
+\end{figure}
+% TODO: write a makefile for automated rebuild of PGF plots
+
 % In fact, in the part of $\Omega$ which temperature is above the liquidus threshold an additional heat transfer takes place due to convection in the liquid metal. However, consideration of the convective heat transfer would significantly increase the complexity of the model. One of the possible ways to deal with this issue is assuming no convection on the liquid phase, but defining a fake thermal conductivity coefficient $\kappa(\theta)$ instead.
 
 
 \subsection{Boundary Conditions}
 
+Here we are going to construct the boundary conditions for maintaining the energy balance.
+
+\begin{itemize}
+	\item increasing the internal energy (heating) by laser
+	\item decreasing the internal energy (cooling) by air convection and radiation
+	\item we assume laser's power density to be uniform
+\end{itemize}
 
 \subsection{Model Equations}
+\label{subsec:equations}
+
+In this subsection we summarize the above considerations as a formal mathematical model.
 
 \begin{figure}[ht]
 	\centering
 	\input{plots/cylinder}
-	\caption{I don't like this plot much \ldots}
+	\caption{Cylinder $\Omega$ and its boundaries.}
 	\label{fig:cylinder}
 \end{figure}
-
-{\color{TolHighContrastBlue}
-I guess we need some plot of the cylinder $\Omega$, but I don't like much the one I put here. I'm not 100\% sure we need the coordinate system on the plot. The boundaries could be marked with colors instead of letters.
-}
 
 Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
@@ -96,16 +131,6 @@ The boundary conditions are
 Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
 The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
 
-The temperature dependent coefficients $s(\theta)$ and $\kappa(\theta)$ are defined using spline fitting to the experimental data, based on the above considerations in the current section, see Figure~\ref{fig:coef}. The exact formulas can be found in [cite numerical implementation].
-
-\begin{figure}[ht]
-	\centering
-	\input{plots/vhc.pgf}
-	\input{plots/kappa.pgf}
-	\caption{Volumetric heat capacity $s(\theta)$ and thermal conductivity $\kappa(\theta)$. I'm not sure we need these plots.}
-	\label{fig:coef}
-\end{figure}
-% TODO: write a makefile for automated rebuild of PGF plots
 
 
 \section{Optimal Control Problem}
