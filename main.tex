@@ -166,6 +166,7 @@ penalizes the difference between the maximal temperature at $x_{\text{target}}$ 
 
 
 \subsection{Solidification Velocity Penalty}
+\label{subsec:velocity}
 
 {\color{TolHighContrastBlue}
 Maybe this subsection will benefit from a picture (solidification corridor, isolines, velocity directions)?
@@ -229,22 +230,34 @@ To penalize the energy consumption we use the following penalty term:
 \subsection{Reduction to the radially symmetric case}
 
 {\color{TolHighContrastBlue}
-We pretend that everything is 3D up to this moment.
+\begin{itemize}
+	\item We pretend that everything is 3D up to this moment.
+	\item Motivate radial symmetry.
+	\item State the entire problem including all the equations and terms of the objective in cylindrical coordinates.
+\end{itemize}
+}
+
+\subsection{Discretization of the forward problem}
+
+{\color{TolHighContrastBlue}
+Mention \fenics somewhere here.
 }
 
 
+\subsection{Evaluation of the gradient}
+
 \section{Numerical Results}
-\label{sec:numerical_results}
+\label{sec:numericals}
 
 \appendix
 
 \section{Implementation Details}
+\label{sec:implementation}
 
 \section{Reproducing Numerical Results}
 
 
 \section{TODO}
-
 \begin{itemize}
 	\item Subsection~\ref{subsec:capacity}: introduce symbol $c(\theta)$.
 	\item Subsections \ref{subsec:capacity}, \ref{subsec:density}, and \ref{subsec:conductivity}: explain how it is technically done.
