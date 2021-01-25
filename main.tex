@@ -1,10 +1,13 @@
+%!TeX root = ./manuscript-numapde-preprint.tex
+
 \section{Introduction}
 \label{sec:introduction}
 
 \begin{itemize}
-	\item Pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series is a challenging engineering problem due to a hight tendency of the material to hot cracking during the solidification phase. Especially high cooling which take place in pulsed laser welding rates lead to high strain rates [cite PAMM-4].
+	\item Pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series is a challenging engineering problem due to a hight tendency of the material to hot cracking during the solidification phase. Especially high cooling rates which take place in pulsed laser welding lead to high material strain [cite PAMM-4].
 	\item In this paper we propose an optimal control approach to avoid the appearance of the hot cracks.
 	\item In order to obtain a realistic model we need to take into account several physical effects which are usually not present in a standard heat dissipation problem: the enthalpy of fusion and the convective heat transfer.
+	\item In pulsed laser welding a welding seam consists of multiple partially overlapping welding spots made by switching the laser on and off. Various experiments show that a hot-crack in the first welding spot usually spreads to the whole welding seam. And vice versa, if the first welding spot has no cracks then most likely the whole seam will be crack-free provided the welding regime kept the same for each of the spots [citation needed]. Therefore, in this paper study an optipal control problem for a single welding spot.
 	\item (We neglect the evaporation of the metal.)
 	\item In particular, we take some effort to define realistic boundary conditions.
 	\item From the mathematical point of view it makes a quasi-linear heat equation.
