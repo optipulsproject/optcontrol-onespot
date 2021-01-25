@@ -55,7 +55,7 @@ For the considered aluminium alloys, the reference values of volumetric heat cap
 	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
 
-Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
+Since the final formulas are cumbersome (and can be found in the numerical implementation), we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
 % \begin{equation}
 % \label{eq:vhc}
 % 	s(\theta) = \left\{
@@ -70,11 +70,20 @@ Since the final formulas are cumbersome, we limit ourselves here to a plot of th
 \subsection{Effective Thermal Conductivity}
 \label{subsec:conductivity}
 
-Convective heat transfer in the liquid phase (see the Marangoni effect [citation needed]) becomes the next modelling challenge caused by the phase transition. In order to not include the convection term into the core equation we extrapolate in a special way the thermal conductivity coefficient $\kappa(\theta)$ outside its experimentally measured values in the solid state. While heating, once the solidus point is passed, \emph{the effective thermal conductivity} becomes unequal in different directions resulting in a matrix valued function. The matrix $\kappa(\theta)$ is diagonal if the chosen coordinate system coincides with the main directions of the effective thermal conductivity.
+Convective heat transfer in the liquid phase becomes the next modelling challenge caused by the phase transition. Due to the Marangoni effect [citation needed], once the solidus point is passed, the heat transfer in the melting pool significantly increases in the radial direction and decreases in the axial direction (see Figure~\ref{fig:cylinder} for the coordinate axes).
+
+In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to the measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. The heat transfer in the angular direction is assumed to be zero.
+
+As the result, we have a matrix valued function $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0)$, which takes diagonal form since the chosen coordinate system coincides with the main directions of the observed thermal conductivity.
+
+% In order to not include the convection term into the core equation we extrapolate in a special way the thermal conductivity coefficient $\kappa(\theta)$ outside its experimentally measured values in the solid state. While heating, once the solidus point is passed, \emph{the effective thermal conductivity} becomes unequal in different directions resulting in a matrix valued function. We distinguish the radial and the axial main directions of the thermal conductivity. The matrix $\kappa(\theta)$ takes diagonal form if the chosen coordinate system coincides with the main directions of the effective thermal conductivity. Therefore, we have $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0).$ .See Figure~\ref{fig:cylinder}.
+
 
 {\color{TolHighContrastBlue}
 Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
 }
+
+Similarly to $c(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see Figure~\ref{fig:coef}.
 
 \begin{figure}[ht]
 	\centering
@@ -115,7 +124,6 @@ Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_
 	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
 \end{equation}
 which temperature-dependent coefficients $s(\theta(x,t)) = c(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ were duscussed in the previous subsections.
-% = \diag(\kappa_\text{rad}, \kappa_\text{ax})
 
 While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
 The boundary conditions are
