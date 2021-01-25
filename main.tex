@@ -48,13 +48,14 @@ Considering the above, it becomes more natural in our case to embed the enthalpy
 
 Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{effective volumetric heat capacity} coefficient $s(\theta)$.
 
-We construct the effective volumetric heat capacity $s(\theta)$ using the following procedure:
+For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility. Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
-	\item Make a linear least square approximation to the experimental data independently for the solid and in the liquid state of matter.
-	\item Connect obtained linear function by a cubic polynomial making a $C^1$ cubic spline.
-	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the alloy.
+	\item We make a linear least square approximation to the experimental data independently in the solid and in the liquid state of matter.
+	\item Make a $C^1$ cubic spline by filling the liquidus-solidus gap with uniquely defined cubic polynomial.
+	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
 
+Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
 % \begin{equation}
 % \label{eq:vhc}
 % 	s(\theta) = \left\{
@@ -65,7 +66,6 @@ We construct the effective volumetric heat capacity $s(\theta)$ using the follow
 % 		\end{array} \right.
 % \end{equation}
 
-For a sketch of $s(\theta)$ see Figure~\ref{fig:coef}.
 
 \subsection{Effective Thermal Conductivity}
 \label{subsec:conductivity}
