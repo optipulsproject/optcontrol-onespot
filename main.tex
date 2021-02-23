@@ -12,7 +12,6 @@
 	\item In particular, we take some effort to define realistic boundary conditions.
 	\item From the mathematical point of view it makes a quasi-linear heat equation.
 	\item The analysis of associated optimal control problems is quite involved, therefore our focus here is on modelling of the state equation and formulating of an appropriate cost function as well as the numerical solution of the discretized version of the optimal control problem.
-	\item \ldots literature review incl. engineering papers \ldots
 	\item This paper is structured as follows \ldots
 \end{itemize}
 
@@ -20,33 +19,47 @@
 \section{Modelling}
 \label{sec:modelling}
 
-In this section we are going to build a mathematical model for a single spot pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series.
+The aim of this section is to derive step-by-step a mathematical model for a single spot pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series in a cylinder.
 
-{\color{TolHighContrastBlue}
-Here we are using a sligtly modified mathematical model, which was previously developed in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.
-The key differences are:
-\begin{enumerate}
-	\item The heat capacity function $c(\theta)$ now includes the melting enthalpy, which was missing in the previous paper.
-	\item The temperature-dependent coefficients $c(\theta)$, $\rho(\theta)$, and $\kappa(\theta)$ are now constructed more accurate using spline fitting to the measured data.
-	\item The velocity component of the objective functional now takes into consideration all the internal points of the solidification corridor, not only the top surface as in the previous paper.
-	\item The boundary condition on the laser spot has been modified.
-	\item The thermal conductivity coefficient $\kappa(\theta)$ (prev. $\lambda(\theta)$) is a matrix-valued function in this paper.
-\end{enumerate}
-}
+\begin{figure}[ht]
+	\centering
+	\input{plots/cylinder}
+	\caption{Cylinder $\Omega$ and its boundaries.}
+	\label{fig:cylinder}
+\end{figure}
+
+Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface (see. Figure~\ref{fig:cylinder}), and $\Gamma_1$ be the part of the boundary affected by the laser beam radiation.
+Denote by $\theta(x,t)$ the temperature at the point $x \in \Omega$ at the time moment $t \in [0,T]$.
+
+We are going to describe the temperature evolution inside $\Omega$, and hence the evolution of the welding process, as a solution to a boundary value problem based on the heat equation.
+The applied nature of the problem provides a few modelling challenges such as temperature dependent properties of the material, a phase transition, and a combination of multiple heat transfer mechanisms.
+These challenges are sequentially managed in the succeeding subsections, resulting in a complete model.
+
+% {\color{TolHighContrastBlue}
+% Here we are using a sligtly modified mathematical model, which was previously developed in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.
+% The key differences are:
+% \begin{enumerate}
+% 	\item The heat capacity function $c(\theta)$ now includes the melting enthalpy, which was missing in the previous paper.
+% 	\item The temperature-dependent coefficients $c(\theta)$, $\rho(\theta)$, and $\kappa(\theta)$ are now constructed more accurate using spline fitting to the measured data.
+% 	\item The velocity component of the objective functional now takes into consideration all the internal points of the solidification corridor, not only the top surface as in the previous paper.
+% 	\item The boundary condition on the laser spot has been modified.
+% 	\item The thermal conductivity coefficient $\kappa(\theta)$ (prev. $\lambda(\theta)$) is a matrix-valued function in this paper.
+% \end{enumerate}
+% }
 
 
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its phisicall properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{(latent) heat of fusion}. For the opposite a liquid to a solid transition the \emph{heat of solidification} has the same absolute value but its sign is the opposite.
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{(latent) heat of fusion}. For the opposite a liquid to a solid transition the \emph{heat of solidification} has the same absolute value but its sign is the opposite.
 
-The classical Stefan problem [citation needed] is a particular kind of a boundary value problem, which describes the evolution of the boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
+The classical Stefan problem [citation needed] is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
 
 However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
 
 Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is done to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
 
-Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{effective volumetric heat capacity} coefficient $s(\theta)$.
+Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{effective volumetric heat capacity} coefficient $s(\theta)$.
 
 For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility. Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
@@ -99,31 +112,42 @@ Similarly to $c(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $
 
 \subsection{Boundary Conditions}
 
-Here we are going to construct the boundary conditions for maintaining the energy balance.
+The total internal energy of the body increases because
 
-\begin{itemize}
-	\item increasing the internal energy (heating) by laser
-	\item decreasing the internal energy (cooling) by air convection and radiation
-	\item we assume laser's power density to be uniform
-\end{itemize}
+For maintaining the energy balance we must consider the increase of the internal energy of the body via the laser's radiation and the decrease
+
+While in some studies the energy radiated by the laser is plugged into the equation as a volumetric energy source and described by its density, in this paper we assume no internal heat sources.
+Instead we consider the energy transferred to the body via the laser beam as a heat flux through the part of the boundary $\Gamma_1$:
+\begin{equation}
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = - \eta \cdot \text{pd}_{\max} \cdot u(t).
+\end{equation}
+Here $\text{pd}_{\max}$ is the power density of the laser beam, i.e. the ration of the the maximal total power to the area of the affected spot, $\eta$ is the the absorbsion coefficient of the material (which is assumed to be constant), and $u(t)$ is the control function taking values from $[0,1]$.
+
+In a similar way, the cooling of the body is described as a heat flux through the whole boundary (except possibly $\Gamma_3$). Notice, that the choice of a boundary condition at $\Gamma_3$ make any essential difference if the radius of $\Omega$ is chosen big enough.
+For simplicity we assume zero heat flux through $\Gamma_3$.
+
+We distingush a convective and a radiative cooling heat fluxes modelled as
+\begin{equation}
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = h \cdot (\theta(x,t) - \theta_\text{amb})
+\end{equation}
+and
+\begin{equation}
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
+\end{equation}
+respctively [reference to these models needed].
+Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, are the radiative and the convective cooling coefficients respectively, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
+The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
 
 \subsection{Model Equations}
 \label{subsec:equations}
 
-In this subsection we summarize the above considerations as a formal mathematical model.
+Let us summarize the above considerations and gather them together as a formal mathematical model.
 
-\begin{figure}[ht]
-	\centering
-	\input{plots/cylinder}
-	\caption{Cylinder $\Omega$ and its boundaries.}
-	\label{fig:cylinder}
-\end{figure}
-
-Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
+We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
 	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
 \end{equation}
-which temperature-dependent coefficients $s(\theta(x,t)) = c(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ were duscussed in the previous subsections.
+which temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines [reference to the implementation needed].
 
 While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
 The boundary conditions are
@@ -132,14 +156,10 @@ The boundary conditions are
 		\begin{array}{ll}
 			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)) + P_{\max} u(t), & \text{on}\ \Gamma_1, \\
 			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)), & \text{on}\ \Gamma_2 \cup \Gamma_4, \\
-			0, & \text{on}\ \Gamma_3%
-			\footnote{On $\Gamma_3$ the Dirichlet boundary condition $\theta(x,t) = \theta_0$ can be used as well, however, it is does not make any essential difference if the radius of $\Omega$ is chosen big enough.}.
+			0, & \text{on}\ \Gamma_3.
 		\end{array} \right.
 \end{equation}
-Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
-The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
-
-
+Here $k$, $h$, and $P_{\max}$ are known in advance constants; $u(t)$ is the control function taking values from $[0,1]$.
 
 \section{Optimal Control Problem}
 \label{sec:objective}
