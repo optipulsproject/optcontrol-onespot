@@ -160,45 +160,36 @@ Here $k$, $h$, and $P_{\max}$ are known in advance constants; $u(t)$ is the cont
 \section{Optimal Control Problem}
 \label{sec:objective}
 
-{\color{TolHighContrastBlue}
-In this section we are going to construct an objective functional as a sum of independent penalty terms.
-}
+This section aims at constructing of an  an objective functional as a sum of independent penalty terms, each term corresponding to a certain application driven requirement.
+We are trying to avoid state constraints as far as possible.
 
-From the engineering point of view the desired optimal control (i.e. the laser pulse shape) must:
+As imposed by the application, the desired optimal control (i.e. the laser pulse shape) must:
 \begin{itemize}
 	\item provide sufficient welding penetration;
-	\item ensure complete solidification after welding withing preselected time interval;
 	\item avoid hot cracking during the solidification stage;
+	\item ensure complete solidification after welding withing preselected time interval;
 	\item minimize the total energy consumed by the laser.
 \end{itemize}
 
 In the following subsections we present and discuss corresponding penalty terms designed to satisfy these requirements.
 
-{\color{TolHighContrastBlue}
-I think, one subsection per every penalty term is too much, so I gonna rewrite it in a more compact way.
-}
 
 \subsection{Welding Penetration Penalty}
+\label{subsec:velocity}
 
-
-
-In order to guarantee the successful completion of the welding stage we must ensure that the melting pool has reached a certein predefined depth. At the same time, exceeding of this depth would result in unnecessary increase in time and energy consumption. Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{threshold}}$. The corresponding term of the objective functional
-\begin{equation}
-	J_{\text{penetration}} = \frac{\beta_\text{penetration}}{2} \left( \| \theta(x_{\text{target}},\cdot) \|_{L^{\infty}[0,T]} - \theta_{\text{threshold}} \right)^2,
+In order to guarantee the \textbf{successful completion of the welding stage} we must ensure that the melting pool has reached a certein predefined depth. At the same time, exceeding of this depth would result in unnecessary increase in time and energy consumption. Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{threshold}}$. The corresponding term of the objective functional
+\begin{equation} \label{eq:J_penetration}
+	J_{\text{penetration}} = \frac{\beta_\text{penetration}}{2} \left( \| \theta(x_{\text{target}},\cdot) \|_{L^{\infty}[0,T]} - \theta_{\text{threshold}} \right)^2
 \end{equation}
-penalizes the difference between the maximal temperature at $x_{\text{target}}$ and $\theta_{\text{threshold}}$.
+penalizes the difference between the maximal temperature at $x_{\text{target}}$ and $\theta_{\text{threshold}}$. In order to simplify the numerical implementation, we substitute the $L^{\infty}$-norm in~\eqref{eq:J_penetration} with $L^{p}$-norm, where $p$ is sufficiently large.
 
 
 \subsection{Solidification Velocity Penalty}
 \label{subsec:velocity}
 
-{\color{TolHighContrastBlue}
-Maybe this subsection will benefit from a picture (solidification corridor, isolines, velocity directions)?
-}
+Our main practical goal is to \textbf{avoid appearing of the hot cracks} during the solidification stage. For this purpose we restrict the maximal velocity of the solidification front by introducing a non-standard penalty term.
 
-Our main optimization goal is to avoid appearing of the hot cracks during the solidification stage. For this purpose we restrict the maximal velocity of the solidification front by introducing a non-standard penalty term.
-
-Let $I(t)$ be a moving over time isothermal surface in $\Omega$. For a moving point $x(t) \in I(t)$ one can get
+Let $I(t)$ be a moving over time isothermal surface in $\Omega$ (see Figure~\ref{fig:velocity}). For a moving point $x(t) \in I(t)$ one can get
 \begin{equation} \label{eq:dxt}
 	\frac{d}{dt} \theta(x(t),t) = \grad \theta(x(t),t) \cdot x_t(t) + \theta_t(x(t),t) = 0.
 \end{equation}
@@ -215,6 +206,14 @@ Therefore, we define \emph{the velocity of an isothermal surface} as
 	v(x,t) \coloneqq \frac{\theta_t(x,t)}{\norm{\grad \theta(x,t)}}.
 \end{equation}
 
+
+\begin{figure}
+	\centering
+	\input{plots/solidification_velocity}
+	\caption{Solidification interface and its velocity (sectional view).}
+	\label{fig:velocity}
+\end{figure}
+
 The function $v(x,t)$ takes positive values near the edge of the melting pool while it expands and negative values while it shrinks. We are only interested in restricting negative values within the solidus-liquidus temperature corridor, we propose the following penalty term
 \begin{equation}
 	J_{\text{velocity}} = \frac{\beta_\text{velocity}}{2} =
@@ -230,20 +229,18 @@ where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is 
 \end{equation}
 
 
-\subsection{Completeness of Solidification Penalty}
+\subsection{Completeness of Solidification and Energy Consumption Penalties}
 
-To ensure that the solidification stage is complete at the final time $T$ we penalize the final temperatures $\theta(x, T)$ which are still above the solidus point:
+To ensure that the \textbf{solidification stage is complete} at the final time $T$ we penalize the final temperatures $\theta(x, T)$ which are still above the solidus point:
 \begin{equation}
 	J_{\text{completeness}} =
 	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max\{ \theta(x, T) - \text{solidus},\ 0 \}^2\, d\omega.
 \end{equation}
 
-\subsection{Energy Consumption Penalty}
-
-To penalize the energy consumption we use the following penalty term:
+To \textbf{minimize the energy consumption} we use the following standard penalty term:
 \begin{equation}
 	J_{\text{control}} =
-	\frac{\beta_\text{control}}{2} \norm{u(t)}_{L^2[0,T]}.
+	\frac{\beta_\text{control}}{2} \norm{u(t)}^2_{L^2[0,T]}.
 \end{equation}
 
 
