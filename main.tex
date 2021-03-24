@@ -158,10 +158,10 @@ The boundary conditions are
 \section{Optimal Control Problem}
 \label{sec:objective}
 
-This section aims at constructing of an  an objective functional as a sum of independent penalty terms, each term corresponding to a certain application driven requirement.
+This section aims at constructing of an objective functional as a sum of independent penalty terms, each term corresponding to a certain application driven requirement.
 We are trying to avoid state constraints as far as possible.
 
-As imposed by the application, the desired optimal control (i.e. the laser pulse shape) must:
+As imposed by the application, the desired optimal control must:
 \begin{itemize}
 	\item provide sufficient welding penetration;
 	\item avoid hot cracking during the solidification stage;
@@ -208,16 +208,15 @@ Therefore, we define \emph{the velocity of an isothermal surface} as
 \begin{figure}
 	\centering
 	\input{plots/solidification_velocity}
-	\caption{Solidification interface and its velocity (sectional view).}
+	\caption{Draft: solidification interface and its velocity (sectional view).}
 	\label{fig:velocity}
 \end{figure}
 
 The function $v(x,t)$ takes positive values near the edge of the melting pool while it expands and negative values while it shrinks. We are only interested in restricting negative values within the solidus-liquidus temperature corridor, we propose the following penalty term
 \begin{equation}
-	J_{\text{velocity}} = \frac{\beta_\text{velocity}}{2} =
+	J_{\text{velocity}} = \frac{\beta_\text{velocity}}{2}
 	\int_{\Omega \times [0,T]} \max \{ v_{\max} - v(x,t),\ 0 \}^2 \cdot \chi(\theta(x,t))\, dx\,dt
-\end{equation}
-where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is defined as
+\end{equation}where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is defined as
 \begin{equation}
 	\chi(\theta) \coloneqq \left\{
 		\begin{array}{ll}
