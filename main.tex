@@ -51,24 +51,24 @@ These challenges are sequentially managed in the succeeding subsections, resulti
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{(latent) heat of fusion}. For the opposite a liquid to a solid transition the \emph{heat of solidification} has the same absolute value but its sign is the opposite.
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{the (latent) heat of fusion}. For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
 
 The classical Stefan problem [citation needed] is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
 
 However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
 
-Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is done to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
+Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
 
-Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible \emph{effective volumetric heat capacity} coefficient $s(\theta)$.
+Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ which we refer to as \emph{the effective volumetric heat capacity}. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible effective volumetric heat capacity coefficient.
 
-For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility. Therefore, we construct $s(\theta)$ using the following procedure:
+For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility within a fixed state of matter. Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
 	\item We make a linear least square approximation to the experimental data independently in the solid and in the liquid state of matter.
-	\item Make a $C^1$ cubic spline by filling the liquidus-solidus gap with uniquely defined cubic polynomial.
+	\item Make a $C^1$ cubic spline by filling the liquidus-solidus gap with the uniquely defined cubic polynomial.
 	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
 
-Since the final formulas are cumbersome (and can be found in the numerical implementation), we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
+Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
 % \begin{equation}
 % \label{eq:vhc}
 % 	s(\theta) = \left\{
@@ -96,7 +96,7 @@ As the result, we have a matrix valued function $\kappa(\theta) = \diag(\kappa_\
 Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
 }
 
-Similarly to $c(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see Figure~\ref{fig:coef}.
+The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\theta)$ can be inspected in [link to implementation]. Similarly to $s(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see Figure~\ref{fig:coef}.
 
 \begin{figure}[ht]
 	\centering
@@ -117,11 +117,11 @@ Instead we consider the energy transferred to the body via the laser beam as a h
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = - \eta \cdot \text{pd}_{\max} \cdot u(t).
 \end{equation}
-Here $\text{pd}_{\max}$ is the power density of the laser beam, i.e. the ration of the the maximal total power to the area of the affected spot, $\eta$ is the the absorbsion coefficient of the material (which is assumed to be constant), and $u(t)$ is the control function taking values from $[0,1]$.
+Here $\text{pd}_{\max}$ is the power density of the laser beam, $\eta$ is the absorbsion coefficient of the material, and $u(t)$ is the control function bounded by $[0,1]$.
+Since the power distribution of the laser beam is close to uniform in the current study, the power density is assumed to be constant (and hence can be evaluated as the ratio of the the maximal total power to the area of the affected spot). The absorbtion coefficient is also assumed to be constant.
 
 In a similar way, the cooling of the body is described as a heat flux through the whole boundary (except possibly $\Gamma_3$). Notice, that the choice of a boundary condition at $\Gamma_3$ make any essential difference if the radius of $\Omega$ is chosen big enough.
 For simplicity we assume zero heat flux through $\Gamma_3$.
-
 We distingush a convective and a radiative cooling heat fluxes modelled as
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = h \cdot (\theta(x,t) - \theta_\text{amb})
@@ -131,14 +131,12 @@ and
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
 \end{equation}
 respctively [reference to these models needed].
-Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, are the radiative and the convective cooling coefficients respectively, and $P_{\max}$ is the maximal achievable laser power density in \si{\W\per\m^2}, which is known in advance.
-The control function $u(t)$ takes values from $[0,1]$ and represents the laser power intensity.
+Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, are the radiative and the convective cooling coefficients respectively, and $\theta_\text{amb}$ is the ambience temperature.
 
 \subsection{Model Equations}
 \label{subsec:equations}
 
-Let us summarize the above considerations and gather them together as a formal mathematical model.
-
+Let us summarize the above considerations.
 We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
 	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
@@ -147,15 +145,15 @@ which temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x
 
 While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
 The boundary conditions are
-\begin{equation}
+\begin{equation} \label{eq:heat_eq_bc}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = \left\{
 		\begin{array}{ll}
-			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)) + P_{\max} u(t), & \text{on}\ \Gamma_1, \\
-			k (\theta_\text{amb}^4 - \theta(x,t)^4) + h (\theta_\text{amb} - \theta(x,t)), & \text{on}\ \Gamma_2 \cup \Gamma_4, \\
+			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}) - \eta\, \text{pd}_{\max} u(t), & \text{on}\ \Gamma_1, \\
+			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}), & \text{on}\ \Gamma_2 \cup \Gamma_4, \\
 			0, & \text{on}\ \Gamma_3.
 		\end{array} \right.
 \end{equation}
-Here $k$, $h$, and $P_{\max}$ are known in advance constants; $u(t)$ is the control function taking values from $[0,1]$.
+% Here $k$, $h$, $\text{pd}_{\max}$, and $\theta_\text{amb}$ are known constants; $u(t)$ is the control function bounded by $[0,1]$.
 
 \section{Optimal Control Problem}
 \label{sec:objective}
