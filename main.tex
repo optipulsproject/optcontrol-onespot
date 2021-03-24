@@ -242,18 +242,87 @@ To \textbf{minimize the energy consumption} we use the following standard penalt
 
 
 
+\subsection{Optimal Control Problem Formulation}
+
+{\color{TolHighContrastBlue}
+We say that a function $u^*(t) \in [0,1]$ is the best optimal control, if it minimizes the objective functional
+\begin{equation} \label{eq:J}
+	J(u^*, \theta) \coloneqq J_{\text{penetration}} + J_{\text{velocity}} + J_{\text{completeness}} + J_{\text{control}}
+\end{equation}
+where $\theta(x, t)$ is the unique solution to the boundary value problem \eqref{eq:heat_eq}, \eqref{eq:heat_eq_bc} corresponding to $u^*(t)$.
+}
+
+
 \section{Discretization}
 \label{sec:discretization}
 
+\subsection{Weak Formulation}
+As the first step we are going to define a weak solution.
+
+\begin{definition}
+	Let $V$ be a subspace in $L^2(\Omega \times [0,T])$, $d\Omega$ be a volume element, $dS$ be a surface element, and let
+	\begin{equation*}
+		\Phi(\theta(x,t)) \coloneqq k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}).
+	\end{equation*}
+	We say that $\theta \in L^2(\Omega \times [0,T])$ is \emph{a weak solution} to the boundary value problem \eqref{eq:heat_eq}, \eqref{eq:heat_eq_bc} if the equality
+	\begin{multline} \label{eq:weak}
+		\int_{\Omega \times [0,T]} s(\theta(x,t)) \frac{\d \theta(x,t)}{\d t} v\, d\Omega\, dt
+		+
+		\int_{\Omega \times [0,T]} \langle \kappa(\theta(x,t)) \grad\theta(x,t), \grad v \rangle \, d\Omega\, dt \\
+		+
+		\int_{(\Gamma_1 \cup \Gamma_2) \times [0,T]} \Phi(\theta(x,t)) v\, dS\, dt -
+		\int_{\Gamma_1 \times [0,T]} \eta \text{pd}_{\max} u(t) v\, dS\, dt = 0
+	\end{multline}
+	holds for every $v\in V$.
+\end{definition}
+
+
 \subsection{Reduction to the radially symmetric case}
 
-{\color{TolHighContrastBlue}
-\begin{itemize}
-	\item We pretend that everything is 3D up to this moment.
-	\item Motivate radial symmetry.
-	\item State the entire problem including all the equations and terms of the objective in cylindrical coordinates.
-\end{itemize}
-}
+% Despite the problem is naturally three-dimensional,
+Up to this moment the problem was considered in $\R^3$.
+However, the power density of the laser beam proved be to radially symmetric, and there was no heat transition in the angular direction observed, i.e. $\partial\Omega/\partial\varphi = 0$. This motivates us to reduce the computational complexity of the problem by reducing the domain $\Omega$ to its two-dimensional radial section $\omega$, see Figure~\ref{fig:sec}.
+
+\begin{figure}
+	\centering
+	\input{plots/cylinder_sec}
+	\input{plots/sec}
+	\caption{Draft: reduction to the radially symmetric case.}
+	\label{fig:sec}
+\end{figure}
+
+Thus, equation~\ref{eq:weak} turns into
+\begin{multline} \label{eq:weak_reduced}
+	\int_{\omega \times [0,T]} s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v\, r\, dr\, dt
+	+
+	\int_{\Omega \times [0,T]} \langle \kappa(\theta(r,z,t)) \grad\theta(r,z,t), \grad v \rangle \, r\, dr\, dt \\
+	+
+	\int_{(\gamma_1 \cup \gamma_2) \times [0,T]} \Phi(\theta(x,t)) v\, r\, ds\, dt -
+	\int_{\gamma_1 \times [0,T]} \eta \text{pd}_{\max} u(t) v\, r\, ds\, dt = 0.
+\end{multline}
+
+Notice, that the gradient operator in equation~\eqref{eq:weak_reduced} must be used in its cylindrical form
+\begin{equation*}
+	\grad f(r,z,\varphi) =
+		\frac{\partial f}{\partial r} e_r
+		+
+		\frac{\partial f}{\partial z} e_z
+		+
+		\frac{1}{r} \frac{\partial f}{\partial \varphi} e_{\varphi},
+\end{equation*}
+however, as mentioned before, due to the radial symmetry of the heat distribution, the $e_{\varphi}$-component vanishes. This feature is convenient for the numerical implementation, since the standard gradient operator (in Cartesian coordinate form) can be used.
+
+Similarly, two penalty terms affected by this reduction take the following forms:
+\begin{eqnarray}
+	\label{eq:J_velocity_r}
+	J_\text{velocity} =
+	\frac{\beta_\text{velocity}}{2}
+	\int_{\omega \times [0,T]} \max \{ v_{\max} - v(r,z,t),\ 0 \}^2 \cdot \chi(\theta(r,z,t))\, r\, dr\, dt, \\
+	\label{eq:J_completeness_r}
+	J_\text{completeness} =
+	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta(r,z,T) - \text{solidus},\ 0 \}^2\, r\, dr.
+\end{eqnarray}
+
 
 \subsection{Discretization of the forward problem}
 
