@@ -293,9 +293,9 @@ However, the power density of the laser beam proved be to radially symmetric, an
 
 Thus, equation~\ref{eq:weak} turns into
 \begin{multline} \label{eq:weak_reduced}
-	\int_{\omega \times [0,T]} s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v\, r\, dr\, dt
+	\int_{\omega \times [0,T]} s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v\, r\, dr\, dz\, dt
 	+
-	\int_{\Omega \times [0,T]} \langle \kappa(\theta(r,z,t)) \grad\theta(r,z,t), \grad v \rangle \, r\, dr\, dt \\
+	\int_{\Omega \times [0,T]} \langle \kappa(\theta(r,z,t)) \grad\theta(r,z,t), \grad v \rangle \, r\, dr\, dz\, dt \\
 	+
 	\int_{(\gamma_1 \cup \gamma_2) \times [0,T]} \Phi(\theta(x,t)) v\, r\, ds\, dt -
 	\int_{\gamma_1 \times [0,T]} \eta \text{pd}_{\max} u(t) v\, r\, ds\, dt = 0.
@@ -317,18 +317,62 @@ Similarly, two penalty terms affected by this reduction take the following forms
 	\label{eq:J_velocity_r}
 	J_\text{velocity} =
 	\frac{\beta_\text{velocity}}{2}
-	\int_{\omega \times [0,T]} \max \{ v_{\max} - v(r,z,t),\ 0 \}^2 \cdot \chi(\theta(r,z,t))\, r\, dr\, dt, \\
+	\int_{\omega \times [0,T]} \max \{ v_{\max} - v(r,z,t),\ 0 \}^2 \cdot \chi(\theta(r,z,t))\, r\, dr\, dz\, dt, \\
 	\label{eq:J_completeness_r}
 	J_\text{completeness} =
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta(r,z,T) - \text{solidus},\ 0 \}^2\, r\, dr.
+	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta(r,z,T) - \text{solidus},\ 0 \}^2\, r\, dr\, dz.
 \end{eqnarray}
 
 
 \subsection{Discretization of the forward problem}
 
+We are going to combine the finite difference method in time with the finite element method in space.
+
 {\color{TolHighContrastBlue}
 Mention \fenics somewhere here.
+In order to use \fenics \ldots
 }
+
+Let $N_t$ be the number of considered time steps excluding the initial state, then we denote:
+\begin{align}
+	\tau & \coloneqq T/N_t, \\
+	\theta_n(x) & \coloneqq \theta(x,n\tau), & n &= 0, \ldots, N_t, \\
+	\theta_{n+\frac{1}{2}} & \coloneqq \alpha\theta_{n+1} + (1-\alpha)\theta_n,
+	 & n &= 0, \ldots, N_t-1, \\
+	u_n & \coloneqq u(n\tau), & n &= 0, \ldots, N_t-1,
+\end{align}
+% \end{mdframed}
+where $\alpha \in [0,1]$ is the implicitness parameter which is not neccessary equal to $1/2$.
+
+
+Withing the time interval $(n\tau, n\tau+\tau]$ we define the the following discrete in time operators:
+% \begin{mdframed}
+\begin{align}
+	\frac{\d\theta}{\d t} & \coloneqq \frac{\theta_{n+1}-\theta_n}{\tau},\\
+	\grad(\theta) & \coloneqq \grad\left(\theta_{n+\frac{1}{2}}\right),\\
+	\Phi(\theta) & \coloneqq \Phi\left(\theta_{n+\frac{1}{2}}\right),\\
+	s(\theta) & \coloneqq s(\theta_n),\\
+	\kappa(\theta) & \coloneqq \kappa(\theta_n).
+\end{align}
+% \end{mdframed}
+
+Now equation~\eqref{eq:weak_reduced} takes the form
+\begin{multline} \label{eq:discrete}
+	\sum_{n=0}^{N_t-1}\int_{\omega}
+		s(\theta_n) (\theta_{n+1}-\theta_n) v_n\, r\, dr\, dz
+	+ \tau
+	\sum_{n=0}^{N_t-1}\int_{\omega}
+		\left\langle \kappa(\theta_n) \grad \theta_{n+\frac{1}{2}} , \grad v_n \right\rangle\, r\, dr \, dz \\
+	+ \tau
+	\sum_{n=0}^{N_t-1}\int_{(\gamma_1 \cup \gamma_2)}
+		\Phi \left( \theta_{n+\frac{1}{2}} \right)  v_n\, r\, ds
+	- \tau
+	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
+		\text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
+\end{multline}
+
+In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial temperature field and $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ as the unknown vector (of scalar fields).
+Mind a little inconsistency in the indexing of $\theta$ and the test function $v = [v_0, v_1, \ldots, v_{N_t-1}]$. This is made on purpose to simplify indexing of arrays in the code.
 
 
 \subsection{Evaluation of the gradient}
