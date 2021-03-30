@@ -364,18 +364,44 @@ Now equation~\eqref{eq:weak_reduced} takes the form
 	\sum_{n=0}^{N_t-1}\int_{\omega}
 		\left\langle \kappa(\theta_n) \grad \theta_{n+\frac{1}{2}} , \grad v_n \right\rangle\, r\, dr \, dz \\
 	+ \tau
-	\sum_{n=0}^{N_t-1}\int_{(\gamma_1 \cup \gamma_2)}
+	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
 		\Phi \left( \theta_{n+\frac{1}{2}} \right)  v_n\, r\, ds
 	- \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
-		\text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
+		\eta \text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
 \end{multline}
 
 In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial temperature field and $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ as the unknown vector (of scalar fields).
-Mind a little inconsistency in the indexing of $\theta$ and the test function $v = [v_0, v_1, \ldots, v_{N_t-1}]$. This is made on purpose to simplify indexing of arrays in the code.
+
+% Mind a little inconsistency in the indexing of $\theta$ and the test function $v = [v_0, v_1, \ldots, v_{N_t-1}]$. This is made on purpose to simplify indexing of arrays in the code.
 
 
 \subsection{Evaluation of the gradient}
+
+{\color{TolHighContrastBlue}
+Write here about automatic differentiation in \fenics.
+}
+
+Let the temperature field evolution $\theta$ be already known and $p=[p_0, p_1, \ldots, p_{N_t-1}]$ be the sought-for adjoint state, see Figure~\ref{fig:indexing_diagram}.
+The Lagrange function takes the following form
+\begin{multline}
+	\mathcal{L}(\theta,u,p) \coloneqq
+	% \sum_{n=0}^{N_t-1}\int_{\Omega}
+	% 	\vel_{\circ}^2(\theta_n,\theta_{n+1}) +
+	J(\theta,u)
+	+
+	\sum_{n=0}^{N_t-1}\int_{\Omega}
+		s(\theta_n) (\theta_{n+1}-\theta_n) p_n\, d\omega \\
+	+ \tau
+	\sum_{n=0}^{N_t-1}\int_{\Omega}
+		\left\langle \kappa(\theta_n) \grad \theta_{n+\frac{1}{2}}, \grad p_n \right\rangle\, d\omega \\
+	+ \tau
+	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
+		\Phi \left( \theta_{n+\frac{1}{2}} \right) p_n\, ds
+	- \tau
+	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
+		\eta \text{pd}_{\max} u_n\, p_n\, ds.
+\end{multline}
 
 \section{Numerical Results}
 \label{sec:numericals}
