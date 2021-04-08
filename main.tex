@@ -329,33 +329,27 @@ Similarly, two penalty terms affected by this reduction take the following forms
 
 We are going to combine the finite difference method in time with the finite element method in space.
 
-{\color{TolHighContrastBlue}
-Mention \fenics somewhere here.
-In order to use \fenics \ldots
-}
+\added[id=DS]{\textbf{Mention \fenics somewhere here.}}
 
 Let $N_t$ be the number of considered time steps excluding the initial state, then we denote:
-\begin{align}
-	\tau & \coloneqq T/N_t, \\
-	\theta_n(x) & \coloneqq \theta(x,n\tau), & n &= 0, \ldots, N_t, \\
-	\theta_{n+\frac{1}{2}} & \coloneqq \alpha\theta_{n+1} + (1-\alpha)\theta_n,
-	 & n &= 0, \ldots, N_t-1, \\
-	u_n & \coloneqq u(n\tau), & n &= 0, \ldots, N_t-1,
-\end{align}
-% \end{mdframed}
-where $\alpha \in [0,1]$ is the implicitness parameter which is not neccessary equal to $1/2$.
+\begin{equation}
+\begin{split}
+	\tau \coloneqq T/N_t, \quad	u_n \coloneqq u(n\tau),	\quad \theta_n(r,z) \coloneqq \theta(r,z,n\tau), \\
+	\theta_{n+\alpha}(r,z) \coloneqq \alpha\theta_{n+1}(r,z) + (1-\alpha)\theta_n(r,z)\\
+\end{split}
+\end{equation}
+where $\alpha \in [0,1]$ is the implicitness parameter.
 
+Withing the time interval $(n\tau, n\tau+\tau]$ the coefficients and the operators of equation~\eqref{eq:heat_eq} are discretized as follows:
+\begin{equation}
+\begin{split}
+	s(\theta) \coloneqq s(\theta_n), \quad \kappa(\theta) \coloneqq \kappa(\theta_n), \quad \Phi(\theta) \coloneqq \Phi\left(\theta_{n+\alpha}\right), \\
+	\frac{\d\theta}{\d t} \coloneqq \frac{\theta_{n+1}-\theta_n}{\tau}, \quad
+	\grad(\theta) \coloneqq \grad\left(\theta_{n+\alpha}\right).
+\end{split}
+\end{equation}
 
-Withing the time interval $(n\tau, n\tau+\tau]$ we define the the following discrete in time operators:
-% \begin{mdframed}
-\begin{align}
-	\frac{\d\theta}{\d t} & \coloneqq \frac{\theta_{n+1}-\theta_n}{\tau},\\
-	\grad(\theta) & \coloneqq \grad\left(\theta_{n+\frac{1}{2}}\right),\\
-	\Phi(\theta) & \coloneqq \Phi\left(\theta_{n+\frac{1}{2}}\right),\\
-	s(\theta) & \coloneqq s(\theta_n),\\
-	\kappa(\theta) & \coloneqq \kappa(\theta_n).
-\end{align}
-% \end{mdframed}
+For the space discretization the subspace of piecewise linear functions on a predefined mesh.
 
 Now equation~\eqref{eq:weak_reduced} takes the form
 \begin{multline} \label{eq:discrete}
@@ -363,10 +357,10 @@ Now equation~\eqref{eq:weak_reduced} takes the form
 		s(\theta_n) (\theta_{n+1}-\theta_n) v_n\, r\, dr\, dz
 	+ \tau
 	\sum_{n=0}^{N_t-1}\int_{\omega}
-		\left\langle \kappa(\theta_n) \grad \theta_{n+\frac{1}{2}} , \grad v_n \right\rangle\, r\, dr \, dz \\
+		\left\langle \kappa(\theta_n) \grad \theta_{n+\alpha} , \grad v_n \right\rangle\, r\, dr \, dz \\
 	+ \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
-		\Phi \left( \theta_{n+\frac{1}{2}} \right)  v_n\, r\, ds
+		\Phi \left( \theta_{n+\alpha} \right)  v_n\, r\, ds
 	- \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
 		\eta \text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
@@ -395,14 +389,22 @@ The Lagrange function takes the following form
 		s(\theta_n) (\theta_{n+1}-\theta_n) p_n\, d\omega \\
 	+ \tau
 	\sum_{n=0}^{N_t-1}\int_{\Omega}
-		\left\langle \kappa(\theta_n) \grad \theta_{n+\frac{1}{2}}, \grad p_n \right\rangle\, d\omega \\
+		\left\langle \kappa(\theta_n) \grad \theta_{n+\alpha}, \grad p_n \right\rangle\, d\omega \\
 	+ \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
-		\Phi \left( \theta_{n+\frac{1}{2}} \right) p_n\, ds
+		\Phi \left( \theta_{n+\alpha} \right) p_n\, ds
 	- \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
 		\eta \text{pd}_{\max} u_n\, p_n\, ds.
 \end{multline}
+
+The adjoint equation is derived mostly using \fenics built-in automatic differentiation. However, the penalty term $J_\text{penetration}$ unlike the other ones, cannot be splite into a discrete in time sum and hence a slight manual intervention is required to derive the adjoint equation. One can find the details of implementation in \added[id=DS]{\textbf{[\texttt{solve\_adjoint}, ...]}}.
+
+When the adjoint state is known, the gradient can be evalueted as
+\begin{equation}
+	\grad_u \mathcal{L} = - \int_{\gamma_1} \eta \text{pd}_{\max}\, \vec{p}\, ds.
+\end{equation}
+
 
 \section{Numerical Results}
 \label{sec:numericals}
@@ -424,4 +426,13 @@ The Lagrange function takes the following form
 	\item \cref{sec:numericals}: sketch the gradient descent algorithm.
 	\item Make a short explanation about 2XXX, 5XXX, and 6XXX aluminium alloys. What is special about them and why are they relevant to this study?
 	\item \cref{sec:implementation}: provide code listings with syntax highlight via pygments.
+\end{itemize}
+
+
+\section{Misc}
+Links to the open repository on GitHub (optcontrol-draft):
+\begin{itemize}
+	\item \url{https://github.com/dstrelnikov/optipuls/tree/optcontrol-draft}
+	\item \url{https://github.com/dstrelnikov/optipuls/blob/optcontrol-draft/optipuls/coefficients.py}
+	\item \url{https://github.com/dstrelnikov/optipuls/blob/optcontrol-draft/optipuls/core.py#L184}
 \end{itemize}
