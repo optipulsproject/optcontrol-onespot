@@ -28,7 +28,7 @@ The aim of this section is to derive step-by-step a mathematical model for a sin
 	\label{fig:cylinder}
 \end{figure}
 
-Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface (see. Figure~\ref{fig:cylinder}), and $\Gamma_1$ be the part of the boundary affected by the laser beam radiation.
+Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface (see \cref{fig:cylinder}), and $\Gamma_1$ be the part of the boundary affected by the laser beam radiation.
 Denote by $\theta(x,t)$ the temperature at the point $x \in \Omega$ at the time moment $t \in [0,T]$.
 
 We are going to describe the temperature evolution inside $\Omega$, and hence the evolution of the welding process, as a solution to a boundary value problem based on the heat equation.
@@ -51,15 +51,15 @@ These challenges are sequentially managed in the succeeding subsections, resulti
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorbation or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{the (latent) heat of fusion}. For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorption or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{the (latent) heat of fusion}. For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
 
-The classical Stefan problem [citation needed] is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
+The classical Stefan problem \added[id=RH]{\textbf{[citation needed]}} is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
 
 However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
 
 Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
 
-Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ which we refer to as \emph{the effective volumetric heat capacity}. Therefore, we ignore volume changes but encount the variable density in order to obtain maximally plausible effective volumetric heat capacity coefficient.
+Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ which we refer to as \emph{the effective volumetric heat capacity}. Therefore, we ignore volume changes but take into account the variable density in order to obtain maximally plausible effective volumetric heat capacity coefficient.
 
 For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility within a fixed state of matter. Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
@@ -68,7 +68,7 @@ For the considered aluminium alloys, the reference values of volumetric heat cap
 	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline which integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
 
-Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see Figure~\ref{fig:coef}.
+Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see \cref{fig:coef}.
 % \begin{equation}
 % \label{eq:vhc}
 % 	s(\theta) = \left\{
@@ -83,7 +83,7 @@ Since the final formulas are cumbersome, we limit ourselves here to a plot of th
 \subsection{Effective Thermal Conductivity}
 \label{subsec:conductivity}
 
-Convective heat transfer in the liquid phase becomes the next modelling challenge caused by the phase transition. Due to the Marangoni effect [citation needed], once the solidus point is passed, the heat transfer in the melting pool significantly increases in the radial direction and decreases in the axial direction (see Figure~\ref{fig:cylinder} for the coordinate axes).
+Convective heat transfer in the liquid phase becomes the next modelling challenge caused by the phase transition. Due to the Marangoni effect \added[id=RH]{\textbf{[citation needed]}}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in the radial direction and decreases in the axial direction (see \cref{fig:cylinder} for the coordinate axes).
 
 In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to the measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. The heat transfer in the angular direction is assumed to be zero.
 
@@ -92,11 +92,9 @@ As the result, we have a matrix valued function $\kappa(\theta) = \diag(\kappa_\
 % In order to not include the convection term into the core equation we extrapolate in a special way the thermal conductivity coefficient $\kappa(\theta)$ outside its experimentally measured values in the solid state. While heating, once the solidus point is passed, \emph{the effective thermal conductivity} becomes unequal in different directions resulting in a matrix valued function. We distinguish the radial and the axial main directions of the thermal conductivity. The matrix $\kappa(\theta)$ takes diagonal form if the chosen coordinate system coincides with the main directions of the effective thermal conductivity. Therefore, we have $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0).$ .See Figure~\ref{fig:cylinder}.
 
 
-{\color{TolHighContrastBlue}
-Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.
-}
+\added[id=DS]{\textbf{Obtained in this way numerical results have shown a good poximity to the corresponding lab experiments in the eyeball metric.}}
 
-The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\theta)$ can be inspected in [link to implementation]. Similarly to $s(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see Figure~\ref{fig:coef}.
+The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\theta)$ can be inspected in \added[id=DS]{\textbf{[link to implementation]}}. Similarly to $s(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see \cref{fig:coef}.
 
 \begin{figure}[ht]
 	\centering
@@ -117,8 +115,8 @@ Instead we consider the energy transferred to the body via the laser beam as a h
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = - \eta \cdot \text{pd}_{\max} \cdot u(t).
 \end{equation}
-Here $\text{pd}_{\max}$ is the power density of the laser beam, $\eta$ is the absorbsion coefficient of the material, and $u(t)$ is the control function bounded by $[0,1]$.
-Since the power distribution of the laser beam is close to uniform in the current study, the power density is assumed to be constant (and hence can be evaluated as the ratio of the the maximal total power to the area of the affected spot). The absorbtion coefficient is also assumed to be constant.
+Here $\text{pd}_{\max}$ is the power density of the laser beam, $\eta$ is the absorption coefficient of the material, and $u(t)$ is the control function bounded by $[0,1]$.
+Since the power distribution of the laser beam is close to uniform in the current study, the power density is assumed to be constant (and hence can be evaluated as the ratio of the the maximal total power to the area of the affected spot). The absorption coefficient is also assumed to be constant.
 
 In a similar way, the cooling of the body is described as a heat flux through the whole boundary (except possibly $\Gamma_3$). Notice, that the choice of a boundary condition at $\Gamma_3$ make any essential difference if the radius of $\Omega$ is chosen big enough.
 For simplicity we assume zero heat flux through $\Gamma_3$.
@@ -130,18 +128,18 @@ and
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
 \end{equation}
-respctively [reference to these models needed].
+respctively \added[id=DS]{\textbf{[reference to these models needed]}}.
 Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, are the radiative and the convective cooling coefficients respectively, and $\theta_\text{amb}$ is the ambience temperature.
 
 \subsection{Model Equations}
 \label{subsec:equations}
 
 Let us summarize the above considerations.
-We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on Figure~\ref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
+We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on \cref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
 	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
 \end{equation}
-which temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines [reference to the implementation needed].
+which temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines \added[id=DS]{\textbf{[reference to the implementation needed]}}.
 
 While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
 The boundary conditions are
@@ -162,12 +160,12 @@ This section aims at constructing of an objective functional as a sum of indepen
 We are trying to avoid state constraints as far as possible.
 
 As imposed by the application, the desired optimal control must:
-\begin{itemize}
+\begin{enumeratearabic}
 	\item provide sufficient welding penetration;
 	\item avoid hot cracking during the solidification stage;
 	\item ensure complete solidification after welding withing preselected time interval;
 	\item minimize the total energy consumed by the laser.
-\end{itemize}
+\end{enumeratearabic}
 
 In the following subsections we present and discuss corresponding penalty terms designed to satisfy these requirements.
 
@@ -187,7 +185,7 @@ penalizes the difference between the maximal temperature at $x_{\text{target}}$ 
 
 Our main practical goal is to \textbf{avoid appearing of the hot cracks} during the solidification stage. For this purpose we restrict the maximal velocity of the solidification front by introducing a non-standard penalty term.
 
-Let $I(t)$ be a moving over time isothermal surface in $\Omega$ (see Figure~\ref{fig:velocity}). For a moving point $x(t) \in I(t)$ one can get
+Let $I(t)$ be a moving over time isothermal surface in $\Omega$ (see \cref{fig:velocity}). For a moving point $x(t) \in I(t)$ one can get
 \begin{equation} \label{eq:dxt}
 	\frac{d}{dt} \theta(x(t),t) = \grad \theta(x(t),t) \cdot x_t(t) + \theta_t(x(t),t) = 0.
 \end{equation}
@@ -226,13 +224,17 @@ The function $v(x,t)$ takes positive values near the edge of the melting pool wh
 \end{equation}
 
 
-\subsection{Completeness of Solidification and Energy Consumption Penalties}
+\subsection{Completeness of Solidification}
 
 To ensure that the \textbf{solidification stage is complete} at the final time $T$ we penalize the final temperatures $\theta(x, T)$ which are still above the solidus point:
 \begin{equation}
 	J_{\text{completeness}} =
 	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max\{ \theta(x, T) - \text{solidus},\ 0 \}^2\, d\omega.
 \end{equation}
+
+\subsection{Energy Consumption Penalties}
+
+\added[id=RH]{\textbf{Add some text}}
 
 To \textbf{minimize the energy consumption} we use the following standard penalty term:
 \begin{equation}
@@ -244,13 +246,12 @@ To \textbf{minimize the energy consumption} we use the following standard penalt
 
 \subsection{Optimal Control Problem Formulation}
 
-{\color{TolHighContrastBlue}
+\added[id=RH]{\textbf{Formulate more precisely.}}
 We say that a function $u^*(t) \in [0,1]$ is the best optimal control, if it minimizes the objective functional
 \begin{equation} \label{eq:J}
 	J(u^*, \theta) \coloneqq J_{\text{penetration}} + J_{\text{velocity}} + J_{\text{completeness}} + J_{\text{control}}
 \end{equation}
 where $\theta(x, t)$ is the unique solution to the boundary value problem \eqref{eq:heat_eq}, \eqref{eq:heat_eq_bc} corresponding to $u^*(t)$.
-}
 
 
 \section{Discretization}
@@ -281,7 +282,7 @@ As the first step we are going to define a weak solution.
 
 % Despite the problem is naturally three-dimensional,
 Up to this moment the problem was considered in $\R^3$.
-However, the power density of the laser beam proved be to radially symmetric, and there was no heat transition in the angular direction observed, i.e. $\partial\Omega/\partial\varphi = 0$. This motivates us to reduce the computational complexity of the problem by reducing the domain $\Omega$ to its two-dimensional radial section $\omega$, see Figure~\ref{fig:sec}.
+However, the power density of the laser beam proved be to radially symmetric, and there was no heat transition in the angular direction observed, i.e. $\partial\Omega/\partial\varphi = 0$. This motivates us to reduce the computational complexity of the problem by reducing the domain $\Omega$ to its two-dimensional radial section $\omega$, see \cref{fig:sec}.
 
 \begin{figure}
 	\centering
@@ -291,7 +292,7 @@ However, the power density of the laser beam proved be to radially symmetric, an
 	\label{fig:sec}
 \end{figure}
 
-Thus, equation~\ref{eq:weak} turns into
+Thus, \eqref{eq:weak} turns into
 \begin{multline} \label{eq:weak_reduced}
 	\int_{\omega \times [0,T]} s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v\, r\, dr\, dz\, dt
 	+
@@ -382,7 +383,7 @@ In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial tempera
 Write here about automatic differentiation in \fenics.
 }
 
-Let the temperature field evolution $\theta$ be already known and $p=[p_0, p_1, \ldots, p_{N_t-1}]$ be the sought-for adjoint state, see Figure~\ref{fig:indexing_diagram}.
+Let the temperature field evolution $\theta$ be already known and $p=[p_0, p_1, \ldots, p_{N_t-1}]$ be the sought-for adjoint state, see \cref{fig:indexing_diagram}.
 The Lagrange function takes the following form
 \begin{multline}
 	\mathcal{L}(\theta,u,p) \coloneqq
@@ -416,11 +417,11 @@ The Lagrange function takes the following form
 
 \section{TODO}
 \begin{itemize}
-	\item Subsection~\ref{subsec:capacity}: introduce symbol $c(\theta)$.
-	\item Subsections \ref{subsec:capacity}, \ref{subsec:density}, and \ref{subsec:conductivity}: explain how it is technically done.
-	\item Subsection \ref{subsec:equations}: organize it as a summary, putting together everything from section~\ref{sec:modelling}.
-	\item Subsection~\ref{subsec:velocity}: make a 2D picture illustrating the velocity of a single isoline at a single time moment.
-	\item Section~\ref{sec:numericals}: sketch the gradient descent algorithm.
+	\item \cref{subsec:capacity}: introduce symbol $c(\theta)$.
+	\item \cref{subsec:capacity,subsec:density,subsec:conductivity}: explain how it is technically done.
+	\item \cref{subsec:equations}: organize it as a summary, putting together everything from \cref{sec:modelling}.
+	\item \cref{subsec:velocity}: make a 2D picture illustrating the velocity of a single isoline at a single time moment.
+	\item \cref{sec:numericals}: sketch the gradient descent algorithm.
 	\item Make a short explanation about 2XXX, 5XXX, and 6XXX aluminium alloys. What is special about them and why are they relevant to this study?
-	\item Section~\ref{sec:implementation}: provide code listings with syntax highlight via pygments.
+	\item \cref{sec:implementation}: provide code listings with syntax highlight via pygments.
 \end{itemize}
