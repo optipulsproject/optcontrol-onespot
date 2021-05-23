@@ -366,7 +366,7 @@ Now equation~\eqref{eq:weak_reduced} takes the form
 		\eta \text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
 \end{multline}
 
-In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial temperature field and $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ as the unknown vector (of scalar fields).
+In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial temperature field and $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ as the unknown vector (of scalar fields). The equation is solved step by step in time, i.e. we find $\theta_{n+1}$ using already known $\theta_1, \ldots, \theta_n$.
 
 
 \subsection{Discretization of the objective functional}
@@ -421,13 +421,13 @@ The Lagrange function takes the following form
 		\eta \text{pd}_{\max} u_n\, p_n\, ds.
 \end{multline}
 
-Differentiating $\mathcal{L}(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $v$ we get
+Differentiating $\mathcal{L}(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $\delta u$ we get
 \begin{equation}
-	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial u} (v)
+	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial u} (\delta u)
 	=
 	\tau \sum_{n=0}^{N_t-1}
 	\left\langle
-		\beta_\text{control}\, u_n - \int_{\gamma_1} \eta \text{pd}_{\max} p_n\, ds, v
+		\beta_\text{control}\, u_n - \int_{\gamma_1} \eta \text{pd}_{\max} p_n\, ds, \delta u
 	\right\rangle
 \end{equation}
 and hence
@@ -437,12 +437,19 @@ and hence
 
 The adjoint state $p$ must be evaluated to benefit from formula~\eqref{eq:gradient}. The corresponding adjoint equation is obtained from
 \begin{equation}
-	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial \theta} (v)
-	= 0, \quad \forall v \in V.
+	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial \theta} (\delta \theta)
+	= 0, \quad \forall \delta \theta \in V.
 \end{equation}
 We do not provide the explicit formula for the adjoint equation here, since in the code it is derived using \fenics' built-in automatic differentiation.
 The only manual differentiation is required for the penalty term $J_\text{penetration}$, since it has a different structure from the other terms.
 One can find more details in \cite[\texttt{solve\_adjoint}]{optipuls_github}.
+
+
+\subsection{Projected Gradient Descent}
+\begin{itemize}
+	\item short description of the method itself
+	\item spell out the Armijo condition
+\end{itemize}
 
 
 \section{Numerical Results}
