@@ -455,6 +455,20 @@ One can find more details in \cite[\texttt{solve\_adjoint}]{optipuls_github}.
 \section{Numerical Results}
 \label{sec:numericals}
 
+
+\begin{figure}[h]
+	\centering
+	\foreach \PYAG in {1500, 2000, 2500} {
+		\foreach \T in {0.010, 0.015, 0.020} {
+			\includegraphics[scale=0.6]{plots/optimized/\PYAG-\T.pdf}
+		}
+		\\
+	}
+	\caption{This is just a proof of concept. Do not take it seriously.}
+\end{figure}
+
+
+
 \appendix
 
 \section{Implementation Details}
