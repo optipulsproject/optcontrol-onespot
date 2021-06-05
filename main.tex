@@ -458,15 +458,21 @@ One can find more details in \cite[\texttt{solve\_adjoint}]{optipuls_github}.
 
 \begin{figure}[h]
 	\centering
-	\foreach \PYAG in {1500, 2000, 2500} {
-		\foreach \T in {0.010, 0.015, 0.020} {
-			\includegraphics[scale=0.6]{plots/optimized/\PYAG-\T.pdf}
-		}
-		\\
-	}
+	\includegraphics{plots/optimized/zeroguess.pdf}
 	\caption{This is just a proof of concept. Do not take it seriously.}
 \end{figure}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics{plots/optimized/rampdown.pdf}
+	\caption{Yet another dummy plot.}
+\end{figure}
+
+\begin{table} \label{tab:report}
+	\centering
+	\input{reports/table_report}
+	\caption{Report on the optimizations...}
+\end{table}
 
 
 \appendix
