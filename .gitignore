@@ -22,3 +22,7 @@
 *.swp
 *.swo
 
+numericals
+!numericals/_src
+
+**/__pycache__
