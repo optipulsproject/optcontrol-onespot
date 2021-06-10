@@ -46,14 +46,22 @@ numericals/rampdown/%.npy numericals/rampdown/%.json &: numericals/_src/optimize
 	python3 numericals/_src/optimize-rampdown.py --outfile=$@
 
 
+plots.all: plots.coefficients plots.zeroguess plots.rampdown
+plots.coefficients: plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
+plots.zeroguess: plots/optimized/zeroguess.pdf
+plots.rampdown: plots/optimized/rampdown.pdf
 
+numericals.all: numericals.zeroguess numericals.rampdown
+numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) $(ZEROGUESS_REPORTS)
+numericals.rampdown: $(RAMPDOWN_OPTCONTROLS) $(RAMPDOWN_REPORTS)
 
 clean.all: clean.plots clean.numericals
 	latexmk -C
 
 clean.numericals:
-	rm -rf numericals/zeroguess/*.npy
-	rm -rf numericals/rampdown/*.npy
+	rm -rf numericals/zeroguess/*
+	rm -rf numericals/rampdown/*
 
 clean.plots:
+	rm plots/coefficients/*
 	rm plots/optimized/*
