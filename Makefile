@@ -14,6 +14,8 @@ PLOTS_ALL = plots/optimized/zeroguess.pdf plots/optimized/rampdown.pdf plots/coe
 TABLES_ALL = tables/zeroguess.tex tables/rampdown.tex
 
 
+preprint: $(MANUSCRIPT_PREPRINT_PDF)
+
 $(MANUSCRIPT_PREPRINT_PDF): \
 			$(MANUSCRIPT_MAIN_TEX) \
 			$(MANUSCRIPT_TEMPLATE_TEX) \
@@ -56,6 +58,8 @@ plots.all: plots.coefficients plots.zeroguess plots.rampdown
 plots.coefficients: plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
 plots.zeroguess: plots/optimized/zeroguess.pdf
 plots.rampdown: plots/optimized/rampdown.pdf
+
+tables.all: tables/zeroguess.tex tables/rampdown.tex
 
 numericals.all: numericals.zeroguess numericals.rampdown
 numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) $(ZEROGUESS_REPORTS)
