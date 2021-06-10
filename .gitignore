@@ -22,7 +22,7 @@
 *.swp
 *.swo
 
-numericals
-!numericals/_src
+numericals/zeroguess
+numericals/rampdown
 
 **/__pycache__

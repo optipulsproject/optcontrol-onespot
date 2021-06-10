@@ -1,4 +1,5 @@
 import argparse
+import json
 import re
 
 import numpy as np
@@ -45,5 +46,23 @@ problem.laser_pd = laser_pd
 control = (P_YAG_rd / P_YAG) * linear_rampdown(time_domain.timeline, t1, t2)
 simulation = Simulation(problem, control)
 descent = gradient_descent(simulation, **parameters.gradient_descent)
+optimized = descent[-1]
 
-np.save(args.outfile, descent[-1].control)
+# save the optimal control
+np.save(args.outfile, optimized.control)
+
+# prepare the report
+report = {
+    'P_YAG': optimized.problem.P_YAG,
+    'T': optimized.problem.time_domain.T,
+    'temp_target_point_max': optimized.temp_target_point_vector.max(),
+    'penalty_welding_total': optimized.penalty_welding_total,
+    'penalty_velocity_total': optimized.penalty_velocity_total,
+    'penalty_liquidity_total': optimized.penalty_liquidity_total,
+    'penalty_control_total': optimized.penalty_control_total,
+    'penalty_total': optimized.J,
+}
+
+# save the report
+with open(args.outfile.replace('.npy', '.json'), 'w') as report_file:
+    json.dump(report, report_file, indent=4)
