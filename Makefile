@@ -2,51 +2,72 @@ MANUSCRIPT_TEMPLATE_TEX = manuscript-numapde-preprint.tex
 MANUSCRIPT_PREPRINT_PDF = $(MANUSCRIPT_TEMPLATE_TEX:.tex=.pdf)
 MANUSCRIPT_MAIN_TEX = main.tex
 
-CONTROLS_OPTIMIZED_ZERO = $(shell /bin/bash -c 'echo numericals/zeroguess/{1500,2000,2500}-0.0{10,15,20}.npy')
-CONTROLS_OPTIMIZED_RAMPDOWN = $(shell /bin/bash -c 'echo numericals/rampdown/2000-1500-0.005-{0.005,0.010}-0.012.npy')
+OPTENV = optenv/__init__.py optenv/problem.py optenv/parameters.py optenv/material.json
 
-PLOTS_ALL = plots/optimized/zeroguess.pdf plots/optimized/rampdown.pdf
+ZEROGUESS_OPTCONTROLS = $(shell optenv/filenames.py --experiment=zeroguess --type=optcontrols)
+ZEROGUESS_REPORTS = $(shell optenv/filenames.py --experiment=zeroguess --type=reports)
+
+RAMPDOWN_OPTCONTROLS = $(shell optenv/filenames.py --experiment=rampdown --type=optcontrols)
+RAMPDOWN_REPORTS = $(shell optenv/filenames.py --experiment=rampdown --type=reports)
+
+PLOTS_ALL = plots/optimized/zeroguess.pdf plots/optimized/rampdown.pdf plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
+TABLES_ALL = tables/zeroguess.tex tables/rampdown.tex
 
 
-$(MANUSCRIPT_PREPRINT_PDF): $(MANUSCRIPT_MAIN_TEX) $(MANUSCRIPT_TEMPLATE_TEX) $(PLOTS_ALL)
+$(MANUSCRIPT_PREPRINT_PDF): \
+			$(MANUSCRIPT_MAIN_TEX) \
+			$(MANUSCRIPT_TEMPLATE_TEX) \
+			$(PLOTS_ALL) \
+			$(TABLES_ALL)
 	latexmk -pdf -silent $(MANUSCRIPT_TEMPLATE_TEX)
 
-plots/optimized/zeroguess.pdf: $(CONTROLS_OPTIMIZED_ZERO) plots/_src/zeroguess.py
+plots/coefficients/vhc.pdf: plots/_src/vhc.py $(OPTENV)
+	python3 plots/_src/vhc.py --outfile=$@
+
+plots/coefficients/kappa.pdf: plots/_src/kappa.py $(OPTENV)
+	python3 plots/_src/kappa.py --outfile=$@
+
+plots/optimized/zeroguess.pdf: $(ZEROGUESS_OPTCONTROLS) plots/_src/zeroguess.py
 	python3 plots/_src/zeroguess.py --outfile=$@
 
-plots/optimized/rampdown.pdf: $(CONTROLS_OPTIMIZED_RAMPDOWN) plots/_src/rampdown.py
+plots/optimized/rampdown.pdf: $(RAMPDOWN_OPTCONTROLS) plots/_src/rampdown.py
 	python3 plots/_src/rampdown.py --outfile=$@
 
-numericals/%: $(wildcard 'optenv/*')
+tables/zeroguess.tex: $(ZEROGUESS_REPORTS) tables/_src/zeroguess.py
+	python3 tables/_src/zeroguess.py > tables/zeroguess.tex
 
-numericals/zeroguess/%.npy: numericals/_src/optimize-zeroguess.py
+tables/rampdown.tex: $(RAMPDOWN_REPORTS) tables/_src/rampdown.py
+	python3 tables/_src/rampdown.py > tables/rampdown.tex
+
+numericals/zeroguess/%.npy numericals/zeroguess/%.json &: \
+			numericals/_src/optimize-zeroguess.py \
+			$(OPTENV)
 	mkdir -p numericals/zeroguess
 	python3 numericals/_src/optimize-zeroguess.py --outfile=$@
 
-numericals/rampdown/%.npy: numericals/_src/optimize-rampdown.py
+numericals/rampdown/%.npy numericals/rampdown/%.json &: \
+			numericals/_src/optimize-rampdown.py \
+			$(OPTENV)
 	mkdir -p numericals/rampdown
 	python3 numericals/_src/optimize-rampdown.py --outfile=$@
 
 
-##############################################3
+plots.all: plots.coefficients plots.zeroguess plots.rampdown
+plots.coefficients: plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
+plots.zeroguess: plots/optimized/zeroguess.pdf
+plots.rampdown: plots/optimized/rampdown.pdf
 
-# # plots of advanced optimized controls
-# plots/optimized/advanced/%.pdf: numericals/advanced/%.npy plots/_src/plot-control-advanced.py
-# 	mkdir -p plots/optimized/advanced
-# 	python3 plots/_src/plot-control-advanced.py --infile=$< --outfile=$@
-
-# clean.figs:
-# 	rm -rf plots/optimized
-
-# clean.tmp:
-# 	latexmk -c
+numericals.all: numericals.zeroguess numericals.rampdown
+numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) $(ZEROGUESS_REPORTS)
+numericals.rampdown: $(RAMPDOWN_OPTCONTROLS) $(RAMPDOWN_REPORTS)
 
 clean.all: clean.plots clean.numericals
 	latexmk -C
 
 clean.numericals:
-	rm -rf numericals/zeroguess/*.npy
-	rm -rf numericals/rampdown/*.npy
+	rm -rf numericals/zeroguess/*
+	rm -rf numericals/rampdown/*
 
 clean.plots:
+	rm plots/coefficients/*
 	rm plots/optimized/*

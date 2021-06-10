@@ -98,8 +98,8 @@ The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\
 
 \begin{figure}[ht]
 	\centering
-	\input{plots/pgf/vhc.pgf}
-	\input{plots/pgf/kappa.pgf}
+	\includegraphics{plots/coefficients/vhc.pdf}
+	\includegraphics{plots/coefficients/kappa.pdf}
 	\caption{Volumetric heat capacity $s(\theta)$ and thermal conductivity $\kappa(\theta)$.}
 	\label{fig:coef}
 \end{figure}
@@ -455,14 +455,7 @@ One can find more details in \cite[\texttt{solve\_adjoint}]{optipuls_github}.
 \section{Numerical Results}
 \label{sec:numericals}
 
-
-\begin{figure}[h]
-	\centering
-	\includegraphics{plots/optimized/zeroguess.pdf}
-	\caption{This is just a proof of concept. Do not take it seriously.}
-\end{figure}
-
-\begin{figure}[h]
+\begin{figure}
 	\centering
 	\includegraphics{plots/optimized/rampdown.pdf}
 	\caption{Yet another dummy plot.}
@@ -470,9 +463,22 @@ One can find more details in \cite[\texttt{solve\_adjoint}]{optipuls_github}.
 
 \begin{table} \label{tab:report}
 	\centering
-	\input{reports/table_report}
-	\caption{Report on the optimizations...}
+	\input{tables/rampdown}
+	\caption{Results of the optimization with rampdown initial guess (sketch)\ldots}
 \end{table}
+
+\begin{figure}
+	\centering
+	\includegraphics{plots/optimized/zeroguess.pdf}
+	\caption{This is just a proof of concept. Do not take it seriously.}
+\end{figure}
+
+\begin{table} \label{tab:zeroguess}
+	\centering
+	\input{tables/zeroguess}
+	\caption{Results of the optimization with zero initial guess (sketch)\ldots}
+\end{table}
+
 
 
 \appendix
