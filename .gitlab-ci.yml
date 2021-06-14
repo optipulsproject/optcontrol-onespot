@@ -1,6 +1,40 @@
+stages:
+  - compute
+  - plot
+  - tabulate
+  - tex
+
+numericals:
+  stage: compute
+  image: optipuls
+  script: make numericals.all
+  artifacts:
+    paths:
+      - numericals/zeroguess
+      - numericals/rampdown
+
+plots:
+  stage: plot
+  image: optipuls
+  script: make plots.all
+  artifacts:
+    paths:
+      - plots/coefficients
+      - plots/optimized
+
+tables:
+  stage: tabulate
+  image: tabulate
+  script: make tables.all
+  artifacts:
+    paths:
+      - tables/zeroguess.tex
+      - tables/rampdown.tex
+
 tex:
+  stage: tex
   image: numapde/publications
-  script: latexmk -pdf manuscript-numapde-preprint.tex
+  script: make preprint
   artifacts:
     paths:
       - manuscript-numapde-preprint.pdf
