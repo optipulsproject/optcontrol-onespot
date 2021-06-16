@@ -1,0 +1,5 @@
+FROM python:latest
+RUN python3 -m pip install tabulate
+RUN mkdir /data
+WORKDIR /data
+CMD ["/bin/bash"]
