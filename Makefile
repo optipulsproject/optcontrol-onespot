@@ -13,6 +13,10 @@ RAMPDOWN_REPORTS = $(shell optenv/filenames.py --experiment=rampdown --type=repo
 PLOTS_ALL = plots/optimized/zeroguess.pdf plots/optimized/rampdown.pdf plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
 TABLES_ALL = tables/zeroguess.tex tables/rampdown.tex
 
+# a dirty hack to make optenv package visible for the python scripts
+# works only if make is called from the project root dir (which is normally the case)
+export PYTHONPATH = :
+
 
 preprint: $(MANUSCRIPT_PREPRINT_PDF)
 
