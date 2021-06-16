@@ -37,28 +37,60 @@ A working [FEniCS](https://fenicsproject.org/) computing platform installation i
 
 We suppose that [make](https://www.gnu.org/software/make/) is already installed on your machine provided a UNIX-like system is used.
 
-Notice that [optipuls](https://github.com/dstrelnikov/optipuls) is a single purpose package, so it does not provide a system wide installation mechanism. Instead, just clone it locally, checkout `optcontrol-manuscript` branch and add its path to `$PYTHONPATH` environment variable:
-
+If you already have FEniCS installed locally, you can use python virtual environments to install the remaining dependencies without cluttering your system:
 ```
-cd ~/.local/opt
-git clone https://github.com/dstrelnikov/optipuls
-cd optipuls
-git checkout optcontrol-manuscript
-export PYTHONPATH=~/.local/opt:$PYTHONPATH
+python3 -m venv --system-site-packages ~/.local/optipuls
+source ~/.local/optipuls/bin/activate
+pip install git+https://github.com/dstrelnikov/optipuls@optcontrol
+pip install matplotlib tabulate
 ```
 
-Since it can get quite tricky to install FEniCS, we also provide a docker image containing all the dependencies.
+Since it can get quite tricky to install FEniCS, we also provide a bundle of docker images.
 
-### Reproducing
+
+### Reproducing (local build)
 
 Once the depencdencies are satisfied, reproducing of the results is as simple as running `make` in the root of the project:
 ```
 git clone https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding
 cd optimal-control-spot-welding
-make
+make -j$(nproc)
 ```
 
 Make will run the computations, produce the plots, the tables, and the final `manuscript-numapde-preprint.pdf` file.
+
+
+### Reproducing (build in docker)
+
+Don't forget to build/pull the `optipuls`, `tabulate`, and `numapde/publications` docker images in advance.
+
+Compute & make plots:
+```
+docker run \
+  -v $(pwd):/home/fenics/shared \
+  optipuls:latest \
+  make -C shared plots.all -j$(nproc)
+```
+
+Make tables:
+```
+$ docker run \
+  -u $UID \
+  -v $(pwd):/data \
+  tabulate:latest \
+  make tables.all
+```
+
+Make paper:
+```
+docker run \
+  -u $UID \
+  -v $(pwd):/data \
+  numapde/publications:latest \
+  make preprint
+```
+
+
 
 ### GitLab CI/CD artifacts
 
@@ -67,5 +99,7 @@ Make will run the computations, produce the plots, the tables, and the final `ma
 ### How?
 
 For anyone how might get interested in implementing a similar reproduction mechanism, we outline the key points of the paper building process.
+
+#### GitLab CI/CD and make
 
 ...
