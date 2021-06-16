@@ -28,15 +28,19 @@ $(MANUSCRIPT_PREPRINT_PDF): \
 	latexmk -pdf -silent $(MANUSCRIPT_TEMPLATE_TEX)
 
 plots/coefficients/vhc.pdf: plots/_src/vhc.py $(OPTENV)
+	mkdir -p plots/coefficients
 	python3 plots/_src/vhc.py --outfile=$@
 
 plots/coefficients/kappa.pdf: plots/_src/kappa.py $(OPTENV)
+	mkdir -p plots/coefficients
 	python3 plots/_src/kappa.py --outfile=$@
 
 plots/optimized/zeroguess.pdf: $(ZEROGUESS_OPTCONTROLS) plots/_src/zeroguess.py
+	mkdir -p plots/optimized
 	python3 plots/_src/zeroguess.py --outfile=$@
 
 plots/optimized/rampdown.pdf: $(RAMPDOWN_OPTCONTROLS) plots/_src/rampdown.py
+	mkdir -p plots/optimized
 	python3 plots/_src/rampdown.py --outfile=$@
 
 tables/zeroguess.tex: $(ZEROGUESS_REPORTS) tables/_src/zeroguess.py
