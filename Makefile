@@ -45,13 +45,19 @@ tables/zeroguess.tex: $(ZEROGUESS_REPORTS) tables/_src/zeroguess.py
 tables/rampdown.tex: $(RAMPDOWN_REPORTS) tables/_src/rampdown.py
 	python3 tables/_src/rampdown.py > tables/rampdown.tex
 
-numericals/zeroguess/%.npy numericals/zeroguess/%.json &: \
+# since the grouped targets feature was introduces in make since v4.3
+# and we want to keep the project compatible with make >= 4.1
+# here is a dirty  workaround for the grouped targets
+
+numericals/zeroguess/%.json: numericals/zeroguess/%.npy
+numericals/zeroguess/%.npy : \
 			numericals/_src/optimize-zeroguess.py \
 			$(OPTENV)
 	mkdir -p numericals/zeroguess
 	python3 numericals/_src/optimize-zeroguess.py --outfile=$@
 
-numericals/rampdown/%.npy numericals/rampdown/%.json &: \
+numericals/rampdown/%.json: numericals/rampdown/%.npy
+numericals/rampdown/%.npy: \
 			numericals/_src/optimize-rampdown.py \
 			$(OPTENV)
 	mkdir -p numericals/rampdown
