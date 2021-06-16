@@ -1,6 +1,8 @@
 An Optimal Control Problem for Single Spot Laser Pulse Welding
 ==============================================================
 
+[![pipeline status](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/badges/master/pipeline.svg)](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/commits/master)
+
 This repository contains a manuscript which is a part of [OptiPuls](https://www.tu-chemnitz.de/mathematik/part_dgl/projects/optipuls/index.en.php) project.
 
 ---
