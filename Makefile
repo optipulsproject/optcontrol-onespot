@@ -4,8 +4,8 @@ MANUSCRIPT_MAIN_TEX = main.tex
 
 OPTENV = optenv/__init__.py optenv/problem.py optenv/parameters.py optenv/material.json
 
-ZEROGUESS_OPTCONTROLS = $(shell optenv/filenames.py --experiment=zeroguess --type=optcontrols)
-ZEROGUESS_REPORTS = $(shell optenv/filenames.py --experiment=zeroguess --type=reports)
+ZEROGUESS_OPTCONTROLS = $(shell python3 optenv/filenames.py --experiment=zeroguess --type=optcontrols)
+ZEROGUESS_REPORTS = $(shell python3 optenv/filenames.py --experiment=zeroguess --type=reports)
 
 RAMPDOWN_OPTCONTROLS = $(shell optenv/filenames.py --experiment=rampdown --type=optcontrols)
 RAMPDOWN_REPORTS = $(shell optenv/filenames.py --experiment=rampdown --type=reports)
