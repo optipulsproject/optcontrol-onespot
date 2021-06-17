@@ -76,8 +76,8 @@ plots.rampdown: plots/optimized/rampdown.pdf
 tables.all: tables/zeroguess.tex tables/rampdown.tex
 
 numericals.all: numericals.zeroguess numericals.rampdown
-numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) $(ZEROGUESS_REPORTS)
-numericals.rampdown: $(RAMPDOWN_OPTCONTROLS) $(RAMPDOWN_REPORTS)
+numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) #$(ZEROGUESS_REPORTS)
+numericals.rampdown: $(RAMPDOWN_OPTCONTROLS) #$(RAMPDOWN_REPORTS)
 
 clean.all: clean.plots clean.numericals
 	latexmk -C
