@@ -3,13 +3,13 @@ An Optimal Control Problem for Single Spot Laser Pulse Welding
 
 [![pipeline status](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/badges/master/pipeline.svg)](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/commits/master)
 
-This repository contains a manuscript which is a part of [OptiPuls](https://www.tu-chemnitz.de/mathematik/part_dgl/projects/optipuls/index.en.php) project.
+This repository contains a manuscript which is a part of [OptiPuls][projectpage] project.
 
 ---
 
 **Authors:** Dmytro Strelnikov <dmytro.strelnikov@math.tu-chemnitz.de>, Roland Herzog <roland.herzog@math.tu-chemnitz.de>  
 **Funding:** Funding: Project IGF 20.826B (DVS I2.3005) in Forschungsvereinigung Schweißen und verwandte Verfahren e.V. of the [Deutschen Verbandes für Schweißen und verwandte Verfahren e.V.](https://www.die-verbindungs-spezialisten.de/)  
-**Project page:** [Simulation Based Optimization of the Time-Dependent Pulse Power for Laser Beam Welding of Aluminum Alloys in Order to Avoid Hot Cracks](https://www.tu-chemnitz.de/mathematik/part_dgl/projects/optipuls/index.en.php)
+**Project page:** [Simulation Based Optimization of the Time-Dependent Pulse Power for Laser Beam Welding of Aluminum Alloys in Order to Avoid Hot Cracks][projectpage]
 
 
 ## About this paper
@@ -92,11 +92,10 @@ docker run \
   make preprint
 ```
 
-
-
+q
 ### GitLab CI/CD artifacts
 
-- `manuscript-numapde-preprint.pdf` [view](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/file/manuscript-numapde-preprint.pdf?job=tex), [download](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/raw/manuscript-numapde-preprint.pdf?job=tex)
+- `manuscript-numapde-preprint.pdf` (latest successful) [view][gitlab-pdf-view], [download][gitlab-pdf-download]
 
 ### How?
 
@@ -105,3 +104,8 @@ For anyone how might get interested in implementing a similar reproduction mecha
 #### GitLab CI/CD and make
 
 ...
+
+[projectpage]: https://www.tu-chemnitz.de/mathematik/part_dgl/projects/optipuls/index.en.php "OptiPuls"
+
+[gitlab-pdf-view]: https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/file/manuscript-numapde-preprint.pdf?job=tex
+[gitlab-pdf-download]: https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/artifacts/master/raw/manuscript-numapde-preprint.pdf?job=tex
