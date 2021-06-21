@@ -92,7 +92,7 @@ docker run \
   make preprint
 ```
 
-q
+
 ### GitLab CI/CD artifacts
 
 - `manuscript-numapde-preprint.pdf` (latest successful) [view][gitlab-pdf-view], [download][gitlab-pdf-download]
