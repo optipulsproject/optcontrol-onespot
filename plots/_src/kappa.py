@@ -35,9 +35,9 @@ ax.set_xticklabels(knots, rotation=45)
 x = np.linspace(223, 1123, 900)
 
 ax.plot(x, np.vectorize(kappa_rad)(x), color='violet', zorder=0,
-        label=r'$\kappa_{rad}(\theta)$ spline fitting')
+        label=r'$\kappa_\mathrm{rad}(\theta)$ spline fitting')
 ax.plot(x, np.vectorize(kappa_ax)(x), color='blue', zorder=0,
-        label=r'$\kappa_{ax}(\theta)$ spline fitting')
+        label=r'$\kappa_\mathrm{ax}(\theta)$ spline fitting')
 ax.scatter(knots, values, color='red', zorder=1,
         label='experimental data')
 ax.legend(loc='upper left')

@@ -1,3 +1,3 @@
-font = {'family' : 'IBM Plex Sans',
+font = {'family' : 'Libertinus Math',
         'weight' : 'normal',
         'size'   : 7}
