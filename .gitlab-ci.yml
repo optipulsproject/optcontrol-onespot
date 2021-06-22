@@ -19,9 +19,6 @@ numericals:
   stage: compute
   image: optipulsproject/optipuls
   script: make numericals.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - numericals/zeroguess
@@ -31,9 +28,6 @@ plots:
   stage: plot
   image: optipulsproject/optipuls
   script: make plots.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - plots/coefficients
@@ -43,9 +37,6 @@ tables:
   stage: tabulate
   image: optipulsproject/tabulate
   script: make tables.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - tables/zeroguess.tex
@@ -55,9 +46,6 @@ tex:
   stage: tex
   image: numapde/publications
   script: make preprint
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - manuscript-numapde-preprint.pdf
