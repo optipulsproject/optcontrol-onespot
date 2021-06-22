@@ -44,7 +44,7 @@ tables:
 
 tex:
   stage: tex
-  image: numapde/publications
+  image: optipulsproject/publications
   script: make preprint
   artifacts:
     paths:
