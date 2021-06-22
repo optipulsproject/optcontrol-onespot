@@ -4,6 +4,17 @@ stages:
   - tabulate
   - tex
 
+variables:
+  DIJITSO_CACHE_DIR: $CI_PROJECT_DIR/.cache/dijitso
+  GIT_STRATEGY: fetch
+
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .cache/dijitso
+    - numericals/zeroguess
+    - numericals/rampdown
+
 numericals:
   stage: compute
   image: optipulsproject/optipuls
