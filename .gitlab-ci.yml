@@ -1,40 +1,51 @@
 stages:
   - compute
-  - plot
-  - tabulate
+  - process
   - tex
+
+variables:
+  DIJITSO_CACHE_DIR: $CI_PROJECT_DIR/.cache/dijitso
+  GIT_STRATEGY: fetch
+
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .cache/dijitso
+    - numericals/zeroguess
+    - numericals/rampdown
+    - plots/coefficients
+    - plots/optimized
+    - tables
+
 
 numericals:
   stage: compute
+  tags:
+    - optipuls
   image: optipulsproject/optipuls
   script: make numericals.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - numericals/zeroguess
       - numericals/rampdown
 
 plots:
-  stage: plot
+  stage: process
+  tags:
+    - optipuls
   image: optipulsproject/optipuls
   script: make plots.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - plots/coefficients
       - plots/optimized
 
 tables:
-  stage: tabulate
+  stage: process
+  tags:
+    - optipuls
   image: optipulsproject/tabulate
   script: make tables.all
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - tables/zeroguess.tex
@@ -42,11 +53,10 @@ tables:
 
 tex:
   stage: tex
-  image: numapde/publications
+  tags:
+    - optipuls
+  image: optipulsproject/publications
   script: make preprint
-  only:
-    refs:
-      - master
   artifacts:
     paths:
       - manuscript-numapde-preprint.pdf

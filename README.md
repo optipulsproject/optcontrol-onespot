@@ -70,8 +70,8 @@ Compute & make plots:
 ```
 docker run \
   -v $(pwd):/home/fenics/shared \
-  optipuls:latest \
-  make -C shared plots.all -j$(nproc)
+  optipulsproject/optipuls:latest \
+  make plots.all -j$(nproc)
 ```
 
 Make tables:
@@ -79,7 +79,7 @@ Make tables:
 $ docker run \
   -u $UID \
   -v $(pwd):/data \
-  tabulate:latest \
+  optipulsproject/tabulate:latest \
   make tables.all
 ```
 
