@@ -6,7 +6,7 @@ stages:
 
 numericals:
   stage: compute
-  image: optipuls
+  image: optipulsproject/optipuls
   script: make numericals.all
   only:
     refs:
@@ -18,7 +18,7 @@ numericals:
 
 plots:
   stage: plot
-  image: optipuls
+  image: optipulsproject/optipuls
   script: make plots.all
   only:
     refs:
@@ -30,7 +30,7 @@ plots:
 
 tables:
   stage: tabulate
-  image: tabulate
+  image: optipulsproject/tabulate
   script: make tables.all
   only:
     refs:
