@@ -98,7 +98,7 @@ docker run \
 - `manuscript-numapde-preprint.pdf` (latest successful) [view][gitlab-pdf-view], [download][gitlab-pdf-download]
 - numericals (latest successful), [download][gitlab-numericals-download]
 
-https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/jobs/158805/artifacts/download
+
 ### How?
 
 For anyone how might get interested in implementing a similar reproduction mechanism, we outline the key points of the paper building process.
