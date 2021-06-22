@@ -1,7 +1,6 @@
 stages:
   - compute
-  - plot
-  - tabulate
+  - process
   - tex
 
 variables:
@@ -18,6 +17,7 @@ cache:
     - plots/optimized
     - tables
 
+
 numericals:
   stage: compute
   image: optipulsproject/optipuls
@@ -28,7 +28,7 @@ numericals:
       - numericals/rampdown
 
 plots:
-  stage: plot
+  stage: process
   image: optipulsproject/optipuls
   script: make plots.all
   artifacts:
@@ -37,7 +37,7 @@ plots:
       - plots/optimized
 
 tables:
-  stage: tabulate
+  stage: process
   image: optipulsproject/tabulate
   script: make tables.all
   artifacts:
