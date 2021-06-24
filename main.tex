@@ -1,10 +1,14 @@
 %!TeX root = ./manuscript-numapde-preprint.tex
+% target journal
+% * Optimization and Engineering
+% * Engeering Optimization
+% * Mathematical and Computer Modelling of Dynamical Systems
 
 \section{Introduction}
 \label{sec:introduction}
 
 \begin{itemize}
-	\item Pulsed laser welding of aluminium alloys of the 2XXX, 5XXX and 6XXX series is a challenging engineering problem due to a hight tendency of the material to hot cracking during the solidification phase. Especially high cooling rates which take place in pulsed laser welding lead to high material strain [cite PAMM-4].
+	\item Pulsed laser welding of aluminum alloys of the 2XXX, 5XXX and 6XXX series is a challenging engineering problem due to a hight tendency of the material to hot cracking during the solidification phase. Especially high cooling rates which take place in pulsed laser welding lead to high material strain [cite PAMM-4].
 	\item In this paper we propose an optimal control approach to avoid the appearance of the hot cracks.
 	\item In order to obtain a realistic model we need to take into account several physical effects which are usually not present in a standard heat dissipation problem: the enthalpy of fusion and the convective heat transfer.
 	\item In pulsed laser welding a welding seam consists of multiple partially overlapping welding spots made by switching the laser on and off. Various experiments show that a hot-crack in the first welding spot usually spreads to the whole welding seam. And vice versa, if the first welding spot has no cracks then most likely the whole seam will be crack-free provided the welding regime kept the same for each of the spots [citation needed]. Therefore, in this paper study an optipal control problem for a single welding spot.
@@ -19,7 +23,7 @@
 \section{Modelling}
 \label{sec:modelling}
 
-The aim of this section is to derive step-by-step a mathematical model for a single spot pulsed laser welding of aluminium alloys in a cylinder.
+The aim of this section is to derive step-by-step a mathematical model for a single spot pulsed laser welding of aluminum alloys in a cylinder.
 
 \begin{figure}[ht]
 	\centering
@@ -55,13 +59,13 @@ Unlike standard heat dissipation problems when the considered material remains i
 
 The classical Stefan problem \added[id=RH]{\textbf{[citation needed]}} is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
 
-However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminium alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
+However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminum alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
 
 Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
 
 Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ which we refer to as \emph{the effective volumetric heat capacity}. Therefore, we ignore volume changes but take into account the variable density in order to obtain maximally plausible effective volumetric heat capacity coefficient.
 
-For the considered aluminium alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility within a fixed state of matter. Therefore, we construct $s(\theta)$ using the following procedure:
+For the considered aluminum alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility within a fixed state of matter. Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
 	\item We make a linear least square approximation to the experimental data independently in the solid and in the liquid state of matter.
 	\item Make a $C^1$ cubic spline by filling the liquidus-solidus gap with the uniquely defined cubic polynomial.
@@ -471,7 +475,7 @@ In this section we present some solutions to the optimization problem. Notice th
 
 \subsection{Conventional and linear rampdown pulse shapes}
 
-The conventional pulse laser welding uses a rectangular laser pulse shape, i.e. the laser is working full power for a short time and is switched of immediately after. However in welding of aluminium alloys this always leads to hot-cracking. A so-called linear-rampdown pulse shape, i.e. when the laser power is decreasing linearly after a short period of working full power, Has shown its potential to maintain a crack-free welding of aluminium alloys \added[id=DS]{\textbf{[citation needed]}}.
+The conventional pulse laser welding uses a rectangular laser pulse shape, i.e. the laser is working full power for a short time and is switched of immediately after. However in welding of aluminum alloys this always leads to hot-cracking. A so-called linear-rampdown pulse shape, i.e. when the laser power is decreasing linearly after a short period of working full power, Has shown its potential to maintain a crack-free welding of aluminum alloys \added[id=DS]{\textbf{[citation needed]}}.
 
 In view of this we first consider the convential and the linear rampdown pulse shapes as the initial guess for the optimizer. Figure~\ref{fig:rampdown} demonstrates the corresponding solutions to the optimal control problem. The numerical reports on the corresponing simulations are presented in Table~\ref{tab:rampdown}.
 
@@ -514,6 +518,6 @@ As the next step, in order to obtain a more optimal pulse shape, we take the tri
 	\item \cref{subsec:equations}: organize it as a summary, putting together everything from \cref{sec:modelling}.
 	\item \cref{subsec:velocity}: make a 2D picture illustrating the velocity of a single isoline at a single time moment.
 	\item \cref{sec:numericals}: sketch the gradient descent algorithm.
-	\item Make a short explanation about 2XXX, 5XXX, and 6XXX aluminium alloys. What is special about them and why are they relevant to this study?
+	\item Make a short explanation about 2XXX, 5XXX, and 6XXX aluminum alloys. What is special about them and why are they relevant to this study?
 	\item \cref{sec:implementation}: provide code listings with syntax highlight via pygments?
 \end{itemize}

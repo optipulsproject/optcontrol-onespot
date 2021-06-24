@@ -7,7 +7,7 @@
 authors:
 - name: Herzog
   firstName: Roland
-  institution: numapde
+  institution: scoop
   email: roland.herzog@mathematik.tu-chemnitz.de
   url: https://www.tu-chemnitz.de/mathematik/part_dgl/people/herzog
   orcid: 0000-0003-2164-6575
@@ -27,17 +27,29 @@ institutions:
       09107 Chemnitz,
       Germany
 
+  scoop:
+    address: >-
+      Interdisciplinary Center for Scientific Computing,
+      Heidelberg University,
+      69120 Heidelberg,
+      Germany
+
 manuscript: 
-  title: An Optimal Control Problem for Single Spot Laser Pulse Welding 
+  title: An Optimal Control Problem for Single-Spot Laser Pulse Welding 
   subtitle: ""
-  shortTitle: Optimal Control of Single Spot Laser Pulse Welding
+  shortTitle: Optimal Control of Single-Spot Laser Pulse Welding
   bibliography: [ numapde-local.bib, numapde.bib ]
   keywords: [ optimal control, pulsed laser welding, quasilinear heat equation, phase transition ]
   msc: [ 49K20 optimality conditions; problems involving partial differential equations ]
   abstract: |+ 
-    First paragraph of abstract.
-
-    Second paragraph of abstract.
+    We consider an optimal control problem for a single-spot laser pulse welding problem.
+    The distribution of thermal energy is described by a quasilinear heat equation.
+    Our emphasis is on materials which tend to suffer from hot cracking, such as aluminum alloys.
+    A simple indicator for the occurrente of hot cracks is the velocity of the solidification front.
+    We therefore formulate an optimal control problem whose objective contains a term which penalizes excessive solidification velocities.
+    The control function to be optimized is the laser power over time, subject to pointwise lower and upper bounds.
+    We describe the finite element discretization of the problem and a projected gradient scheme for its solution.
+    Numerical experiments for material data representing \added[id=RH]{\textbf{a certain aluminum alloy}} exhibit interesting laser pulse patterns which perform significantly better than standard ramp-down patterns.
   dedication: ""
   funding: This work was funded by the Federal Ministry for Economic Affairs and Energy (BMWi) of Germany through IGF grant 20.826~B (project OptiPuls), which is gratefully acknowledged.
 
