@@ -39,8 +39,8 @@ manuscript:
   subtitle: ""
   shortTitle: Optimal Control of Single-Spot Laser Pulse Welding
   bibliography: [ numapde-local.bib, numapde.bib ]
-  keywords: [ optimal control, pulsed laser welding, quasilinear heat equation, phase transition ]
-  msc: [ 49K20 optimality conditions; problems involving partial differential equations ]
+  keywords: [ optimal control, pulsed laser welding, solidification velocity, quasilinear heat equation, phase transition ]
+  msc: [ 49K20 optimality conditions; problems involving partial differential equations, 35K59 quasilinear parabolic equations, 49M05 optimal control; numerical methods based on necessary conditions ]
   abstract: |+ 
     We consider an optimal control problem for a single-spot laser pulse welding problem.
     The distribution of thermal energy is described by a quasilinear heat equation.
