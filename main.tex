@@ -7,8 +7,8 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Pulsed laser welding is a standard technology to merge metal and thermoplastic components.
-Its advantages are the potentially narrow spatial concentration and high peak power of the the heat source, as well as the opportunity to quickly and frequently adjust the laser power in time.
+Pulsed laser welding is a standard technology to merge metal or thermoplastic components.
+Its advantages are the narrow spatial concentration and high peak power of the the heat source, as well as the opportunity to quickly and frequently adjust the laser power in time.
 These characteristics can be exploited to generate narrow, deep welds at high welding rates.
 However, in comparison to continuous wave laser processes, pulse laser welding is reported to have an elevated tendency to produce hot cracks during the solidification phase due to higher cooling and thus strain rates.
 This is particularly difficult for the welding of certain aluminum alloys, \eg, of the 2XXX, 5XXX and 6XXX series, which remains a challenging engineering problem \cite{Katayama:2001:1,ZhangWeckmanZhou:2008:1,BieleninBergmann:2017:1}.
@@ -47,10 +47,6 @@ Its discretization is detailed in \cref{sec:discretization}, where we also prese
 \section{Modelling}
 \label{sec:modelling}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
-The aim of this section is to derive step-by-step a mathematical model for a single spot pulsed laser welding of aluminum alloys in a cylinder.
-
 \begin{figure}[ht]
 	\centering
 	\input{plots/tikz/cylinder}
@@ -58,12 +54,14 @@ The aim of this section is to derive step-by-step a mathematical model for a sin
 	\label{fig:cylinder}
 \end{figure}
 
-Let $\Omega	\subset \R^3$ be an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface (see \cref{fig:cylinder}), and $\Gamma_1$ be the part of the boundary affected by the laser beam radiation.
-Denote by $\theta(x,t)$ the temperature at the point $x \in \Omega$ at the time moment $t \in [0,T]$.
+The aim of this section is to derive step-by-step a mathematical model for a single-spot pulsed laser welding problems of aluminum alloys in a cylindrical domain.
+To this end, let $\Omega	\subset \R^3$ be an open, orthogonal circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface (see \cref{fig:cylinder}).
+Here $\Gamma_1$ is the portion of the boundary affected by the laser beam radiation.
+We denote by $\theta(x,t)$ the temperature at the point $x \in \Omega$ at time $t \in [0,T]$.
 
-We are going to describe the temperature evolution inside $\Omega$, and hence the evolution of the welding process, as a solution to a boundary value problem based on the heat equation.
-The applied nature of the problem provides a few modelling challenges such as temperature dependent properties of the material, a phase transition, and a combination of multiple heat transfer mechanisms.
-These challenges are sequentially managed in the succeeding subsections, resulting in a complete model.
+We are going to describe the temperature evolution inside $\Omega$, and hence the evolution of the welding process, as a solution to a boundary value problem based on the quasilinear heat equation.
+The applied nature of the problem provides a few modelling challenges such as temperature dependent properties of the material, liquid/solid phase transition, and a combination of multiple heat transfer mechanisms.
+These challenges are sequentially addressed in the following subsections, resulting in a complete model.
 
 % {\color{TolHighContrastBlue}
 % Here we are using a sligtly modified mathematical model, which was previously developed in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.
@@ -81,24 +79,45 @@ These challenges are sequentially managed in the succeeding subsections, resulti
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-Unlike standard heat dissipation problems when the considered material remains in the same state of matter, i.e. its physical properties remain essentially uniform, we deal with a phase transition both during heating up and cooling down stages. The phase transition is accompanied by an absorption or a release of energy. The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called \emph{the enthaply of fusion} or \emph{the (latent) heat of fusion}. For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
-The classical Stefan problem \added[id=RH]{\textbf{[citation needed]}} is a particular kind of a boundary value problem, which describes the evolution of a moving boundary between two phases of a material undergoing a phase change. In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter and its physical properties remain essentially uniform, we deal with a phase transition during the heating and cooling stages. 
+These phase transitions are accompanied by an absorption or a release of energy. 
+The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called the \emph{enthalpy of fusion} or the \emph{(latent) heat of fusion}. 
+For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
 
-However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. Due to the mixed composition of the aluminum alloys, we have a wide temperature corridor during which the material melts from a solid to a liquid state. The temperature under which the material is fully solid is called \emph{solidus}. Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. In the current study we consider solidus~=~\SI{858}{\K} and liquidus~=~\SI{923}{K} as the reference values.
+These phenomena are often modeled in terms of the classical Stefan problem \cite{Gupta:2003:1}, which is a particular kind of a boundary value problem describing the evolution of a moving boundary between two phases of a material undergoing a phase change. 
+In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
+However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. 
+Due to the mixed composition of aluminum alloys, we have a wide temperature corridor (rather than a single melting temperature) within which the material melts from a solid to a liquid state. 
+The temperature below which the material is fully solid is called \emph{solidus}. 
+Similarly, the temperature above which the material is fully liquid is called \emph{liquidus}. 
+In the current study we consider $\text{solidus} = \SI{858}{\K}$ and $\text{liquidus} = \SI{923}{K}$ as reference values.
 
-Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta)\, d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. In the presented model we substitute the heat capacity with \emph{the effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. The latter coefficient coincides with $c(\theta)$ outside the solidus-liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta)\, d\theta$.
+Considering the above, it becomes more natural in our case to embed the enthalpy of fusion directly into the heat equation by means of \emph{the heat capacity} coefficient. 
+In a standard heat dissipation problem with no phase transition, the heat capacity coefficient $c(\theta)$ is a temperature dependent function such that $\int_{\theta_0}^{\theta_1} c(\theta) \, \d\theta$ describes the amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$. 
+In the presented model we substitute the heat capacity with an \emph{effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. 
+The latter coefficient coincides with $c(\theta)$ outside the solidus--liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta) \, \d\theta$.
 
-Making the problem even more sophisticated, it turns out that \emph{the density} of the material changes depending on the temperature not only slightly (due to the thermal expansion and contraction of a solid material) but also significantly due to the phase transition. However, considering variable volume of the material would significantly increase complexity of the model and even make it impossible to limit ourselves to just one heat equation. In fact both the effective heat capacity $c_\text{eff}(\theta)$ and the density $\rho(\theta)$ are presented in the mathematical model only as their product $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ which we refer to as \emph{the effective volumetric heat capacity}. Therefore, we ignore volume changes but take into account the variable density in order to obtain maximally plausible effective volumetric heat capacity coefficient.
+Another effect to be taken into account is that the \emph{density} of aluminum alloys changes significantly over the temperature regime under consideration due to thermal expansion and contraction.
+However, considering variable volume of the material would lead to a free boundary problem, which significantly increases the complexity of our model.
+We therefore take volume changes into account through a temperature dependent desnsity.
+Overall, this leads to an \emph{effective volumetric heat capacity} $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ in our heat equation.
 
-For the considered aluminum alloys, the reference values of volumetric heat capacity are given in both the solid and the liquid state of matter. These values show a good linear approxibility within a fixed state of matter. Therefore, we construct $s(\theta)$ using the following procedure:
+For the aluminum alloys under consideration, reference values of volumetric heat capacity are given in both the fully solid and the fully liquid state of matter. 
+These values show a good linear approxibility within a fixed state of matter. 
+Therefore, we construct $s(\theta)$ using the following procedure:
 \begin{enumerate}
-	\item We make a linear least square approximation to the experimental data independently in the solid and in the liquid state of matter.
-	\item Make a $C^1$ cubic spline by filling the liquidus-solidus gap with the uniquely defined cubic polynomial.
-	\item In the liquidus-solidus corridor add without loss of smoothness a cubic spline whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
+	\item 
+		We perform a linear least-squares approximation to the experimental data independently in the solid and in the liquid state of matter.
+	\item 
+		We choose a $C^1$ cubic spline by filling the liquidus--solidus temperature gap with the uniquely defined cubic polynomial.
+	\item 
+		In the liquidus--solidus interval, we add without loss of smoothness a cubic spline whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
+\added[id=RH]{\textbf{Isn't (ii) and (iii) the same spline? Then we should put these into the same item.}}
 
-Since the final formulas are cumbersome, we limit ourselves here to a plot of the resulting function, see \cref{fig:coef}.
+We do not present the above procedure in terms of cumbersome formulas but limit ourselves here to a plot of the resulting effective volumetric heat capacity function; see \cref{fig:coef}.
 
 
 \subsection{Effective Thermal Conductivity}
@@ -186,7 +205,7 @@ In the following subsections we present and discuss corresponding penalty terms 
 
 
 \subsection{Welding Penetration Penalty}
-\label{subsec:velocity}
+\label{subsec:welding_penetration}
 
 In order to guarantee the \textbf{successful completion of the welding stage} we must ensure that the melting pool has reached a certein predefined depth. At the same time, exceeding of this depth would result in unnecessary increase in time and energy consumption. Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{threshold}}$. The corresponding term of the objective functional
 \begin{equation} \label{eq:J_penetration}
@@ -225,7 +244,7 @@ Therefore, we define \emph{the velocity of an isothermal surface} as
 	\label{fig:velocity}
 \end{figure}
 
-The function $v(x,t)$ takes positive values near the edge of the melting pool while it expands and negative values while it shrinks. We are only interested in restricting negative values within the solidus-liquidus temperature corridor, we propose the following penalty term
+The function $v(x,t)$ takes positive values near the edge of the melting pool while it expands and negative values while it shrinks. We are only interested in restricting negative values within the solidus--liquidus temperature corridor, we propose the following penalty term
 \begin{equation}
 	J_{\text{velocity}} = \frac{\beta_\text{velocity}}{2}
 	\int_{\Omega \times [0,T]} \max \{ v_{\max} - v(x,t),\ 0 \}^2 \cdot \chi(\theta(x,t))\, dx\,dt
