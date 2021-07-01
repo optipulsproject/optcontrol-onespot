@@ -79,14 +79,12 @@ These challenges are sequentially addressed in the following subsections, result
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
 Unlike standard heat dissipation problems when the considered material remains in the same state of matter and its physical properties remain essentially uniform, we deal with a phase transition during the heating and cooling stages. 
 These phase transitions are accompanied by an absorption or a release of energy. 
 The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called the \emph{enthalpy of fusion} or the \emph{(latent) heat of fusion}. 
 For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
 
-These phenomena are often modeled in terms of the classical Stefan problem \cite{Gupta:2003:1}, which is a particular kind of a boundary value problem describing the evolution of a moving boundary between two phases of a material undergoing a phase change. 
+These phenomena are often modeled in terms of the classical Stefan problem, which is a particular kind of a boundary value problem describing the evolution of a moving boundary between two phases of a material undergoing a phase change; see for instance \cite{Gupta:2003:1}. 
 In addition to the underlying heat equation, initial and boundary conditions, the \emph{Stefan condition} is required to provide the energy balance on the phase transition interface.
 However, in the present paper we use another approach to integrate the enthalpy of fusion into the boundary value problem. 
 Due to the mixed composition of aluminum alloys, we have a wide temperature corridor (rather than a single melting temperature) within which the material melts from a solid to a liquid state. 
@@ -123,13 +121,15 @@ We do not present the above procedure in terms of cumbersome formulas but limit 
 \subsection{Effective Thermal Conductivity}
 \label{subsec:conductivity}
 
-Convective heat transfer in the liquid phase becomes the next modelling challenge caused by the phase transition. Due to the Marangoni effect \added[id=RH]{\textbf{[citation needed]}}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in the radial direction and decreases in the axial direction (see \cref{fig:cylinder} for the coordinate axes).
+Convective heat transfer in the liquid phase becomes the next modeling challenge caused by the phase transition. 
+Due to the Marangoni effect, see \cite{MillsKeeneBrooksShirali:1998:1,Saldi:2012:1}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in radial direction and decreases in axial direction (see \cref{fig:cylinder} for the coordinate axes).
+In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to its measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. 
+\added[id=RH]{Convective} heat transfer in the angular direction is assumed to be zero.
+As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0)$ in diagonal form in a cylindrical coordinate system.
 
-In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to the measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. The heat transfer in the angular direction is assumed to be zero.
-
-As the result, we have a matrix valued function $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0)$, which takes diagonal form since the chosen coordinate system coincides with the main directions of the observed thermal conductivity.
-
-The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\theta)$ can be inspected in \cite[\texttt{optipuls.coefficients}]{optipuls_github}. Similarly to $s(\theta)$, we provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$, see \cref{fig:coef}.
+The exact algorithm used for constructing $\kappa(\theta)$ (and also $s(\theta)$) can be inspected in code in \cite[\texttt{optipuls.coefficients}]{optipuls_github}. 
+We provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$; see \cref{fig:coef}.
+Numerical simulations based on these assumptions have shown reasonable correspondence to the real experiments, \added[id=DS]{\textbf{citation desirable}}.
 
 \begin{figure}[ht]
 	\centering
@@ -139,10 +139,10 @@ The exact algorithm used for constructing coefficients $s(\theta)$ and $\kappa(\
 	\label{fig:coef}
 \end{figure}
 
-Numerical simulations based on these assumptions have shown reasonable correspondence to the real experiments, \added[id=DS]{\textbf{citation desirable}}.
-
 
 \subsection{Boundary Conditions}
+
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
 While in some studies the energy radiated by the laser is plugged into the equation as a volumetric energy source and described by its density, in this paper we assume no internal heat sources.
 Instead we consider the energy transferred to the body via the laser beam as a heat flux through the part of the boundary $\Gamma_1$:
