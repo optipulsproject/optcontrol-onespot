@@ -97,7 +97,7 @@ In a standard heat dissipation problem with no phase transition, the heat capaci
 In the presented model we substitute the heat capacity with an \emph{effective heat capacity} denoted by $c_{\text{eff}}(\theta)$. 
 The latter coefficient coincides with $c(\theta)$ outside the solidus--liquidus temperature corridor but has significantly higher values inside, which is meant to archieve the same equality: the total amount of energy required to heat a unit mass of the material from temperature $\theta_0$ to temperature $\theta_1$ (including the enthalpy of fusion if applicable on the interval) is given by the integral $\int_{\theta_0}^{\theta_1} c_{\text{eff}}(\theta) \, \d\theta$.
 
-Another effect to be taken into account is that the \emph{density} of aluminum alloys changes significantly over the temperature regime under consideration due to thermal expansion and contraction.
+Another effect to be taken into account is that the \emph{density}~$\rho$ of aluminum alloys changes significantly over the temperature regime under consideration due to thermal expansion and contraction.
 However, considering variable volume of the material would lead to a free boundary problem, which significantly increases the complexity of our model.
 We therefore take volume changes into account through a temperature dependent desnsity.
 Overall, this leads to an \emph{effective volumetric heat capacity} $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ in our heat equation.
@@ -173,27 +173,49 @@ respectively; see for instance \cite[Chapter~3]{Sluzalec:2005:1}.
 Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4} and $h = 5$ \si{\W\per\m^2} are the radiative and the convective transfer coefficients, respectively, and $\theta_\text{amb}$ denotes the ambient temperature.
 
 
-\subsection{Model Equations}
+\subsection{Summary of Model Equations}
 \label{subsec:equations}
 
 \added[id=RH]{\textbf{@RH: continue revision here}}
 
-Let us summarize the above considerations.
-We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on \cref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
+Let us summarize our model based on the above considerations.
+We recall that $\Omega\subset \R^3$ is an open, orthogonal circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ is its boundary surface as shown in \cref{fig:cylinder}. 
+The temperature distribution in $\Omega$ is governed by the quasi-linear heat equation
 \begin{equation} \label{eq:heat_eq}
-	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} = \div (\kappa(\theta(x,t)) \grad\theta(x,t)),
+	s(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial t} 
+	= 
+	\div \paren[big](){\kappa(\theta(x,t)) \grad\theta(x,t)}
+	,
 \end{equation}
-which temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines (see \cite[\texttt{optipuls.coefficients}]{optipuls_github}).
+where the temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines as detailed in \cite[\texttt{optipuls.coefficients}]{optipuls_github}.
 
-While the first spot of the welding seam is considered, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
+Since we consider single-spot weldeing, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
 The boundary conditions are
 \begin{equation} \label{eq:heat_eq_bc}
-	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = \left\{
-		\begin{array}{ll}
-			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}) - \eta\, \text{pd}_{\max} u(t), & \text{on}\ \Gamma_1, \\
-			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}), & \text{on}\ \Gamma_2 \cup \Gamma_4, \\
-			0, & \text{on}\ \Gamma_3.
-		\end{array} \right.
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
+	= 
+	\paren[auto]\{\}{%
+		\begin{aligned}
+			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}) - \eta\, \text{pd}_{\max} u(t)
+			, 
+			& 
+			\text{on } \Gamma_1
+			, 
+			\\
+			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb})
+			, 
+			& 
+			\text{on } \Gamma_2 \cup \Gamma_4
+			, 
+			\\
+			0
+			, 
+			& 
+			\text{on } \Gamma_3
+			.
+		\end{aligned}
+	}
+	.
 \end{equation}
 % Here $k$, $h$, $\text{pd}_{\max}$, and $\theta_\text{amb}$ are known constants; $u(t)$ is the control function bounded by $[0,1]$.
 
