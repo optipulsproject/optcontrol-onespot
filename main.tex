@@ -141,32 +141,42 @@ Numerical simulations based on these assumptions have shown reasonable correspon
 
 
 \subsection{Boundary Conditions}
+\label{subsec:boundary_conditions}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
-While in some studies the energy radiated by the laser is plugged into the equation as a volumetric energy source and described by its density, in this paper we assume no internal heat sources.
-Instead we consider the energy transferred to the body via the laser beam as a heat flux through the part of the boundary $\Gamma_1$:
+While some studies considered the energy introduced by the laser as a volumetric energy source, in this paper we use flux boundary conditions on the boundary part $\Gamma_1$ for this purpose:
 \begin{equation}
-	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = - \eta \cdot \text{pd}_{\max} \cdot u(t).
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
+	= 
+	- \eta \, \text{pd}_{\max} \, u(t)
+	.
 \end{equation}
-Here $\text{pd}_{\max}$ is the power density of the laser beam, $\eta$ is the absorption coefficient of the material, and $u(t)$ is the control function bounded by $[0,1]$.
-Since the power distribution of the laser beam is close to uniform in the current study, the power density is assumed to be constant (and hence can be evaluated as the ratio of the the maximal total power to the area of the affected spot). The absorption coefficient is also assumed to be constant.
+Here $\eta$ is the absorption coefficient of the material, $\text{pd}_{\max}$ is the power density of the laser beam, and $u(t)$ is the control function with values in $[0,1]$.
+Since the power distribution of the laser beam taken to be uniform across~$\Gamma_1$ in the current study, the power density is assumed to be constant and hence can be evaluated as the ratio of the maximal total power to the area of the affected spot. 
+The absorption coefficient~$\eta$ is also assumed to be constant.
 
-In a similar way, the cooling of the body is described as a heat flux through the whole boundary (except possibly $\Gamma_3$). Notice, that the choice of a boundary condition at $\Gamma_3$ make any essential difference if the radius of $\Omega$ is chosen big enough.
-For simplicity we assume zero heat flux through $\Gamma_3$.
-We distingush a convective and a radiative cooling heat fluxes modelled as
+The cooling of the body is a result of the heat flux through the entire boundary except $\Gamma_3$; see \cref{fig:cylinder}.
+For simplicity we assume zero heat flux through $\Gamma_3$, which is a reasonable approximation when the radius of $\Omega$ is sufficiently large.
+On the remaining parts of the boundary, we distingush convective and radiative heat fluxes modelled as
 \begin{equation}
-	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = h \cdot (\theta(x,t) - \theta_\text{amb})
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
+	= 
+	h \cdot (\theta(x,t) - \theta_\text{amb})
 \end{equation}
 and
 \begin{equation}
-	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} = k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
+	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
+	= 
+	k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
+	,
 \end{equation}
-respectively \added[id=DS]{\textbf{[reference to these models needed]}}.
-Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4}, $h = 5$ \si{\W\per\m^2}, are the radiative and the convective cooling coefficients respectively, and $\theta_\text{amb}$ is the ambience temperature.
+respectively; see for instance \cite[Chapter~3]{Sluzalec:2005:1}.
+Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4} and $h = 5$ \si{\W\per\m^2} are the radiative and the convective transfer coefficients, respectively, and $\theta_\text{amb}$ denotes the ambient temperature.
+
 
 \subsection{Model Equations}
 \label{subsec:equations}
+
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
 Let us summarize the above considerations.
 We recall that $\Omega\subset \R^3$ is an open right circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ be its boundary surface as it is shown on \cref{fig:cylinder}. The temperature distribution in $\Omega$ is described by the quasi-linear heat equation
