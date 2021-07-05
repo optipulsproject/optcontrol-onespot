@@ -258,7 +258,7 @@ In order to guarantee the \textbf{successful completion of the welding stage} we
 At the same time, exceeding of this depth would result in an unnecessary increase in energy consumption and the time required for cooling.
 Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{target}}$ and formulate a term which penalizes the difference between the maximal temperature reached at $x_{\text{target}}$ and a target temperature~$\theta_{\text{target}}$:
 \begin{equation} \label{eq:J_penetration}
-	J_{\text{penetration}} 
+	J_\text{penetration} 
 	= 
 	\frac{\beta_\text{penetration}}{2} \paren[big](){\norm{\theta(x_{\text{target}},\cdot)}_{L^p(0,T)} - \theta_{\text{target}}}^2
 	.
@@ -318,7 +318,7 @@ When the pool shrinks, $v(x,t)$ has \replaced[id=RH]{positive}{negative} values.
 We are only interested in restricting \replaced[id=RH]{positive}{negative} velocities and only within the solidus--liquidus temperature corridor.
 We therefore propose the following penalty term,
 \begin{equation} \label{eq:J_velocity}
-	J_{\text{velocity}} 
+	J_\text{velocity} 
 	= 
 	\frac{\beta_\text{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(x,t) - v_{\max}}{v_{\max} - v(x,t)}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
 	,
@@ -342,7 +342,7 @@ where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is 
 
 To ensure that the \textbf{solidification stage is complete} at the given final time $T$, we penalize final temperatures $\theta(x,T)$ which are still above the solidus temperature by means of the following term,
 \begin{equation} \label{eq:J_completeness}
-	J_{\text{completeness}} 
+	J_\text{completeness} 
 	=
 	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max \paren[big]\{\}{\theta(x, T) - \text{solidus}, \; 0}^2 \d x
 	.
@@ -353,7 +353,7 @@ To ensure that the \textbf{solidification stage is complete} at the given final 
 
 The \textbf{consumption of energy} in the process is taken into account by means of the following standard quadratic control cost term,
 \begin{equation}
-	J_{\text{control}} 
+	J_\text{control} 
 	=
 	\frac{\beta_\text{control}}{2} \norm{u}^2_{L^2(0,T)}
 	.
@@ -378,7 +378,7 @@ For convenience, we summarize our single-spot welding optimal control problem as
 			&
 			J(u,\theta) 
 			\coloneqq 
-			J_{\text{penetration}}(\theta) + J_{\text{velocity}}(\theta) + J_{\text{completeness}}(\theta) + J_{\text{control}}(u)
+			J_\text{penetration}(\theta) + J_\text{velocity}(\theta) + J_\text{completeness}(\theta) + J_\text{control}(u)
 			,
 			\\
 			&
@@ -578,43 +578,49 @@ The unknown coefficient vectors $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ at 
 
 \subsection{Discretization of the Objective Functional}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
-To derive the discrete version of $J_\text{penetration}$ we substitute the $L^{\infty}$-norm in~\eqref{eq:J_penetration} with $l^p$-norm taking sufficiently large $p$
+To derive the discrete version of $J_\text{penetration}$, we discretize \eqref{eq:J_penetration} with $l^p$-norm taking sufficiently large $p$
 \begin{equation}
-	J_{\text{penetration}} = \frac{\beta_\text{penetration}}{2}
-	\left(
-		\left( \sum_{n=1}^{N_t} \theta_n^p (0, z_\text{target}) \right)^{1/p} - \theta_\text{threshhold}
-	\right)^2.
+	J_\text{penetration} 
+	= 
+	\frac{\beta_\text{penetration}}{2}
+	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\text{target}\added[id=RH]{,n\tau})}^p}^{1/p} - \theta_\text{target}}^2
+	.
 \end{equation}
+\added[id=RH]{\textbf{@DS: The factor $\tau$ above may incur a change in the code.}}
 
-The velocity of an isothermal surface (if fact an isothermal line after dimension reduction) turns into
+The velocity of an isothermal surface (in fact an isothermal line after dimension reduction) can be approximated as
 \begin{equation}
-	v(\theta_n, \theta_{n+1}) = \frac{\theta_{n+1}-\theta_n}{\tau \left|\grad \theta_{n+\alpha} \right|}
+	v(\theta_n, \theta_{n+1}) 
+	= 
+	\frac{\added[id=RH]{{}-{}}(\theta_{n+1}-\theta_n)}{\tau \, \norm{\grad \theta_{n+\alpha}}}
 \end{equation}
-and hence $J_\text{velocity}$ takes the following form
+and hence $J_\text{velocity}$ takes the following form:
 \begin{equation}
-	J_\text{velocity} =
-	\frac{\tau \beta_\text{velocity}}{2}
-	\sum_{n=0}^{N_t-1} \int_{\omega} \max \{ - v_{\max} - v(\theta_n, \theta_{n+1}),\ 0 \}^2 \cdot \chi(\theta_{n+\alpha})\, r\d r\d z\, \\
+	J_\text{velocity} 
+	=
+	\frac{\beta_\text{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{ \replaced[id=RH]{v(\theta_n, \theta_{n+1}) - v_{\max}}{- v_{\max} - v(\theta_n, \theta_{n+1})}, \; 0}^2 \cdot \chi(\theta_{n+\alpha}) \, r \d r \d z
 \end{equation}
+\added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(\theta_n,\theta_{n+1})$ may require an update of the code.}}
 
-The remaining penalty terms $J_\text{completeness}$ and $J_\text{control}$ are discretized trivially:
+The remaining penalty terms $J_\text{completeness}$ and $J_\text{control}$ are discretized according to
 \begin{align}
 	J_\text{completeness} 
 	&
 	=
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta_{N_t} - \text{solidus},\ 0 \}^2\, r\d r\d z, 
+	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta_{N_t} - \text{solidus}, \; 0}^2 \, r \d r \d z
+	, 
 	\\
-	J_{\text{control}} 
+	J_\text{control} 
 	&
 	=
-	\frac{\tau \beta_\text{control}}{2} \sum_{n=0}^{N_t-1} u_n^2.
+	\frac{\beta_\text{control}}{2} \tau \sum_{n=0}^{N_t-1} u_n^2
+	.
 \end{align}
 
 
 \subsection{Evaluation of the Gradient}
 
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
 Let the evolution of the temperature $\theta = [\theta_1, \theta_2, \ldots, \theta_{N_t}]$ be already known and $p = [p_0, p_1, \ldots, p_{N_t-1}]$ be the adjoint state which is yet unknown.
 The Lagrange function takes the following form
