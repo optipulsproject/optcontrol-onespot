@@ -100,7 +100,7 @@ The latter coefficient coincides with $c(\theta)$ outside the solidus--liquidus 
 Another effect to be taken into account is that the \emph{density}~$\rho$ of aluminum alloys changes significantly over the temperature regime under consideration due to thermal expansion and contraction.
 However, considering variable volume of the material would lead to a free boundary problem, which significantly increases the complexity of our model.
 We therefore take volume changes into account through a temperature dependent desnsity.
-Overall, this leads to an \emph{effective volumetric heat capacity} $s(\theta) = c_\text{eff}(\theta) \rho(\theta)$ in our heat equation.
+Overall, this leads to an \emph{effective volumetric heat capacity} $s(\theta) = c_\textup{eff}(\theta) \rho(\theta)$ in our heat equation.
 
 For the aluminum alloys under consideration, reference values of volumetric heat capacity are given in both the fully solid and the fully liquid state of matter. 
 These values show a good linear approxibility within a fixed state of matter. 
@@ -125,10 +125,10 @@ Convective heat transfer in the liquid phase becomes the next modeling challenge
 Due to the Marangoni effect, see \cite{MillsKeeneBrooksShirali:1998:1,Saldi:2012:1}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in radial direction and decreases in axial direction (see \cref{fig:cylinder} for the coordinate axes).
 In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to its measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. 
 \added[id=RH]{Convective} heat transfer in the angular direction is assumed to be zero.
-As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\text{ax}(\theta), \kappa_\text{rad}(\theta), 0)$ in diagonal form in a cylindrical coordinate system.
+As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\textup{ax}(\theta), \kappa_\textup{rad}(\theta), 0)$ in diagonal form in a cylindrical coordinate system.
 
 The exact algorithm used for constructing $\kappa(\theta)$ (and also $s(\theta)$) can be inspected in code in \cite[\texttt{optipuls.coefficients}]{optipuls_github}. 
-We provide a plot of $\kappa_\text{rad}(\theta)$ and $\kappa_\text{ax}(\theta)$; see \cref{fig:coef}.
+We provide a plot of $\kappa_\textup{rad}(\theta)$ and $\kappa_\textup{ax}(\theta)$; see \cref{fig:coef}.
 Numerical simulations based on these assumptions have shown reasonable correspondence to the real experiments, \added[id=DS]{\textbf{citation desirable}}.
 
 \begin{figure}[ht]
@@ -160,17 +160,17 @@ On the remaining parts of the boundary, we distingush convective and radiative h
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
 	= 
-	h \cdot (\theta(x,t) - \theta_\text{amb})
+	h \cdot (\theta(x,t) - \theta_\textup{amb})
 \end{equation}
 and
 \begin{equation}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
 	= 
-	k \cdot (\theta(x,t)^4 - \theta^4_\text{amb})
+	k \cdot (\theta(x,t)^4 - \theta^4_\textup{amb})
 	,
 \end{equation}
 respectively; see for instance \cite[Chapter~3]{Sluzalec:2005:1}.
-Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4} and $h = 5$ \si{\W\per\m^2} are the radiative and the convective transfer coefficients, respectively, and $\theta_\text{amb}$ denotes the ambient temperature.
+Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4} and $h = 5$ \si{\W\per\m^2} are the radiative and the convective transfer coefficients, respectively, and $\theta_\textup{amb}$ denotes the ambient temperature.
 
 
 \subsection{Summary of Model Equations}
@@ -185,13 +185,13 @@ The temperature distribution in $\Omega$ is governed by the quasi-linear heat eq
 	\div \paren[big](){\kappa(\theta(x,t)) \grad\theta(x,t)}
 	,
 \end{equation}
-where the temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines as detailed in \cite[\texttt{optipuls.coefficients}]{optipuls_github}.
+where the temperature-dependent coefficients $s(\theta(x,t)) = c_\textup{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines as detailed in \cite[\texttt{optipuls.coefficients}]{optipuls_github}.
 
-Since we consider single-spot welding, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$:
+Since we consider single-spot welding, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\textup{amb}$:
 \begin{equation} \label{eq:heat_eq_ic}
 	\theta(x,0)
 	=
-	\theta_\text{amb}
+	\theta_\textup{amb}
 	\quad
 	\text{in } \Omega
 	.
@@ -203,14 +203,14 @@ The boundary conditions for \eqref{eq:heat_eq} are
 	\paren[auto]\{\}{%
 		\begin{aligned}
 			&
-			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}) - \eta\, \text{pd}_{\max} u(t)
+			k (\theta(x,t)^4 - \theta_\textup{amb}^4) + h (\theta(x,t) - \theta_\textup{amb}) - \eta\, \text{pd}_{\max} u(t)
 			& 
 			& 
 			\text{on } \Gamma_1
 			, 
 			\\
 			& 
-			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb})
+			k (\theta(x,t)^4 - \theta_\textup{amb}^4) + h (\theta(x,t) - \theta_\textup{amb})
 			& 
 			& 
 			\text{on } \Gamma_2 \cup \Gamma_4
@@ -226,7 +226,7 @@ The boundary conditions for \eqref{eq:heat_eq} are
 	}
 	.
 \end{equation}
-We recall that $k$, $h$, $\text{pd}_{\max}$ and $\theta_\text{amb}$ are known constants.
+We recall that $k$, $h$, $\text{pd}_{\max}$ and $\theta_\textup{amb}$ are known constants.
 Moreover, $u(t)$ is the control function with values by $[0,1]$ we seek to determine, which represents the fraction of maximal laser power to be emitted as a function of time.
 
 
@@ -258,9 +258,9 @@ In order to guarantee the \textbf{successful completion of the welding stage} we
 At the same time, exceeding of this depth would result in an unnecessary increase in energy consumption and the time required for cooling.
 Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{target}}$ and formulate a term which penalizes the difference between the maximal temperature reached at $x_{\text{target}}$ and a target temperature~$\theta_{\text{target}}$:
 \begin{equation} \label{eq:J_penetration}
-	J_\text{penetration} 
+	J_\textup{penetration} 
 	= 
-	\frac{\beta_\text{penetration}}{2} \paren[big](){\norm{\theta(x_{\text{target}},\cdot)}_{L^p(0,T)} - \theta_{\text{target}}}^2
+	\frac{\beta_\textup{penetration}}{2} \paren[big](){\norm{\theta(x_{\text{target}},\cdot)}_{L^p(0,T)} - \theta_{\text{target}}}^2
 	.
 \end{equation}
 Here $p$ is sufficiently large so that the $L^p$-norm, which is chosen for simplicity and to avoid non-differentiabilities and state constraints, approximates the $L^\infty$-norm.
@@ -318,9 +318,9 @@ When the pool shrinks, $v(x,t)$ has \replaced[id=RH]{positive}{negative} values.
 We are only interested in restricting \replaced[id=RH]{positive}{negative} velocities and only within the solidus--liquidus temperature corridor.
 We therefore propose the following penalty term,
 \begin{equation} \label{eq:J_velocity}
-	J_\text{velocity} 
+	J_\textup{velocity} 
 	= 
-	\frac{\beta_\text{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(x,t) - v_{\max}}{v_{\max} - v(x,t)}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
+	\frac{\beta_\textup{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(x,t) - v_{\max}}{v_{\max} - v(x,t)}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
 	,
 \end{equation}
 \added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(x,t)$ may require an update of the code. The updated formula agrees with the original proposal in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.}}
@@ -342,9 +342,9 @@ where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is 
 
 To ensure that the \textbf{solidification stage is complete} at the given final time $T$, we penalize final temperatures $\theta(x,T)$ which are still above the solidus temperature by means of the following term,
 \begin{equation} \label{eq:J_completeness}
-	J_\text{completeness} 
+	J_\textup{completeness} 
 	=
-	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max \paren[big]\{\}{\theta(x, T) - \text{solidus}, \; 0}^2 \d x
+	\frac{\beta_\textup{completeness}}{2} \int_{\Omega} \max \paren[big]\{\}{\theta(x, T) - \text{solidus}, \; 0}^2 \d x
 	.
 \end{equation}
 
@@ -353,9 +353,9 @@ To ensure that the \textbf{solidification stage is complete} at the given final 
 
 The \textbf{consumption of energy} in the process is taken into account by means of the following standard quadratic control cost term,
 \begin{equation}
-	J_\text{control} 
+	J_\textup{control} 
 	=
-	\frac{\beta_\text{control}}{2} \norm{u}^2_{L^2(0,T)}
+	\frac{\beta_\textup{control}}{2} \norm{u}^2_{L^2(0,T)}
 	.
 \end{equation}
 Indeed, an $L^1$-norm penalty would be a more meaningful model of energy consumption.
@@ -378,7 +378,7 @@ For convenience, we summarize our single-spot welding optimal control problem as
 			&
 			J(u,\theta) 
 			\coloneqq 
-			J_\text{penetration}(\theta) + J_\text{velocity}(\theta) + J_\text{completeness}(\theta) + J_\text{control}(u)
+			J_\textup{penetration}(\theta) + J_\textup{velocity}(\theta) + J_\textup{completeness}(\theta) + J_\textup{control}(u)
 			,
 			\\
 			&
@@ -407,7 +407,7 @@ Abbreviating
 \begin{equation*}
 	\Phi(\theta(x,t)) 
 	\coloneqq 
-	k \paren[big](){\theta(x,t)^4 - \theta_\text{amb}^4} + h \paren[big](){\theta(x,t) - \theta_\text{amb}}
+	k \paren[big](){\theta(x,t)^4 - \theta_\textup{amb}^4} + h \paren[big](){\theta(x,t) - \theta_\textup{amb}}
 	,
 \end{equation*}
 we thus arrive at the notion that a function $\theta \colon \Omega \times [0,T] \to \R$ is a \emph{weak solution} to the boundary value problem \eqref{eq:heat_eq}--\eqref{eq:heat_eq_bc} if it satisfies the initial condition \eqref{eq:heat_eq_ic} and the equality
@@ -472,17 +472,17 @@ Similarly, two of the penalty terms in the objective in \eqref{eq:J} are affecte
 Specifically, \eqref{eq:J_velocity} and \eqref{eq:J_completeness} now take the following forms:
 \begin{align}
 	\label{eq:J_velocity_r}
-	J_\text{velocity} 
+	J_\textup{velocity} 
 	&
 	=
-	\frac{\beta_\text{velocity}}{2} \int_{\omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(r,z,t) - v_{\max}}{v_{\max} - v(r,z,t)}, \; 0}^2 \cdot \chi(\theta(r,z,t)) \, r \d r \d z \d t
+	\frac{\beta_\textup{velocity}}{2} \int_{\omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(r,z,t) - v_{\max}}{v_{\max} - v(r,z,t)}, \; 0}^2 \cdot \chi(\theta(r,z,t)) \, r \d r \d z \d t
 	, 
 	\\
 	\label{eq:J_completeness_r}
-	J_\text{completeness} 
+	J_\textup{completeness} 
 	&
 	=
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta(r,z,T) - \text{solidus}, \; 0}^2 \, r \d r \d z
+	\frac{\beta_\textup{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta(r,z,T) - \text{solidus}, \; 0}^2 \, r \d r \d z
 	.
 \end{align}
 
@@ -572,18 +572,18 @@ Now the discretized form of equation \eqref{eq:weak_reduced} reads as follows,
 	0
 	.
 \end{multline}
-In \eqref{eq:discrete} we set $\theta_0 \coloneqq \theta_\text{amb}$.
+In \eqref{eq:discrete} we set $\theta_0 \coloneqq \theta_\textup{amb}$.
 The unknown coefficient vectors $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ at subsequent points in time is then solved time step by time step.
 
 
 \subsection{Discretization of the Objective Functional}
 
-To derive the discrete version of $J_\text{penetration}$, we discretize \eqref{eq:J_penetration} with $l^p$-norm taking sufficiently large $p$
-\begin{equation}
-	J_\text{penetration} 
+To derive the discrete version of $J_\textup{penetration}$, we discretize \eqref{eq:J_penetration} with $l^p$-norm taking sufficiently large $p$
+\begin{equation} \label{eq:J_penetration_discrete}
+	J_\textup{penetration} 
 	= 
-	\frac{\beta_\text{penetration}}{2}
-	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\text{target}\added[id=RH]{,n\tau})}^p}^{1/p} - \theta_\text{target}}^2
+	\frac{\beta_\textup{penetration}}{2}
+	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target}\added[id=RH]{,n\tau})}^p}^{1/p} - \theta_\textup{target}}^2
 	.
 \end{equation}
 \added[id=RH]{\textbf{@DS: The factor $\tau$ above may incur a change in the code.}}
@@ -594,113 +594,107 @@ The velocity of an isothermal surface (in fact an isothermal line after dimensio
 	= 
 	\frac{\added[id=RH]{{}-{}}(\theta_{n+1}-\theta_n)}{\tau \, \norm{\grad \theta_{n+\alpha}}}
 \end{equation}
-and hence $J_\text{velocity}$ takes the following form:
+and hence $J_\textup{velocity}$ takes the following form:
 \begin{equation}
-	J_\text{velocity} 
+	J_\textup{velocity} 
 	=
-	\frac{\beta_\text{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{ \replaced[id=RH]{v(\theta_n, \theta_{n+1}) - v_{\max}}{- v_{\max} - v(\theta_n, \theta_{n+1})}, \; 0}^2 \cdot \chi(\theta_{n+\alpha}) \, r \d r \d z
+	\frac{\beta_\textup{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{ \replaced[id=RH]{v(\theta_n, \theta_{n+1}) - v_{\max}}{- v_{\max} - v(\theta_n, \theta_{n+1})}, \; 0}^2 \cdot \chi(\theta_{n+\alpha}) \, r \d r \d z
 \end{equation}
 \added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(\theta_n,\theta_{n+1})$ may require an update of the code.}}
 
-The remaining penalty terms $J_\text{completeness}$ and $J_\text{control}$ are discretized according to
+The remaining penalty terms $J_\textup{completeness}$ and $J_\textup{control}$ are discretized according to
 \begin{align}
-	J_\text{completeness} 
+	J_\textup{completeness} 
 	&
 	=
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta_{N_t} - \text{solidus}, \; 0}^2 \, r \d r \d z
+	\frac{\beta_\textup{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta_{N_t} - \text{solidus}, \; 0}^2 \, r \d r \d z
 	, 
 	\\
-	J_\text{control} 
+	J_\textup{control} 
 	&
 	=
-	\frac{\beta_\text{control}}{2} \tau \sum_{n=0}^{N_t-1} u_n^2
+	\frac{\beta_\textup{control}}{2} \tau \sum_{n=0}^{N_t-1} u_n^2
 	.
 \end{align}
 
 
 \subsection{Evaluation of the Gradient}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
-Let the evolution of the temperature $\theta = [\theta_1, \theta_2, \ldots, \theta_{N_t}]$ be already known and $p = [p_0, p_1, \ldots, p_{N_t-1}]$ be the adjoint state which is yet unknown.
-The Lagrange function takes the following form
+In this section we briefly describe the evaluation of the gradient by means of the discrete adjoint state $p = [p_0, p_1, \ldots, p_{N_t-1}]$.
+To this end, we introduce the Lagrangian 
 \begin{multline} \label{eq:lagrange}
-	\mathcal{L}(\theta,u,p) \coloneqq
+	\cL(\theta,u,p) \coloneqq
 	J(\theta,u)
 	+
-	\sum_{n=0}^{N_t-1}\int_{\Omega}
-		s(\theta_n) (\theta_{n+1}-\theta_n) p_n\, d\omega \\
-	+ \tau
-	\sum_{n=0}^{N_t-1}\int_{\Omega}
-		\left\langle \kappa(\theta_n) \grad \theta_{n+\alpha}, \grad p_n \right\rangle\, d\omega \\
-	+ \tau
-	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
-		\Phi \left( \theta_{n+\alpha} \right) p_n\d s
-	- \tau
-	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
-		\eta \text{pd}_{\max} u_n\, p_n\d s.
+	\sum_{n=0}^{N_t-1}\int_{\Omega} s(\theta_n) (\theta_{n+1}-\theta_n) \, p_n \, \d x
+	+ 
+	\tau \sum_{n=0}^{N_t-1}\int_{\Omega} \grad \theta_{n+\alpha}^\transp \, \kappa(\theta_n) \grad p_n \d x
+	\\
+	+ 
+	\tau \sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2} \Phi \paren[auto](){\theta_{n+\alpha}} p_n \d s
+	- 
+	\tau \sum_{n=0}^{N_t-1}\int_{\gamma_1} \eta \, \text{pd}_{\max} \, u_n \, p_n \d s.
 \end{multline}
+The sequence of linear systems governing the discrete adjoint state is obtained from $\partial \cL(\theta,u,p)/\partial \theta_n = 0$.
+We do not provide the explicit formula for the adjoint equation here since in the code we derive it using \fenics' built-in automatic differentiation capabilities.
+The only manual differentiation required is for the penalty term $J_\textup{penetration}$ in \eqref{eq:J_penetration_discrete}, since it has a structure different from the other terms.
+We added the contributions coming from this term manually to the adjoint state's right hand side.
+\added[id=RH]{\textbf{@DS: What is different about the structure that prevents us from using AD here?}}
+One can find more details in \cite[\texttt{optipuls.core}]{optipuls_github}.
 
-Differentiating $\mathcal{L}(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $\delta u$ we get
+Finally, we differentiate $\cL(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $\delta u$ to obtain
 \begin{equation}
-	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial u} (\delta u)
+	\frac{\partial \cL(\theta,u,p)}{\partial u} \, \delta u
 	=
 	\tau \sum_{n=0}^{N_t-1}
-	\left\langle
-		\beta_\text{control}\, u_n - \int_{\gamma_1} \eta \text{pd}_{\max} p_n\d s, \delta u
-	\right\rangle
+	\paren[auto][]{\beta_\textup{control} \, u_n - \int_{\gamma_1} \eta \, \text{pd}_{\max} \, p_n \d s} \, \delta u
+	.
 \end{equation}
-and hence
+Consequently,
 \begin{equation} \label{eq:gradient}
-	\grad_u \mathcal{L}(\theta, u, p) = \beta_\text{control}\, u - \int_{\gamma_1} \eta \text{pd}_{\max} p\d s.
+	\grad_u \cL(\theta, u, p) 
+	= 
+	\beta_\textup{control}\, u - \int_{\gamma_1} \eta \, \text{pd}_{\max} p \d s
 \end{equation}
-
-The adjoint state $p$ must be evaluated to benefit from formula~\eqref{eq:gradient}. The corresponding adjoint equation is obtained from
-\begin{equation}
-	\frac{\partial \mathcal{L}(\theta,u,p)}{\partial \theta} (\delta \theta)
-	= 0, \quad \forall \delta \theta \in V.
-\end{equation}
-We do not provide the explicit formula for the adjoint equation here, since in the code it is derived using \fenics' built-in automatic differentiation.
-The only manual differentiation is required for the penalty term $J_\text{penetration}$, since it has a different structure from the other terms.
-One can find more details in \cite[\texttt{optipuls.core}]{optipuls_github}.
+holds.
 
 
 \subsection{Projected Gradient Descent Scheme}
 
-To find the optimal control we apply the \emph{projected gradient descent} procedure \added[id=DS]{\textbf{[citation needed]}}. Since the procedure is well known, we present only a short general outline, one can find more details in \cite[\texttt{optipuls.optimization}]{optipuls_github}.
-
+To find the optimal control for the discretized counterpart of \eqref{eq:J}, we apply a \emph{projected gradient descent} scheme with line search; see, \eg, \cite{GafniBertsekas:1984:1,CalamaiMore:1987:1} or \cite[Chapter~5.8.2]{GeigerKanzow:2002:1}.
+To this end, we denote by $j(u) = J(u,\theta)$ the reduced objective, which depends only on the values $u = [u_0, u_1, \ldots, u_{N_t-1}]$ of the control and the solution $\theta = [\theta_1, \theta_2, \ldots, \theta_{N_t}]$ to the forward system \eqref{eq:discrete} has been inserted.
+Since this procedure is well known, we present only a short general outline in \cref{alg:projected_gradient_descent}.
+\added[id=RH]{The norm in which the size of the gradient is evaluated is the norm represented by $\tau$ times the identity matrix.}
+More details can be found in the implementation at \cite[\texttt{optipuls.optimization}]{optipuls_github}.
+ 
 \begin{figure}
 	\begin{algorithm}[H]
-	\caption{projected gradient descent}
+	\caption{Projected gradient descent scheme}
 	\DontPrintSemicolon
-	\KwIn{$u_\text{initial}$}
-	\KwOut{$u_\text{optimized}$}
-	$u_\text{current} \gets u_\text{initial}$\;
-	\While{$ \| J_u (\mathcal{P}_{U} u_\text{current}) \| < \text{tolerance} $}{
-		compute the gradient of the objective $J_u(u_\text{current})$\;
-		\Repeat{$J(u_\text{trial}) \ge J(u_\text{current}) - \sigma \alpha \|J_u (u_\text{current})\|^2$}{
-			line search for the step size $\alpha$\;
-			$u_\text{trial} \gets \mathcal{P}_{[0,1]} (u_\text{current} - \alpha J_u (u_\text{current}))$\;
+	\KwIn{$u_\textup{initial} \in \R^{N_t}$}
+	\KwOut{$u_\textup{optimized} \in \R^{N_t}$}
+	$u_\textup{current} \gets u_\textup{initial}$\;
+	\While{$\norm{\grad_u j (\deleted[id=RH]{\mathcal{P}_{U}} u_\textup{current})} \ge \text{tolerance} $}{
+		solve the forward system \eqref{eq:discrete} for $\theta$, given $u_\textup{current}$\;
+		solve the adjoint system for $p$, given $\theta$ and $u_\textup{current}$\;
+		evaluate the gradient of the reduced objective $\grad_u j(u_\textup{current})$ from \eqref{eq:gradient}\;
+		\Repeat{$J(u_\textup{trial}) \ge J(u_\textup{current}) - \sigma \, \alpha \, \norm{\grad_u j (u_\textup{current})}^2$}{
+			perform a line search for the step size $\alpha$\;
+			$u_\textup{trial} \gets \cP_{[0,1]} \paren[auto](){u_\textup{current} - \alpha \grad_u j (u_\textup{current})}$\;
 		}
-		$u_\text{current} \gets u_\text{trial}$\;
+		$u_\textup{current} \gets u_\textup{trial}$\;
 	}
+	\Return{$u_\textup{optimized} \gets u_\textup{current}$}
 	\end{algorithm}
 	\caption{Projected gradient descent algorithm.}
+	\label{alg:projected_gradient_descent}
 \end{figure}
-
-
-% \begin{itemize}
-% 	\item short description of the method itself
-% 	\item spell out the Armijo condition
-% \end{itemize}
-% We accept $u_\text{trial}$ if the following Armijo condition is satisfied
-% \begin{equation} \label{eq:Armijo_cond}
-%  	J(u_\text{trial}) < J(u_\text{current}) - \sigma \cdot \text{step}_\text{current} \cdot \|(\grad_u J)(u_\text{current})\|^2
-% \end{equation}
 
 
 \section{Numerical Results}
 \label{sec:numericals}
+
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
 In this section we present some solutions to the optimization problem. Notice that all the numerical results presented in the paper are fully reproducible and hence can be verified by the reader. See \cite{optcontrol_github} for further instructions. 
 
@@ -725,7 +719,7 @@ In view of this we first consider the convential and the linear rampdown pulse s
 
 \subsection{Zero Guess Optimizations}
 
-As the next step, in order to obtain a more optimal pulse shape, we take the trivial initial guess with no power radiated by the laser. This formulation of the optimization problem is possible due to $J_\text{penetration}$ penalty term which insures that the defined penetration (\ie the welding depth) is reached. Figure~\ref{fig:zeroguess} demonstrates the corresponding solutions to the optimal control problem with the vatiable maximal laser power and maximal welding time. The corresponding numerical reports are presented in Table~\ref{tab:zeroguess}.
+As the next step, in order to obtain a more optimal pulse shape, we take the trivial initial guess with no power radiated by the laser. This formulation of the optimization problem is possible due to $J_\textup{penetration}$ penalty term which insures that the defined penetration (\ie the welding depth) is reached. Figure~\ref{fig:zeroguess} demonstrates the corresponding solutions to the optimal control problem with the vatiable maximal laser power and maximal welding time. The corresponding numerical reports are presented in Table~\ref{tab:zeroguess}.
 
 \begin{figure} \label{fig:zeroguess}
 	\centering
