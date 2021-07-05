@@ -176,8 +176,6 @@ Here $k = 2.26 \cdot 10^{-9}$ \si{\W\per\m^2\K^4} and $h = 5$ \si{\W\per\m^2} ar
 \subsection{Summary of Model Equations}
 \label{subsec:equations}
 
-\added[id=RH]{\textbf{@RH: continue revision here}}
-
 Let us summarize our model based on the above considerations.
 We recall that $\Omega\subset \R^3$ is an open, orthogonal circular cylinder and $\Gamma = \cup_{i=1}^4 \Gamma_i$ is its boundary surface as shown in \cref{fig:cylinder}. 
 The temperature distribution in $\Omega$ is governed by the quasi-linear heat equation
@@ -189,27 +187,38 @@ The temperature distribution in $\Omega$ is governed by the quasi-linear heat eq
 \end{equation}
 where the temperature-dependent coefficients $s(\theta(x,t)) = c_\text{eff}(\theta(x,t)) \rho(\theta(x,t))$ and $\kappa(\theta(x,t)$ are constructed as $C^1$ cubic splines as detailed in \cite[\texttt{optipuls.coefficients}]{optipuls_github}.
 
-Since we consider single-spot weldeing, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$.
-The boundary conditions are
+Since we consider single-spot welding, the initial temperature $\theta(x,0)$ inside $\Omega$ is assumed to be constant and equal to the ambience temperature $\theta_\text{amb}$:
+\begin{equation} \label{eq:heat_eq_ic}
+	\theta(x,0)
+	=
+	\theta_\text{amb}
+	\quad
+	\text{in } \Omega
+	.
+\end{equation}
+The boundary conditions for \eqref{eq:heat_eq} are
 \begin{equation} \label{eq:heat_eq_bc}
 	\kappa(\theta(x,t)) \frac{\partial \theta(x,t)}{\partial \vn} 
 	= 
 	\paren[auto]\{\}{%
 		\begin{aligned}
+			&
 			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}) - \eta\, \text{pd}_{\max} u(t)
-			, 
+			& 
 			& 
 			\text{on } \Gamma_1
 			, 
 			\\
+			& 
 			k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb})
-			, 
+			& 
 			& 
 			\text{on } \Gamma_2 \cup \Gamma_4
 			, 
 			\\
+			& 
 			0
-			, 
+			& 
 			& 
 			\text{on } \Gamma_3
 			.
@@ -217,57 +226,85 @@ The boundary conditions are
 	}
 	.
 \end{equation}
-% Here $k$, $h$, $\text{pd}_{\max}$, and $\theta_\text{amb}$ are known constants; $u(t)$ is the control function bounded by $[0,1]$.
+We recall that $k$, $h$, $\text{pd}_{\max}$ and $\theta_\text{amb}$ are known constants.
+Moreover, $u(t)$ is the control function with values by $[0,1]$ we seek to determine, which represents the fraction of maximal laser power to be emitted as a function of time.
+
 
 \section{Optimal Control Problem}
 \label{sec:optimal_control_problem}
 
-This section aims at constructing of an objective functional as a sum of independent penalty terms, each term corresponding to a certain application driven requirement.
-We are trying to avoid state constraints as far as possible.
-
-As imposed by the application, the desired optimal control must:
+This section aims at constructing of an objective functional as a sum of independent penalty terms, each with a different purpose with relation to the single-splot welding application in mind.
+% We are trying to avoid state constraints as far as possible.
+As imposed by the application, the desired optimal control representing the emitted laser power profile must:
 \begin{enumeratearabic}
-	\item provide sufficient welding penetration;
-	\item avoid hot cracking during the solidification stage;
-	\item ensure complete solidification after welding withing preselected time interval;
-	\item minimize the total energy consumed by the laser.
+	\item 
+		provide sufficient welding penetration;
+	\item 
+		avoid hot cracking during the solidification stage;
+	\item 
+		ensure complete solidification after welding within the preselected time interval~$[0,T]$;
+	\item 
+		minimize the total energy consumed by the laser.
 \end{enumeratearabic}
 
-In the following subsections we present and discuss corresponding penalty terms designed to satisfy these requirements.
+In the following subsections we present and discuss four penalty terms designed to target of one these requirements each.
+We mention that similar, preliminary ideas were already presented in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1} but with little detail and discussion.
 
 
 \subsection{Welding Penetration Penalty}
 \label{subsec:welding_penetration}
 
-In order to guarantee the \textbf{successful completion of the welding stage} we must ensure that the melting pool has reached a certein predefined depth. At the same time, exceeding of this depth would result in unnecessary increase in time and energy consumption. Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{threshold}}$. The corresponding term of the objective functional
+In order to guarantee the \textbf{successful completion of the welding stage} we must ensure that the melting pool has reached a certain predefined depth. 
+At the same time, exceeding of this depth would result in an unnecessary increase in energy consumption and the time required for cooling.
+Therefore, we select a target point $x_{\text{target}}$ on the symmetry axis of $\Omega$ and a threshold temperature $\theta_{\text{target}}$ and formulate a term which penalizes the difference between the maximal temperature reached at $x_{\text{target}}$ and a target temperature~$\theta_{\text{target}}$:
 \begin{equation} \label{eq:J_penetration}
-	J_{\text{penetration}} = \frac{\beta_\text{penetration}}{2} \left( \| \theta(x_{\text{target}},\cdot) \|_{L^{\infty}[0,T]} - \theta_{\text{threshold}} \right)^2
+	J_{\text{penetration}} 
+	= 
+	\frac{\beta_\text{penetration}}{2} \paren[big](){\norm{\theta(x_{\text{target}},\cdot)}_{L^p(0,T)} - \theta_{\text{target}}}^2
+	.
 \end{equation}
-penalizes the difference between the maximal temperature at $x_{\text{target}}$ and $\theta_{\text{threshold}}$. In order to simplify the numerical implementation, we substitute the $L^{\infty}$-norm in~\eqref{eq:J_penetration} with $L^{p}$-norm, where $p$ is sufficiently large.
+Here $p$ is sufficiently large so that the $L^p$-norm, which is chosen for simplicity and to avoid non-differentiabilities and state constraints, approximates the $L^\infty$-norm.
 
 
 \subsection{Solidification Velocity Penalty}
 \label{subsec:velocity}
 
-Our main practical goal is to \textbf{avoid appearing of the hot cracks} during the solidification stage. For this purpose we restrict the maximal velocity of the solidification front by introducing a non-standard penalty term.
+Our main practical goal is to \textbf{avoid the appearance of hot cracks} during the solidification stage. 
+As mentioned in \cref{sec:introduction}, we associate hot cracks with high velocities of the solidification front.
+We therefore seek to restrict the maximal velocity of the solidification front by introducing a non-standard penalty term derived below.
 
-Let $I(t)$ be a moving over time isothermal surface in $\Omega$ (see \cref{fig:velocity}). For a moving point $x(t) \in I(t)$ one can get
+We begin by characterizing the velocity of a point $x(t)$ on some moving isothermal surface in $\Omega$; see \cref{fig:velocity}.
+Since the temperature $\theta(x(t),t)$ is constant, we obtain
 \begin{equation} \label{eq:dxt}
-	\frac{d}{dt} \theta(x(t),t) = \grad \theta(x(t),t) \cdot x_t(t) + \theta_t(x(t),t) = 0.
+	\frac{\d}{\d t} \theta(x(t),t) 
+	= 
+	\grad \theta(x(t),t) \cdot x_t(t) + \theta_t(x(t),t) 
+	= 
+	0
+	.
 \end{equation}
 The derivative $x_t(t)$ can be decomposed as
 \begin{equation} \label{eq:xt_alpha_beta}
-	x_t(t) = \alpha(x(t),t) \cdot \grad \theta(x(t),t) + \beta(x(t),t) \grad \theta(x(t),t)^{\top}
+	x_t(t) 
+	= 
+	\alpha(x(t),t) \, \grad \theta(x(t),t) + \text{component perpendicular to } \grad \theta(x(t),t),
 \end{equation}
-where $\alpha(x(t),t)$ and $\beta(x(t),t)$ are scalar functions. Notice, that only the component $\alpha(x(t),t) \grad \theta(x(t),t)$ which is orthogonal to the isothermal surface $I(t)$ can be recovered from equation~\eqref{eq:dxt}. Substituting \eqref{eq:xt_alpha_beta} into \eqref{eq:dxt}, one obtains
+where $\alpha(x(t),t)$ is a scalar function. 
+Substituting \eqref{eq:xt_alpha_beta} into \eqref{eq:dxt}, we obtain 
 \begin{equation}
-	\alpha(x(t),t) = \frac{\theta_t(x(t),t)}{\norm{\grad \theta(x(t),t)}^2}.
+	\alpha(x(t),t) 
+	= 
+	\frac{\added[id=RH]{{}-{}} \theta_t(x(t),t)}{\norm{\grad \theta(x(t),t)}^2}
+	,
 \end{equation}
-Therefore, we define \emph{the velocity of an isothermal surface} as
+where $\norm{\cdot}$ denotes the Euclidean norm.
+Therefore, we can define the \emph{velocity of any isothermal surface} passing through the point~$x$ at time~$t$ as
 \begin{equation}
-	v(x,t) \coloneqq \frac{\theta_t(x,t)}{\norm{\grad \theta(x,t)}}.
+	v(x,t) 
+	\coloneqq 
+	\frac{\added[id=RH]{{}-{}} \theta_t(x,t)}{\norm{\grad \theta(x,t)}}
+	.
 \end{equation}
-
 
 \begin{figure}
 	\centering
@@ -276,81 +313,124 @@ Therefore, we define \emph{the velocity of an isothermal surface} as
 	\label{fig:velocity}
 \end{figure}
 
-The function $v(x,t)$ takes positive values near the edge of the melting pool while it expands and negative values while it shrinks. We are only interested in restricting negative values within the solidus--liquidus temperature corridor, we propose the following penalty term
+While the melting pool expands, $v(x,t)$ takes \replaced[id=RH]{negative}{positive} values near the edge of the pool since $\theta_t > 0$ holds.
+When the pool shrinks, $v(x,t)$ has \replaced[id=RH]{positive}{negative} values.
+We are only interested in restricting \replaced[id=RH]{positive}{negative} velocities and only within the solidus--liquidus temperature corridor.
+We therefore propose the following penalty term,
+\begin{equation} \label{eq:J_velocity}
+	J_{\text{velocity}} 
+	= 
+	\frac{\beta_\text{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(x,t) - v_{\max}}{v_{\max} - v(x,t)}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
+	,
+\end{equation}
+\added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(x,t)$ may require an update of the code. The updated formula agrees with the original proposal in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.}}
+where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is defined as
 \begin{equation}
-	J_{\text{velocity}} = \frac{\beta_\text{velocity}}{2}
-	\int_{\Omega \times [0,T]} \max \{ v_{\max} - v(x,t),\ 0 \}^2 \cdot \chi(\theta(x,t))\, dx\,dt
-\end{equation}where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is defined as
-\begin{equation}
-	\chi(\theta) \coloneqq \left\{
-		\begin{array}{ll}
-			1, & \text{if}\ \text{solidus} \le \theta \le \text{liquidus}, \\
-			0, & \text{otherwise}.
-		\end{array} \right.
+	\chi(\theta) 
+	\coloneqq 
+	\begin{cases}
+		1 & \text{if}\ \text{solidus} \le \theta \le \text{liquidus}
+		, 
+		\\
+		0 & \text{otherwise}
+		.
+	\end{cases}
 \end{equation}
 
 
 \subsection{Completeness of Solidification}
 
-To ensure that the \textbf{solidification stage is complete} at the final time $T$ we penalize the final temperatures $\theta(x, T)$ which are still above the solidus point:
-\begin{equation}
-	J_{\text{completeness}} =
-	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max\{ \theta(x, T) - \text{solidus},\ 0 \}^2\, d\omega.
+To ensure that the \textbf{solidification stage is complete} at the given final time $T$, we penalize final temperatures $\theta(x,T)$ which are still above the solidus temperature by means of the following term,
+\begin{equation} \label{eq:J_completeness}
+	J_{\text{completeness}} 
+	=
+	\frac{\beta_\text{completeness}}{2} \int_{\Omega} \max \paren[big]\{\}{\theta(x, T) - \text{solidus}, \; 0}^2 \d x
+	.
 \end{equation}
+
 
 \subsection{Energy Consumption Penalties}
 
-\added[id=RH]{\textbf{Add some text}}
-
-To \textbf{minimize the energy consumption} we use the following standard penalty term:
+The \textbf{consumption of energy} in the process is taken into account by means of the following standard quadratic control cost term,
 \begin{equation}
-	J_{\text{control}} =
-	\frac{\beta_\text{control}}{2} \norm{u(t)}^2_{L^2[0,T]}.
+	J_{\text{control}} 
+	=
+	\frac{\beta_\text{control}}{2} \norm{u}^2_{L^2(0,T)}
+	.
 \end{equation}
-
+Indeed, an $L^1$-norm penalty would be a more meaningful model of energy consumption.
+Such a term is known to induce sparsely supported controls, see for instance \cite{VossenMaurer:2006:1,Stadler:2009:1,CasasHerzogWachsmuth:2012:2}.
+In the present application, however, optimal power profiles may then require the laser to be switched off and on again.
+Technical limitations require a certain amount of time before the laser can be powered up again, which is not feasible due to the brevity of usual process times~$T$ in single-spot welding.
+Moreover, a waiting-time constraint would render the optimal control problem significantly more difficult.
 
 
 \subsection{Optimal Control Problem Formulation}
 
-\added[id=RH]{\textbf{Formulate more precisely.}}
-We say that a function $u^*(t) \in [0,1]$ is the best optimal control, if it minimizes the objective functional
+For convenience, we summarize our single-spot welding optimal control problem as follows:
+
 \begin{equation} \label{eq:J}
-	J(u^*, \theta) \coloneqq J_{\text{penetration}} + J_{\text{velocity}} + J_{\text{completeness}} + J_{\text{control}}
+	\paren[auto].\}{%
+		\begin{aligned}
+			&
+			\text{Find a control function $u \colon [0,T] \to \R$ which minimizes the objective}
+			\\
+			&
+			J(u,\theta) 
+			\coloneqq 
+			J_{\text{penetration}}(\theta) + J_{\text{velocity}}(\theta) + J_{\text{completeness}}(\theta) + J_{\text{control}}(u)
+			,
+			\\
+			&
+			\text{where $\theta$ is the solution to the boundary value problem \eqref{eq:heat_eq}--\eqref{eq:heat_eq_bc}}
+			\\
+			&
+			\text{and the control satisfies the constraints $0 \le u(t) \le 1$ on $[0,T]$}
+			.
+		\end{aligned}
+	}
 \end{equation}
-where $\theta(x, t)$ is the unique solution to the boundary value problem \eqref{eq:heat_eq}, \eqref{eq:heat_eq_bc} corresponding to $u^*(t)$.
 
 
-\section{Discretization}
+\section{Discretization and Optimization Scheme}
 \label{sec:discretization}
 
-In this section the previously derived optimal control problem is discretized as the next step towards its numerical solution.
+In this section we describe a discretization of problem \eqref{eq:J} as well as a projected gradient descent scheme for its numerical solution.
+Since the discretization in space is based on a finite element approach, we begin with the notion of weak solution.
+Notice that our definitions are informal since we do not aim to provide a thorough analysis of the forward system \eqref{eq:heat_eq}--\eqref{eq:heat_eq_bc} here.
+
 
 \subsection{Weak Formulation}
-As the first step we are going to define a weak solution.
 
-\begin{definition}
-	Let $V$ be a subspace in $L^2(\Omega \times [0,T])$, $d\Omega$ be a volume element of $\Omega$, $dS$ be a surface element of $\partial\Omega$, and let
-	\begin{equation*}
-		\Phi(\theta(x,t)) \coloneqq k (\theta(x,t)^4 - \theta_\text{amb}^4) + h (\theta(x,t) - \theta_\text{amb}).
-	\end{equation*}
-	We say that $\theta \in L^2(\Omega \times [0,T])$ is \emph{a weak solution} to the boundary value problem \eqref{eq:heat_eq}, \eqref{eq:heat_eq_bc} if the equality
-	\begin{multline} \label{eq:weak}
-		\int_{\Omega \times [0,T]} s(\theta(x,t)) \frac{\d \theta(x,t)}{\d t} v\, d\Omega\, dt
-		+
-		\int_{\Omega \times [0,T]} \langle \kappa(\theta(x,t)) \grad\theta(x,t), \grad v \rangle \, d\Omega\, dt \\
-		+
-		\int_{(\Gamma_1 \cup \Gamma_2) \times [0,T]} \Phi(\theta(x,t))\, v\, dS\, dt -
-		\int_{\Gamma_1 \times [0,T]} \eta \text{pd}_{\max} u(t)\, v\, dS\, dt = 0
-	\end{multline}
-	holds for every $v\in V$.
-\end{definition}
+As usual, the weak formulation is obtained by multiplying \eqref{eq:heat_eq} by a test function, integrating by parts, and plugging in the natural boundary conditions \eqref{eq:heat_eq_bc}.
+Abbreviating
+\begin{equation*}
+	\Phi(\theta(x,t)) 
+	\coloneqq 
+	k \paren[big](){\theta(x,t)^4 - \theta_\text{amb}^4} + h \paren[big](){\theta(x,t) - \theta_\text{amb}}
+	,
+\end{equation*}
+we thus arrive at the notion that a function $\theta \colon \Omega \times [0,T] \to \R$ is a \emph{weak solution} to the boundary value problem \eqref{eq:heat_eq}--\eqref{eq:heat_eq_bc} if it satisfies the initial condition \eqref{eq:heat_eq_ic} and the equality
+\begin{multline} \label{eq:weak}
+	\int_\Omega s(\theta(x,t)) \, \theta_t(x,t) \, v \d x \d t
+	+
+	\int_\Omega \grad \theta(x,t)^\transp \kappa(\theta(x,t)) \, \grad v \d x \d t 
+	\\
+	+
+	\int_{\Gamma_1 \cup \Gamma_2} \Phi(\theta(x,t))\, v\d s \d t -
+	\int_{\Gamma_1} \eta \, \text{pd}_{\max} \, u(t) \, v \d s \d t 
+	= 
+	0
+\end{multline}
+holds for all functions $v \in C^\infty(\Omega)$ and for almost all $t \in (0,T)$.
+Recall that the thermal conductivity $\kappa(\theta)$ is a matrix due to different conductivities in radial and axial directions, see \cref{subsec:conductivity}.
 
 
-\subsection{Reduction to the radially symmetric case}
+\subsection{Reduction to the Radially Symmetric Case}
 
-% Despite the problem is naturally three-dimensional,
 Up to this moment the problem was considered in $\R^3$.
-However, the power density of the laser beam proved be to radially symmetric, and there is no heat transition in $\Omega$ in the angular direction, i.e. $\partial\theta/\partial\varphi = 0$. This motivates us to reduce the computational complexity of the problem by reducing the domain $\Omega$ to its two-dimensional radial section $\omega$, see \cref{fig:sec}.
+However, the power density of the laser beam is taken to be radially symmetric, and there is no heat transition in $\Omega$ in the angular direction, \ie $\partial\theta/\partial\varphi = 0$. 
+This motivates us to reduce the computational complexity of the problem by reducing the domain $\Omega$ to its two-dimensional radial section $\omega$, see \cref{fig:sec}.
 
 \begin{figure}
 	\centering
@@ -360,82 +440,145 @@ However, the power density of the laser beam proved be to radially symmetric, an
 	\label{fig:sec}
 \end{figure}
 
-Thus, \eqref{eq:weak} turns into
+From now on, we replace $\theta(x,t)$ by $\theta(r,z,t)$. 
+Thus, \eqref{eq:weak} turns becomes
 \begin{multline} \label{eq:weak_reduced}
-	\int_{\omega \times [0,T]} s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v\, r\, dr\, dz\, dt
+	\int_\omega s(\theta(r,z,t)) \frac{\d \theta(r,z,t)}{\d t} v \, r \d r \d z \d t
 	+
-	\int_{\Omega \times [0,T]} \langle \kappa(\theta(r,z,t)) \grad\theta(r,z,t), \grad v \rangle \, r\, dr\, dz\, dt \\
+	\int_\omega \grad\theta(r,z,t)^\transp \kappa(\theta(r,z,t)) \grad v \, r \d r \d z \d t 
+	\\
 	+
-	\int_{(\gamma_1 \cup \gamma_2) \times [0,T]} \Phi(\theta(x,t)) v\, r\, ds\, dt -
-	\int_{\gamma_1 \times [0,T]} \eta \text{pd}_{\max} u(t) v\, r\, ds\, dt = 0.
+	\int_{(\gamma_1 \cup \gamma_2)} \Phi(\theta(r,z,t)) \, v \, r \d s \d t -
+	\int_{\gamma_1} \eta \, \text{pd}_{\max} \, u(t) \, v \, r \d s \d t 
+	= 
+	0
 \end{multline}
-
-Notice, that the gradient operator in equation~\eqref{eq:weak_reduced} must be used in its cylindrical form
+for all $v \in C^\infty(\omega)$ and for almost all $t \in (0,T)$.
+Notice that the gradient operator in equation~\eqref{eq:weak_reduced} must be used in its cylindrical form, \ie,
 \begin{equation*}
-	\grad f(r,z,\varphi) =
-		\frac{\partial f}{\partial r} e_r
-		+
-		\frac{\partial f}{\partial z} e_z
-		+
-		\frac{1}{r} \frac{\partial f}{\partial \varphi} e_{\varphi},
+	\grad \theta(r,z,\varphi) 
+	=
+	\frac{\partial \theta}{\partial r} e_r
+	+
+	\frac{\partial \theta}{\partial z} e_z
+	+
+	\frac{1}{r} \frac{\partial \theta}{\partial \varphi} e_{\varphi}
+	.
 \end{equation*}
-however, as mentioned before, due to the radial symmetry of the heat distribution, the $e_{\varphi}$-component vanishes. This feature is convenient for the numerical implementation, since the standard gradient operator (in Cartesian coordinate form) can be used.
+However, as mentioned before, due to the radial symmetry of the heat distribution, the $e_{\varphi}$-component of $\theta$ vanishes. 
+This feature is convenient for the numerical implementation, since the standard gradient operator (in Cartesian coordinate form) can be used.
 
-Similarly, two penalty terms affected by this reduction take the following forms:
-\begin{eqnarray}
+Similarly, two of the penalty terms in the objective in \eqref{eq:J} are affected by the transition to cylindrical coordinates.
+Specifically, \eqref{eq:J_velocity} and \eqref{eq:J_completeness} now take the following forms:
+\begin{align}
 	\label{eq:J_velocity_r}
-	J_\text{velocity} =
-	\frac{\beta_\text{velocity}}{2}
-	\int_{\omega \times [0,T]} \max \{ v_{\max} - v(r,z,t),\ 0 \}^2 \cdot \chi(\theta(r,z,t))\, r\, dr\, dz\, dt, \\
+	J_\text{velocity} 
+	&
+	=
+	\frac{\beta_\text{velocity}}{2} \int_{\omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(r,z,t) - v_{\max}}{v_{\max} - v(r,z,t)}, \; 0}^2 \cdot \chi(\theta(r,z,t)) \, r \d r \d z \d t
+	, 
+	\\
 	\label{eq:J_completeness_r}
-	J_\text{completeness} =
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta(r,z,T) - \text{solidus},\ 0 \}^2\, r\, dr\, dz.
-\end{eqnarray}
+	J_\text{completeness} 
+	&
+	=
+	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max \paren[big]\{\}{\theta(r,z,T) - \text{solidus}, \; 0}^2 \, r \d r \d z
+	.
+\end{align}
 
 
-\subsection{Discretization of the forward problem}
+\subsection{Discretization of the Forward Problem}
 
-We will now focus on discretizing the problem in time and space in order to solve it numerically. We combine the finite elements method in space and the finite difference method in time. The numerical implementation is based on \fenics computing platform.
+We now focus on discretizing the problem in time and space in order to solve it numerically. 
+We combine a finite element method in space and finite difference method in time. 
+The numerical implementation is based on \fenics computing platform; see \cite{LoggMardalWells:2012:1}.
 
-Let $N_t$ be the number of considered time steps excluding the initial state, then we denote:
+Let $N_t$ be the number of equidistant time steps excluding the initial state, then we denote:
 \begin{equation}
-\begin{split}
-	\tau \coloneqq T/N_t, \quad	u_n \coloneqq u(n\tau),	\quad \theta_n(r,z) \coloneqq \theta(r,z,n\tau), \\
-	\theta_{n+\alpha}(r,z) \coloneqq \alpha\theta_{n+1}(r,z) + (1-\alpha)\theta_n(r,z)\\
-\end{split}
+	\begin{aligned}
+		&
+		\tau 
+		\coloneqq 
+		T/N_t
+		, 
+		\quad
+		u_n 
+		\coloneqq 
+		u(n\tau)
+		,
+		\quad
+		\theta_n(r,z) 
+		\coloneqq 
+		\theta(r,z,n\tau)
+		, 
+		\\
+		&
+		\theta_{n+\alpha}(r,z) 
+		\coloneqq 
+		\alpha\theta_{n+1}(r,z) + (1-\alpha)\theta_n(r,z)
+		,
+	\end{aligned}
 \end{equation}
-where $\alpha \in [0,1]$ is the implicitness parameter.
+where $\alpha \in [0,1]$ determines the degree of implicitness of the time scheme.
 
-Withing the time interval $(n\tau, n\tau+\tau]$ the coefficients and the operators of equation~\eqref{eq:heat_eq} are discretized as follows:
+Within the time interval $(n\tau, n\tau+\tau]$, the coefficients and the operators of equation \eqref{eq:heat_eq} are discretized as follows:
 \begin{equation}
-\begin{split}
-	s(\theta(r,z,t)) \coloneqq s(\theta_n), \quad \kappa(\theta(r,z,t)) \coloneqq \kappa(\theta_n), \quad \Phi(\theta(r,z,t)) \coloneqq \Phi\left(\theta_{n+\alpha}\right), \\
-	\frac{\d\theta(r,z,t)}{\d t} \coloneqq \frac{\theta_{n+1}-\theta_n}{\tau}, \quad
-	\grad(\theta(r,z,t)) \coloneqq \grad\left(\theta_{n+\alpha}\right).
-\end{split}
+	\begin{aligned}
+		s(\theta(r,z,t)) 
+		&
+		\coloneqq 
+		s(\theta_n)
+		, 
+		&
+		\kappa(\theta(r,z,t)) 
+		&
+		\coloneqq 
+		\kappa(\theta_n)
+		, 
+		&
+		\Phi(\theta(r,z,t)) 
+		&
+		\coloneqq 
+		\Phi \paren[auto](){\theta_{n+\alpha}}
+		, 
+		\\
+		\frac{\d\theta(r,z,t)}{\d t} 
+		&
+		\coloneqq 
+		\frac{\theta_{n+1}-\theta_n}{\tau}
+		, 
+		&
+		\grad(\theta(r,z,t)) 
+		&
+		\coloneqq 
+		\grad \paren[auto](){\theta_{n+\alpha}}
+		.
+	\end{aligned}
 \end{equation}
 
-For the space discretization the subspace of piecewise linear functions on a predefined mesh is used.
-
-Now equation~\eqref{eq:weak_reduced} takes the form
+For the discretization in space, we employ piecewise linear, globally continuous test and trial functions on a predefined mesh of $\omega$.
+Now the discretized form of equation \eqref{eq:weak_reduced} reads as follows,
 \begin{multline} \label{eq:discrete}
-	\sum_{n=0}^{N_t-1}\int_{\omega}
-		s(\theta_n) (\theta_{n+1}-\theta_n) v_n\, r\, dr\, dz
-	+ \tau
-	\sum_{n=0}^{N_t-1}\int_{\omega}
-		\left\langle \kappa(\theta_n) \grad \theta_{n+\alpha} , \grad v_n \right\rangle\, r\, dr \, dz \\
-	+ \tau
-	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
-		\Phi \left( \theta_{n+\alpha} \right)  v_n\, r\, ds
-	- \tau
-	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
-		\eta \text{pd}_{\max}\, u_n v_n\, r\, ds = 0.
+	\sum_{n=0}^{N_t-1} \int_{\omega}
+	s(\theta_n) (\theta_{n+1}-\theta_n) \, v_n \, r \d r \d z
+	+ \tau \sum_{n=0}^{N_t-1} \int_{\omega}
+	\grad \theta_{n+\alpha}^\transp \, \kappa(\theta_n) \grad v_n \, r \d r \d z 
+	\\
+	+ \tau \sum_{n=0}^{N_t-1} \int_{\gamma_1 \cup \gamma_2}
+	\Phi \paren[auto](){\theta_{n+\alpha}} v_n \, r \d s
+	- \tau \sum_{n=0}^{N_t-1} \int_{\gamma_1}
+	\eta \text{pd}_{\max} \, u_n \, v_n \, r \d s 
+	= 
+	0
+	.
 \end{multline}
+In \eqref{eq:discrete} we set $\theta_0 \coloneqq \theta_\text{amb}$.
+The unknown coefficient vectors $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ at subsequent points in time is then solved time step by time step.
 
-In~\eqref{eq:discrete} we treat $\theta_0$ as a known in advance initial temperature field and $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ as the unknown vector (of scalar fields). The equation is solved step by step in time, i.e. we find $\theta_{n+1}$ using already known $\theta_1, \ldots, \theta_n$.
 
+\subsection{Discretization of the Objective Functional}
 
-\subsection{Discretization of the objective functional}
+\added[id=RH]{\textbf{@RH: continue revision here}}
 
 To derive the discrete version of $J_\text{penetration}$ we substitute the $L^{\infty}$-norm in~\eqref{eq:J_penetration} with $l^p$-norm taking sufficiently large $p$
 \begin{equation}
@@ -453,19 +596,24 @@ and hence $J_\text{velocity}$ takes the following form
 \begin{equation}
 	J_\text{velocity} =
 	\frac{\tau \beta_\text{velocity}}{2}
-	\sum_{n=0}^{N_t-1} \int_{\omega} \max \{ - v_{\max} - v(\theta_n, \theta_{n+1}),\ 0 \}^2 \cdot \chi(\theta_{n+\alpha})\, r\, dr\, dz\, \\
+	\sum_{n=0}^{N_t-1} \int_{\omega} \max \{ - v_{\max} - v(\theta_n, \theta_{n+1}),\ 0 \}^2 \cdot \chi(\theta_{n+\alpha})\, r\d r\d z\, \\
 \end{equation}
 
 The remaining penalty terms $J_\text{completeness}$ and $J_\text{control}$ are discretized trivially:
-\begin{eqnarray}
-	J_\text{completeness} =
-	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta_{N_t} - \text{solidus},\ 0 \}^2\, r\, dr\, dz, \\
-	J_{\text{control}} =
+\begin{align}
+	J_\text{completeness} 
+	&
+	=
+	\frac{\beta_\text{completeness}}{2} \int_{\omega} \max\{ \theta_{N_t} - \text{solidus},\ 0 \}^2\, r\d r\d z, 
+	\\
+	J_{\text{control}} 
+	&
+	=
 	\frac{\tau \beta_\text{control}}{2} \sum_{n=0}^{N_t-1} u_n^2.
-\end{eqnarray}
+\end{align}
 
 
-\subsection{Evaluation of the gradient}
+\subsection{Evaluation of the Gradient}
 
 
 Let the evolution of the temperature $\theta = [\theta_1, \theta_2, \ldots, \theta_{N_t}]$ be already known and $p = [p_0, p_1, \ldots, p_{N_t-1}]$ be the adjoint state which is yet unknown.
@@ -481,10 +629,10 @@ The Lagrange function takes the following form
 		\left\langle \kappa(\theta_n) \grad \theta_{n+\alpha}, \grad p_n \right\rangle\, d\omega \\
 	+ \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1 \cup \gamma_2}
-		\Phi \left( \theta_{n+\alpha} \right) p_n\, ds
+		\Phi \left( \theta_{n+\alpha} \right) p_n\d s
 	- \tau
 	\sum_{n=0}^{N_t-1}\int_{\gamma_1}
-		\eta \text{pd}_{\max} u_n\, p_n\, ds.
+		\eta \text{pd}_{\max} u_n\, p_n\d s.
 \end{multline}
 
 Differentiating $\mathcal{L}(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $\delta u$ we get
@@ -493,12 +641,12 @@ Differentiating $\mathcal{L}(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots
 	=
 	\tau \sum_{n=0}^{N_t-1}
 	\left\langle
-		\beta_\text{control}\, u_n - \int_{\gamma_1} \eta \text{pd}_{\max} p_n\, ds, \delta u
+		\beta_\text{control}\, u_n - \int_{\gamma_1} \eta \text{pd}_{\max} p_n\d s, \delta u
 	\right\rangle
 \end{equation}
 and hence
 \begin{equation} \label{eq:gradient}
-	\grad_u \mathcal{L}(\theta, u, p) = \beta_\text{control}\, u - \int_{\gamma_1} \eta \text{pd}_{\max} p\, ds.
+	\grad_u \mathcal{L}(\theta, u, p) = \beta_\text{control}\, u - \int_{\gamma_1} \eta \text{pd}_{\max} p\d s.
 \end{equation}
 
 The adjoint state $p$ must be evaluated to benefit from formula~\eqref{eq:gradient}. The corresponding adjoint equation is obtained from
@@ -511,7 +659,7 @@ The only manual differentiation is required for the penalty term $J_\text{penetr
 One can find more details in \cite[\texttt{optipuls.core}]{optipuls_github}.
 
 
-\subsection{Projected Gradient Descent}
+\subsection{Projected Gradient Descent Scheme}
 
 To find the optimal control we apply the \emph{projected gradient descent} procedure \added[id=DS]{\textbf{[citation needed]}}. Since the procedure is well known, we present only a short general outline, one can find more details in \cite[\texttt{optipuls.optimization}]{optipuls_github}.
 
@@ -550,9 +698,9 @@ To find the optimal control we apply the \emph{projected gradient descent} proce
 
 In this section we present some solutions to the optimization problem. Notice that all the numerical results presented in the paper are fully reproducible and hence can be verified by the reader. See \cite{optcontrol_github} for further instructions. 
 
-\subsection{Conventional and linear rampdown pulse shapes}
+\subsection{Conventional and Linear Rampdown Pulse Shapes}
 
-The conventional pulse laser welding uses a rectangular laser pulse shape, i.e. the laser is working full power for a short time and is switched of immediately after. However in welding of aluminum alloys this always leads to hot-cracking. A so-called linear-rampdown pulse shape, i.e. when the laser power is decreasing linearly after a short period of working full power, Has shown its potential to maintain a crack-free welding of aluminum alloys \added[id=DS]{\textbf{[citation needed]}}.
+The conventional pulse laser welding uses a rectangular laser pulse shape, \ie the laser is working full power for a short time and is switched of immediately after. However in welding of aluminum alloys this always leads to hot-cracking. A so-called linear-rampdown pulse shape, \ie when the laser power is decreasing linearly after a short period of working full power, Has shown its potential to maintain a crack-free welding of aluminum alloys \added[id=DS]{\textbf{[citation needed]}}.
 
 In view of this we first consider the convential and the linear rampdown pulse shapes as the initial guess for the optimizer. Figure~\ref{fig:rampdown} demonstrates the corresponding solutions to the optimal control problem. The numerical reports on the corresponing simulations are presented in Table~\ref{tab:rampdown}.
 
@@ -569,9 +717,9 @@ In view of this we first consider the convential and the linear rampdown pulse s
 \end{table}
 
 
-\subsection{Zeroguess optimizations}
+\subsection{Zero Guess Optimizations}
 
-As the next step, in order to obtain a more optimal pulse shape, we take the trivial initial guess with no power radiated by the laser. This formulation of the optimization problem is possible due to $J_\text{penetration}$ penalty term which insures that the defined penetration (i.e. the welding depth) is reached. Figure~\ref{fig:zeroguess} demonstrates the corresponding solutions to the optimal control problem with the vatiable maximal laser power and maximal welding time. The corresponding numerical reports are presented in Table~\ref{tab:zeroguess}.
+As the next step, in order to obtain a more optimal pulse shape, we take the trivial initial guess with no power radiated by the laser. This formulation of the optimization problem is possible due to $J_\text{penetration}$ penalty term which insures that the defined penetration (\ie the welding depth) is reached. Figure~\ref{fig:zeroguess} demonstrates the corresponding solutions to the optimal control problem with the vatiable maximal laser power and maximal welding time. The corresponding numerical reports are presented in Table~\ref{tab:zeroguess}.
 
 \begin{figure} \label{fig:zeroguess}
 	\centering
