@@ -13,7 +13,7 @@ These characteristics can be exploited to generate narrow, deep welds at high we
 However, in comparison to continuous wave laser processes, pulse laser welding is reported to have an elevated tendency to produce hot cracks during the solidification phase due to higher cooling and thus strain rates.
 This is particularly difficult for the welding of certain aluminum alloys, \eg, of the 2XXX, 5XXX and 6XXX series, which remains a challenging engineering problem \cite{Katayama:2001:1,ZhangWeckmanZhou:2008:1,BieleninBergmann:2017:1}.
 
-Previous analyses have shown the potential to reduce hot cracking by varying the laser power profile in pulser laser welding; see, \eg, \cite{BieleninBergmann:2017:1,JiaZhangYuShiLiuWuYeWangTian:2021:1}.
+Previous analyses have shown the potential to reduce hot cracking by varying the laser power profile in pulsed laser welding; see, \eg, \cite{BieleninBergmann:2017:1,JiaZhangYuShiLiuWuYeWangTian:2021:1}.
 In this paper, we propose an optimal control approach to find power profiles which are optimal in a certain sense.
 We concentrate on single-spot laser pulse welding problems with a view towards aluminum alloy welding.
 Since welding seams consist of multiple, partially overlapping welding spots, this work constitutes as a first step towards the optimization of entire welding seams.
@@ -99,7 +99,7 @@ The latter coefficient coincides with $c(\theta)$ outside the solidus--liquidus 
 
 Another effect to be taken into account is that the \emph{density}~$\rho$ of aluminum alloys changes significantly over the temperature regime under consideration due to thermal expansion and contraction.
 However, considering variable volume of the material would lead to a free boundary problem, which significantly increases the complexity of our model.
-We therefore take volume changes into account through a temperature dependent desnsity.
+We therefore take volume changes into account through a temperature dependent density.
 Overall, this leads to an \emph{effective volumetric heat capacity} $s(\theta) = c_\textup{eff}(\theta) \rho(\theta)$ in our heat equation.
 
 For the aluminum alloys under consideration, reference values of volumetric heat capacity are given in both the fully solid and the fully liquid state of matter. 
@@ -135,7 +135,7 @@ Numerical simulations based on these assumptions have shown reasonable correspon
 	\centering
 	\includegraphics{plots/coefficients/vhc.pdf}
 	\includegraphics{plots/coefficients/kappa.pdf}
-	\caption{Effective volumetric heat capacity $s(\theta)$ and effective thermal conductivity $\kappa(\theta)$ construccted using spline fitting procedure.}
+	\caption{Effective volumetric heat capacity $s(\theta)$ and effective thermal conductivity $\kappa(\theta)$ constructed using spline fitting procedure.}
 	\label{fig:coef}
 \end{figure}
 
