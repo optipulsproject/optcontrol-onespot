@@ -79,7 +79,7 @@ These challenges are sequentially addressed in the following subsections, result
 \subsection{Enthalpy of Fusion and Volumetric Effective Heat Capacity}
 \label{subsec:capacity}
 
-Unlike standard heat dissipation problems when the considered material remains in the same state of matter and its physical properties remain essentially uniform, we deal with a phase transition during the heating and cooling stages. 
+Unlike standard heat dissipation problems when the considered material remains in the same state of matter and its physical properties remain essentially uniform, we deal with a phase transition during the heating and the cooling stages.
 These phase transitions are accompanied by an absorption or a release of energy. 
 The required amount of additional energy needed to be provided to a specific quantity of the substance to change its state from a solid to a liquid (at constant pressure) is called the \emph{enthalpy of fusion} or the \emph{(latent) heat of fusion}. 
 For the opposite transition from a liquid to a solid state \emph{the heat of solidification} has the same absolute value but its sign is the opposite.
@@ -111,9 +111,8 @@ Therefore, we construct $s(\theta)$ using the following procedure:
 	\item 
 		We choose a $C^1$ cubic spline by filling the liquidus--solidus temperature gap with the uniquely defined cubic polynomial.
 	\item 
-		In the liquidus--solidus interval, we add without loss of smoothness a cubic spline whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
+		In the liquidus--solidus interval, we add without loss of smoothness a cubic spline \added[id=DS]{(consisting of two cubic polynomials)} whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
-\added[id=RH]{\textbf{Isn't (ii) and (iii) the same spline? Then we should put these into the same item.}}
 
 We do not present the above procedure in terms of cumbersome formulas but limit ourselves here to a plot of the resulting effective volumetric heat capacity function; see \cref{fig:coef}.
 
@@ -125,7 +124,7 @@ Convective heat transfer in the liquid phase becomes the next modeling challenge
 Due to the Marangoni effect, see \cite{MillsKeeneBrooksShirali:1998:1,Saldi:2012:1}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in radial direction and decreases in axial direction (see \cref{fig:cylinder} for the coordinate axes).
 In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to its measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. 
 \added[id=RH]{Convective} heat transfer in the angular direction is assumed to be zero.
-As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\textup{ax}(\theta), \kappa_\textup{rad}(\theta), 0)$ in diagonal form in a cylindrical coordinate system.
+As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\textup{ax}(\theta), \kappa_\textup{rad}(\theta),\; 0)$ in diagonal form in a cylindrical coordinate system.
 
 The exact algorithm used for constructing $\kappa(\theta)$ (and also $s(\theta)$) can be inspected in code in \cite[\texttt{optipuls.coefficients}]{optipuls_github}. 
 We provide a plot of $\kappa_\textup{rad}(\theta)$ and $\kappa_\textup{ax}(\theta)$; see \cref{fig:coef}.
@@ -294,7 +293,7 @@ Substituting \eqref{eq:xt_alpha_beta} into \eqref{eq:dxt}, we obtain
 \begin{equation}
 	\alpha(x(t),t) 
 	= 
-	\frac{\added[id=RH]{{}-{}} \theta_t(x(t),t)}{\norm{\grad \theta(x(t),t)}^2}
+	\frac{{}-{} \theta_t(x(t),t)}{\norm{\grad \theta(x(t),t)}^2}
 	,
 \end{equation}
 where $\norm{\cdot}$ denotes the Euclidean norm.
@@ -302,7 +301,7 @@ Therefore, we can define the \emph{velocity of any isothermal surface} passing t
 \begin{equation}
 	v(x,t) 
 	\coloneqq 
-	\frac{\added[id=RH]{{}-{}} \theta_t(x,t)}{\norm{\grad \theta(x,t)}}
+	\frac{{}-{} \theta_t(x,t)}{\norm{\grad \theta(x,t)}}
 	.
 \end{equation}
 
@@ -313,17 +312,16 @@ Therefore, we can define the \emph{velocity of any isothermal surface} passing t
 	\label{fig:velocity}
 \end{figure}
 
-While the melting pool expands, $v(x,t)$ takes \replaced[id=RH]{negative}{positive} values near the edge of the pool since $\theta_t > 0$ holds.
-When the pool shrinks, $v(x,t)$ has \replaced[id=RH]{positive}{negative} values.
-We are only interested in restricting \replaced[id=RH]{positive}{negative} velocities and only within the solidus--liquidus temperature corridor.
+While the melting pool expands, $v(x,t)$ takes negative values near the edge of the pool since $\theta_t > 0$ holds.
+When the pool shrinks, $v(x,t)$ has positive values.
+We are only interested in restricting positive velocities and only within the solidus--liquidus temperature corridor.
 We therefore propose the following penalty term,
 \begin{equation} \label{eq:J_velocity}
 	J_\textup{velocity} 
 	= 
-	\frac{\beta_\textup{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(x,t) - v_{\max}}{v_{\max} - v(x,t)}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
+	\frac{\beta_\textup{velocity}}{2} \int_{\Omega \times (0,T)} \max \paren[big]\{\}{v(x,t) - v_{\max}, \; 0}^2 \cdot \chi(\theta(x,t)) \d x \d t
 	,
 \end{equation}
-\added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(x,t)$ may require an update of the code. The updated formula agrees with the original proposal in \cite{BergmannBieleninHerzogHildebrandRiedelSchrickerTrunkWorthmann:2017:1}.}}
 where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is defined as
 \begin{equation}
 	\chi(\theta) 
@@ -417,7 +415,7 @@ we thus arrive at the notion that a function $\theta \colon \Omega \times [0,T] 
 	\int_\Omega \grad \theta(x,t)^\transp \kappa(\theta(x,t)) \, \grad v \d x \d t 
 	\\
 	+
-	\int_{\Gamma_1 \cup \Gamma_2} \Phi(\theta(x,t))\, v\d s \d t -
+	\int_{\Gamma_1 \cup \Gamma_2 \cup \Gamma_4} \Phi(\theta(x,t))\, v\d s \d t -
 	\int_{\Gamma_1} \eta \, \text{pd}_{\max} \, u(t) \, v \d s \d t 
 	= 
 	0
@@ -448,7 +446,7 @@ Thus, \eqref{eq:weak} turns becomes
 	\int_\omega \grad\theta(r,z,t)^\transp \kappa(\theta(r,z,t)) \grad v \, r \d r \d z \d t 
 	\\
 	+
-	\int_{(\gamma_1 \cup \gamma_2)} \Phi(\theta(r,z,t)) \, v \, r \d s \d t -
+	\int_{\gamma_1 \cup \gamma_2 \cup \gamma_4} \Phi(\theta(r,z,t)) \, v \, r \d s \d t -
 	\int_{\gamma_1} \eta \, \text{pd}_{\max} \, u(t) \, v \, r \d s \d t 
 	= 
 	0
@@ -475,7 +473,7 @@ Specifically, \eqref{eq:J_velocity} and \eqref{eq:J_completeness} now take the f
 	J_\textup{velocity} 
 	&
 	=
-	\frac{\beta_\textup{velocity}}{2} \int_{\omega \times (0,T)} \max \paren[big]\{\}{\replaced[id=RH]{v(r,z,t) - v_{\max}}{v_{\max} - v(r,z,t)}, \; 0}^2 \cdot \chi(\theta(r,z,t)) \, r \d r \d z \d t
+	\frac{\beta_\textup{velocity}}{2} \int_{\omega \times (0,T)} \max \paren[big]\{\}{v(r,z,t) - v_{\max}, \; 0}^2 \cdot \chi(\theta(r,z,t)) \, r \d r \d z \d t
 	, 
 	\\
 	\label{eq:J_completeness_r}
@@ -583,7 +581,7 @@ To derive the discrete version of $J_\textup{penetration}$, we discretize \eqref
 	J_\textup{penetration} 
 	= 
 	\frac{\beta_\textup{penetration}}{2}
-	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target}\added[id=RH]{,n\tau})}^p}^{1/p} - \theta_\textup{target}}^2
+	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target})}^p}^{1/p} - \theta_\textup{target}}^2
 	.
 \end{equation}
 \added[id=RH]{\textbf{@DS: The factor $\tau$ above may incur a change in the code.}}
@@ -592,16 +590,31 @@ The velocity of an isothermal surface (in fact an isothermal line after dimensio
 \begin{equation}
 	v(\theta_n, \theta_{n+1}) 
 	= 
-	\frac{\added[id=RH]{{}-{}}(\theta_{n+1}-\theta_n)}{\tau \, \norm{\grad \theta_{n+\alpha}}}
+	\frac{{}-{}(\theta_{n+1}-\theta_n)}{\tau \, \norm{\grad \theta_{n+\alpha}}}
 \end{equation}
 and hence $J_\textup{velocity}$ takes the following form:
 \begin{equation}
 	J_\textup{velocity} 
 	=
-	\frac{\beta_\textup{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{ \replaced[id=RH]{v(\theta_n, \theta_{n+1}) - v_{\max}}{- v_{\max} - v(\theta_n, \theta_{n+1})}, \; 0}^2 \cdot \chi(\theta_{n+\alpha}) \, r \d r \d z
+	\frac{\beta_\textup{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{v(\theta_n, \theta_{n+1}) - v_{\max}, \; 0}^2 \cdot
+	\replaced[id=DS]{\chi_n(r, z)}{\chi(\theta_n)}
+	\, r \d r \d z
 \end{equation}
-\added[id=RH]{\textbf{@DS: The above corrections in the sign of $v(\theta_n,\theta_{n+1})$ may require an update of the code.}}
-
+\added[id=DS]{
+where the discretized indicator function $\chi$ is defined as
+\begin{equation}
+	\chi_n(r, z)
+	\coloneqq
+	\begin{cases}
+		1 & \text{if}\ \text{solidus} \le \theta_n\ \text{and}\ \theta_{n+1} < \text{liquidus}
+		,
+		\\
+		0 & \text{otherwise}
+		.
+	\end{cases}
+\end{equation}
+}
+% ge(theta_k, solidus), lt(theta_kp1, liquidus)
 The remaining penalty terms $J_\textup{completeness}$ and $J_\textup{control}$ are discretized according to
 \begin{align}
 	J_\textup{completeness} 
@@ -637,9 +650,8 @@ To this end, we introduce the Lagrangian
 \end{multline}
 The sequence of linear systems governing the discrete adjoint state is obtained from $\partial \cL(\theta,u,p)/\partial \theta_n = 0$.
 We do not provide the explicit formula for the adjoint equation here since in the code we derive it using \fenics' built-in automatic differentiation capabilities.
-The only manual differentiation required is for the penalty term $J_\textup{penetration}$ in \eqref{eq:J_penetration_discrete}, since it has a structure different from the other terms.
+The only manual differentiation required is for the penalty term $J_\textup{penetration}$ in \eqref{eq:J_penetration_discrete}, \added[id=DS]{since in contrast to the other terms, it cannot be split into a sum over the time steps}.
 We added the contributions coming from this term manually to the adjoint state's right hand side.
-\added[id=RH]{\textbf{@DS: What is different about the structure that prevents us from using AD here?}}
 One can find more details in \cite[\texttt{optipuls.core}]{optipuls_github}.
 
 Finally, we differentiate $\cL(\theta,u,p)$ with respect to $u = [u_0, u_1, \ldots, u_{N_t-1}]$ in the direction $\delta u$ to obtain
@@ -664,7 +676,7 @@ holds.
 To find the optimal control for the discretized counterpart of \eqref{eq:J}, we apply a \emph{projected gradient descent} scheme with line search; see, \eg, \cite{GafniBertsekas:1984:1,CalamaiMore:1987:1} or \cite[Chapter~5.8.2]{GeigerKanzow:2002:1}.
 To this end, we denote by $j(u) = J(u,\theta)$ the reduced objective, which depends only on the values $u = [u_0, u_1, \ldots, u_{N_t-1}]$ of the control and the solution $\theta = [\theta_1, \theta_2, \ldots, \theta_{N_t}]$ to the forward system \eqref{eq:discrete} has been inserted.
 Since this procedure is well known, we present only a short general outline in \cref{alg:projected_gradient_descent}.
-\added[id=RH]{The norm in which the size of the gradient is evaluated is the norm represented by $\tau$ times the identity matrix.}
+The norm in which the size of the gradient is evaluated is the norm represented by $\tau$ times the identity matrix.
 More details can be found in the implementation at \cite[\texttt{optipuls.optimization}]{optipuls_github}.
  
 \begin{algorithm}
@@ -675,7 +687,7 @@ More details can be found in the implementation at \cite[\texttt{optipuls.optimi
 	\KwIn{$u_\textup{initial} \in \R^{N_t}$}
 	\KwOut{$u_\textup{optimized} \in \R^{N_t}$}
 	$u_\textup{current} \gets u_\textup{initial}$\;
-	\While{$\norm{\grad_u j (\deleted[id=RH]{\mathcal{P}_{U}} u_\textup{current})} \ge \text{tolerance} $}{
+	\While{$\norm{\grad_u j (u_\textup{current})} \ge \text{tolerance} $}{
 		solve the forward system \eqref{eq:discrete} for $\theta$, given $u_\textup{current}$\;
 		solve the adjoint system for $p$, given $\theta$ and $u_\textup{current}$\;
 		evaluate the gradient of the reduced objective $\grad_u j(u_\textup{current})$ from \eqref{eq:gradient}\;
