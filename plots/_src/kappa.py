@@ -33,13 +33,40 @@ ax.set_xticks(knots)
 ax.set_xticklabels(knots, rotation=45)
 
 x = np.linspace(223, 1123, 900)
+x_solid = x[x <= solidus]
+x_notsolid = x[x > solidus]
 
-ax.plot(x, np.vectorize(kappa_rad)(x), color='violet', zorder=0,
-        label=r'$\kappa_\mathrm{rad}(\theta)$ spline fitting')
-ax.plot(x, np.vectorize(kappa_ax)(x), color='blue', zorder=0,
-        label=r'$\kappa_\mathrm{ax}(\theta)$ spline fitting')
-ax.scatter(knots, values, color='red', zorder=1,
-        label='experimental data')
+# experimental data
+ax.scatter(knots, values,
+           color='red',
+           zorder=1,
+           marker='x',
+           label='experimental data',
+)
+# linear approximation in the fully solid state
+ax.plot(x_solid, np.vectorize(kappa_rad)(x_solid),
+        color='C0',
+        linestyle=(0, (8, 8)),
+        zorder=0,
+)
+ax.plot(x_solid, np.vectorize(kappa_rad)(x_solid),
+        color='C1',
+        linestyle=(8, (8, 8)),
+        zorder=0,
+)
+# approximation in not fully solid state (radial)
+ax.plot(x_notsolid, np.vectorize(kappa_rad)(x_notsolid),
+        color='C0',
+        zorder=0,
+        label=r'$\kappa_\mathrm{ax}(\theta)$ spline fitting',
+)
+# approximation in not fully solid state (axial)
+ax.plot(x_notsolid, np.vectorize(kappa_ax)(x_notsolid),
+        color='C1',
+        zorder=0,
+        label=r'$\kappa_\mathrm{ax}(\theta)$ spline fitting',
+)
+
 ax.legend(loc='upper left')
 plt.tight_layout()
 plt.savefig(args.outfile)

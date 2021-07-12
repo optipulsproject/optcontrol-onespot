@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 from optenv.problem import dummy_material as material
-from optenv.problem import vhc
+from optenv.problem import vhc, polynomial_mid
 from parameters import font
 
 
@@ -36,11 +36,27 @@ ax.set_xticks(knots)
 ax.set_xticklabels(knots, rotation=45)
 
 x = np.linspace(223, 1123, 900)
+x_corridor = x[(x > solidus) & (x < liquidus)]
 
-ax.plot(x, np.vectorize(vhc)(x), color='blue', zorder=0,
-        label=r'$s(\theta)$ spline fitting')
-ax.scatter(knots, values, color='red', zorder=1,
-        label='experimental data')
+
+ax.plot(x, np.vectorize(vhc)(x),
+        zorder=0,
+        color='C0',
+        label=r'$s(\theta)$ spline fitting',
+)
+ax.fill_between(x, polynomial_mid(x), np.vectorize(vhc)(x),
+        where=((x > solidus) & (x < liquidus)),
+        color='C0',
+        zorder=1,
+        alpha=0.1,
+        label='enthalpy of fusion',
+)
+ax.scatter(knots, values,
+           zorder=1,
+           marker='x',
+           color='red',
+           label='experimental data',
+)
 ax.legend(loc='upper left')
 
 plt.tight_layout()
