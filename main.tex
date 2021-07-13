@@ -576,15 +576,21 @@ The unknown coefficient vectors $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ at 
 
 \subsection{Discretization of the Objective Functional}
 
-To derive the discrete version of $J_\textup{penetration}$, we discretize \eqref{eq:J_penetration} according to
+To derive the discrete version of $J_\textup{penetration}$, we can discretize the $L^p$-norm in \eqref{eq:J_penetration} according to
+\begin{equation*}
+	\norm{\theta(x_{\text{target}},\cdot)}_{L^p(0,T)}
+	\approx
+	\paren[Bigg](){\tau \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target})}^p}^{1/p}
+	.
+\end{equation*}
+In fact, for a sufficiently large value of $p$, $\tau^{1/p}$ will be close to one so we implement the following discrete version of \eqref{eq:J_penetration}:
 \begin{equation} \label{eq:J_penetration_discrete}
 	J_\textup{penetration} 
 	= 
 	\frac{\beta_\textup{penetration}}{2}
-	\paren[auto]\{\}{\paren[Bigg](){\added[id=RH]{\tau} \sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target})}^p}^{1/p} - \theta_\textup{target}}^2
+	\paren[auto]\{\}{\paren[Bigg](){\sum_{n=1}^{N_t} \abs[big]{\theta_n(0,z_\textup{target})}^p}^{1/p} - \theta_\textup{target}}^2
 	.
 \end{equation}
-\added[id=RH]{\textbf{@DS: The factor $\tau$ above may incur a change in the code.}}
 
 The velocity of an isothermal surface (in fact an isothermal line after dimension reduction) can be approximated as
 \begin{equation}
