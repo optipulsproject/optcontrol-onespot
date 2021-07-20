@@ -327,7 +327,7 @@ where $v_{\max}$ is a pre-defined constant and the indicator function $\chi$ is 
 	\chi(\theta) 
 	\coloneqq 
 	\begin{cases}
-		1 & \text{if}\ \text{solidus} \le \theta \le \text{liquidus}
+		1 & \text{where}\ \text{solidus} \le \theta \le \text{liquidus}
 		, 
 		\\
 		0 & \text{otherwise}
@@ -603,24 +603,22 @@ and hence $J_\textup{velocity}$ takes the following form:
 	J_\textup{velocity} 
 	=
 	\frac{\beta_\textup{velocity}}{2} \tau \sum_{n=0}^{N_t-1} \int_{\omega} \max \paren[big]\{\}{v(\theta_n, \theta_{n+1}) - v_{\max}, \; 0}^2 \cdot
-	\replaced[id=DS]{\chi_n(r, z)}{\chi(\theta_n)}
+	\chi(\theta_n, \theta_{n+1})
 	\, r \d r \d z
 \end{equation}
-\added[id=DS]{
 where the discretized indicator function $\chi$ is defined as
 \begin{equation}
-	\chi_n(r, z)
+	\chi(\theta_n, \theta_{n+1})
 	\coloneqq
 	\begin{cases}
-		1 & \text{if}\ \text{solidus} \le \theta_n\ \text{and}\ \theta_{n+1} < \text{liquidus}
+		1 & \text{where}\ \text{solidus} \le \theta_n\ \text{and}\ \theta_{n+1} < \text{liquidus}
 		,
 		\\
 		0 & \text{otherwise}
 		.
 	\end{cases}
 \end{equation}
-}
-% ge(theta_k, solidus), lt(theta_kp1, liquidus)
+
 The remaining penalty terms $J_\textup{completeness}$ and $J_\textup{control}$ are discretized according to
 \begin{align}
 	J_\textup{completeness} 
