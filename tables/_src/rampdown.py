@@ -17,7 +17,7 @@ tabulate._table_formats['latex_booktabs_raw'] = tabulate.TableFormat(
 
 headers = [
         r'pulse shape', 
-        r'temp',
+        r'welding depth',
         r'$J_\text{penetration}$',
         r'$J_\text{velocity}$',
         r'$J_\text{completeness}$',

@@ -20,7 +20,7 @@ headers = [
             r'$P_\text{YAG}$', 
             r'$T$',
             # r'penetration',
-            r'temp',
+            r'welding depth',
             r'$J_\text{penetration}$',
             r'$J_\text{velocity}$',
             r'$J_\text{completeness}$',
