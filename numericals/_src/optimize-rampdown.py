@@ -16,6 +16,9 @@ from optenv.problem import problem
 # parse command line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--outfile')
+parser.add_argument('--opt', dest='optimize', action='store_true')
+parser.add_argument('--no-opt', dest='optimize', action='store_false')
+parser.set_defaults(optimize=True)
 args = parser.parse_args()
 
 # parse simulation parameters from the outfile
@@ -44,16 +47,26 @@ problem.laser_pd = laser_pd
 # we use a lower laser power for the rampdown pulse to give space for optimization
 control = (P_YAG_rd / P_YAG) * linear_rampdown(time_domain.timeline, t1, t2)
 simulation = Simulation(problem, control)
-descent = gradient_descent(simulation, **parameters.gradient_descent)
-optimized = descent[-1]
+
+if args.optimize:
+    descent = gradient_descent(simulation, **parameters.gradient_descent)
+    optimized = descent[-1]
+else:
+    optimized = simulation
 
 # save the optimal control
 np.save(args.outfile, optimized.control)
 
 # prepare the report
+if t2 > t1:
+    pulse_shape = 'linear rampdown'
+else:
+    pulse_shape = 'conventional'
+
+if args.optimize:
+    pulse_shape += ' *'
 report = {
-    'P_YAG': optimized.problem.P_YAG,
-    'T': optimized.problem.time_domain.T,
+    'pulse_shape': pulse_shape,
     'welding_depth_max': optimized.welding_depth_vector.max(),
     'penalty_welding_total': optimized.penalty_welding_total,
     'penalty_velocity_total': optimized.penalty_velocity_total,

@@ -9,6 +9,8 @@ ZEROGUESS_REPORTS = $(shell python3 optenv/filenames.py --experiment=zeroguess -
 
 RAMPDOWN_OPTCONTROLS = $(shell optenv/filenames.py --experiment=rampdown --type=optcontrols)
 RAMPDOWN_REPORTS = $(shell optenv/filenames.py --experiment=rampdown --type=reports)
+RAMPDOWN_NOOPT_CONTROLS = $(subst rampdown,rampdown-noopt, $(RAMPDOWN_OPTCONTROLS))
+RAMPDOWN_NOOPT_REPORTS = $(subst rampdown,rampdown-noopt, $(RAMPDOWN_REPORTS))
 
 PLOTS_ALL = plots/optimized/zeroguess.pdf plots/optimized/rampdown.pdf plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
 TABLES_ALL = tables/zeroguess.tex tables/rampdown.tex
@@ -39,14 +41,20 @@ plots/optimized/zeroguess.pdf: $(ZEROGUESS_OPTCONTROLS) plots/_src/zeroguess.py
 	mkdir -p plots/optimized
 	python3 plots/_src/zeroguess.py --outfile=$@
 
-plots/optimized/rampdown.pdf: $(RAMPDOWN_OPTCONTROLS) plots/_src/rampdown.py
+plots/optimized/rampdown.pdf: \
+		$(RAMPDOWN_OPTCONTROLS) \
+		$(RAMPDOWN_NOOPT_CONTROLS) \
+		plots/_src/rampdown.py
 	mkdir -p plots/optimized
 	python3 plots/_src/rampdown.py --outfile=$@
 
 tables/zeroguess.tex: $(ZEROGUESS_REPORTS) tables/_src/zeroguess.py
 	python3 tables/_src/zeroguess.py > tables/zeroguess.tex
 
-tables/rampdown.tex: $(RAMPDOWN_REPORTS) tables/_src/rampdown.py
+tables/rampdown.tex: \
+		$(RAMPDOWN_REPORTS) \
+		$(RAMPDOWN_NOOPT_REPORTS) \
+		tables/_src/rampdown.py
 	python3 tables/_src/rampdown.py > tables/rampdown.tex
 
 # since the grouped targets feature was introduces in make since v4.3
@@ -67,6 +75,12 @@ numericals/rampdown/%.npy: \
 	mkdir -p numericals/rampdown
 	python3 numericals/_src/optimize-rampdown.py --outfile=$@
 
+numericals/rampdown-noopt/%.json: numericals/rampdown-noopt/%.npy ;
+numericals/rampdown-noopt/%.npy: \
+			numericals/_src/optimize-rampdown.py \
+			$(OPTENV)
+	mkdir -p numericals/rampdown-noopt
+	python3 numericals/_src/optimize-rampdown.py --no-opt --outfile=$@
 
 plots.all: plots.coefficients plots.zeroguess plots.rampdown
 plots.coefficients: plots/coefficients/vhc.pdf plots/coefficients/kappa.pdf
@@ -77,7 +91,9 @@ tables.all: tables/zeroguess.tex tables/rampdown.tex
 
 numericals.all: numericals.zeroguess numericals.rampdown
 numericals.zeroguess: $(ZEROGUESS_OPTCONTROLS) $(ZEROGUESS_REPORTS)
-numericals.rampdown: $(RAMPDOWN_OPTCONTROLS) $(RAMPDOWN_REPORTS)
+numericals.rampdown: \
+		$(RAMPDOWN_OPTCONTROLS) $(RAMPDOWN_REPORTS) \
+		$(RAMPDOWN_NOOPT_CONTROLS) $(RAMPDOWN_NOOPT_REPORTS)
 
 clean.all: clean.plots clean.numericals
 	latexmk -C

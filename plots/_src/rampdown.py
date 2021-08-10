@@ -8,40 +8,44 @@ from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 from optipuls.utils.laser import linear_rampdown
 from optipuls.time import TimeDomain
 
-
 from parameters import font
 
+import optenv.parameters
 
 # parse command line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--outfile')
 args = parser.parse_args()
 
-P_YAG = 2000
-P_YAG_rd = 1500
-T = 0.012
-t1 = 0.005
-t2_times = [0.005, 0.010]
+# P_YAG = optenv.parameters.rampdown['power_max']
+# P_YAG_rd = optenv.parameters.rampdown['power_rampdown']
+# T = optenv.parameters.rampdown['T']
+# t1 = optenv.parameters.rampdown['t1']
+# t2s = optenv.parameters.rampdown['t2s']
 
 
-controls = [np.load(f'numericals/rampdown/{P_YAG}-{P_YAG_rd}-{t1:5.3f}-{t2:5.3f}-{T:5.3f}.npy')
-                    for t2 in t2_times]
-
+controls_opt = [
+        np.load(filename)
+        for filename in optenv.parameters.rampdown['optcontrols']
+        ]
+controls_noopt = [
+        np.load(filename.replace('rampdown', 'rampdown-noopt'))
+        for filename in optenv.parameters.rampdown['optcontrols']
+        ]
 
 matplotlib.rc('font', **font)
 
 fig, axes = plt.subplots(1, 2)
 fig.set_size_inches(5, 2)
 
-for ax, control, t2 in zip(axes, controls, t2_times):
+for ax, control_opt, control_noopt in zip(axes, controls_opt, controls_noopt):
     ax.plot(
-        (P_YAG_rd / P_YAG) * \
-            linear_rampdown(TimeDomain(T, len(control)).timeline, t1, t2),
+        control_noopt,
         alpha=0.3,
         color='blue',
         zorder=0
         )
-    ax.plot(control, color='blue', zorder=1)
+    ax.plot(control_opt, color='blue', zorder=1)
     ax.set_ylim(0, 1)
 
 plt.tight_layout()
