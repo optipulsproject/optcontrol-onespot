@@ -9,8 +9,7 @@ from optipuls.space import SpaceDomain
 # set up the problem
 problem = Problem()
 
-space_domain = SpaceDomain(0.0025, 0.0002, 0.0005)
-problem.space_domain = space_domain
+problem.space_domain = SpaceDomain(0.0025, 0.0002, 0.0005)
 
 # optimization parameters
 problem.beta_control = 10**2
