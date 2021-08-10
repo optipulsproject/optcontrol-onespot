@@ -44,3 +44,4 @@ problem.radiation_coeff = 2.26 * 10**-9
 problem.liquidus = dummy_material.liquidus
 problem.solidus = dummy_material.solidus
 problem.theta_init = dolfin.project(problem.temp_amb, problem.V)
+problem.absorb = 0.135

@@ -36,8 +36,7 @@ time_domain = TimeDomain(T, int(T * 10**4))
 problem.time_domain = time_domain
 
 # set laser's parameters
-absorb = 0.135
-laser_pd = (absorb * P_YAG) / (np.pi * problem.space_domain.R_laser**2)
+laser_pd = (problem.absorb * P_YAG) / (np.pi * problem.space_domain.R_laser**2)
 problem.P_YAG = P_YAG
 problem.laser_pd = laser_pd
 
