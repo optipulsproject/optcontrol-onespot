@@ -32,7 +32,7 @@ P_YAG, P_YAG_rd, t1, t2, T = \
 
 
 # initialize time_domain
-time_domain = TimeDomain(T, int(T * 10**4))
+time_domain = TimeDomain(T, int(T / problem.dt))
 problem.time_domain = time_domain
 
 # set laser's parameters

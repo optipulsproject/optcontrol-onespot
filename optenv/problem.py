@@ -22,8 +22,8 @@ problem.target_point = dolfin.Point(0, .7 * problem.space_domain.Z)
 problem.pow_ = 20
 
 # initialize FEM spaces
-problem.V = dolfin.FunctionSpace(space_domain.mesh, "CG", 1)
-problem.V1 = dolfin.FunctionSpace(space_domain.mesh, "DG", 0)
+problem.V = dolfin.FunctionSpace(problem.space_domain.mesh, "CG", 1)
+problem.V1 = dolfin.FunctionSpace(problem.space_domain.mesh, "DG", 0)
 
 # read the material properties and initialize equation coefficients
 dummy_material = material.from_file('optenv/material.json')
@@ -44,3 +44,6 @@ problem.liquidus = dummy_material.liquidus
 problem.solidus = dummy_material.solidus
 problem.theta_init = dolfin.project(problem.temp_amb, problem.V)
 problem.absorb = 0.135
+
+# time step (used to evaluate Nt), since TimeDomain is not assigned here
+problem.dt = 10**-4
