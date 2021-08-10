@@ -3,6 +3,7 @@
 import tabulate
 import json
 
+import optenv.parameters
 
 # a hack to define a missing table format
 tabulate._table_formats['latex_booktabs_raw'] = tabulate.TableFormat(
@@ -28,14 +29,13 @@ headers = [
             r'$J_\text{total}$',
           ]
 
-# warning: the next code block is duplicated in two scripts
-# move it to a separate module (DRY)
-powers = [1500, 2000, 2500]
-times =  [0.010, 0.015, 0.020]
+
+powers = optenv.parameters.zeroguess['powers']
+times = optenv.parameters.zeroguess['times']
 
 report_files = [
-        f'numericals/zeroguess/{P_YAG}-{T:5.3f}.json'
-            for T in times for P_YAG in powers
+        filename.replace('.npy', '.json')
+        for filename in optenv.parameters.zeroguess['optcontrols']
         ]
 ########################################
 
@@ -51,7 +51,7 @@ table = tabulate.tabulate(
         headers=headers,
         tablefmt='latex_booktabs_raw',
         colalign=('center', 'center', 'center', 'center', 'center', 'center', 'center', 'center'),
-        floatfmt=('.3f', '.3f', '.1f', '.4f', '.4f',  '.4f',  '.4f',  '.4f'),
+        floatfmt=('.3f', '.3f', '.7f', '.4f', '.4f',  '.4f',  '.4f',  '.4f'),
     )
 
 print(table)
