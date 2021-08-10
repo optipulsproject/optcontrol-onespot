@@ -4,7 +4,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
 
-from optenv.problem import dummy_material as material
+from optenv.problem import material
 from optenv.problem import vhc, polynomial_mid
 from parameters import font
 
