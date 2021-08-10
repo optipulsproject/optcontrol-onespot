@@ -24,6 +24,7 @@
 
 numericals/zeroguess
 numericals/rampdown
+numericals/rampdown-noopt
 
 tables/zeroguess.tex
 tables/rampdown.tex
