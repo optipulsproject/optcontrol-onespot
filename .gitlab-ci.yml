@@ -13,6 +13,7 @@ cache:
     - .cache/dijitso
     - numericals/zeroguess
     - numericals/rampdown
+    - numericals/rampdown-noopt
     - plots/coefficients
     - plots/optimized
     - tables
@@ -28,6 +29,7 @@ numericals:
     paths:
       - numericals/zeroguess
       - numericals/rampdown
+      - numericals/rampdown-noopt
 
 plots:
   stage: process
