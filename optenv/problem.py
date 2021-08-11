@@ -6,6 +6,10 @@ from optipuls.time import TimeDomain
 from optipuls.space import SpaceDomain
 import optipuls.material
 
+# set up dolfin
+dolfin.set_log_level(40)
+dolfin.parameters["form_compiler"]["quadrature_degree"] = 1
+
 # set up the problem
 problem = Problem()
 

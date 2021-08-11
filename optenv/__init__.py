@@ -8,7 +8,3 @@ of optipuls module is checked out.
 
 '''
 
-import dolfin
-
-dolfin.set_log_level(40)
-dolfin.parameters["form_compiler"]["quadrature_degree"] = 1
