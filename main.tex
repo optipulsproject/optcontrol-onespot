@@ -771,7 +771,7 @@ We observe that in both cases, we obtain apparently locally optimal pulse shapes
 \begin{table} 
 	\centering
 	\input{tables/rampdown}
-	\caption{Numerical report on simulations with the conventional and the linear rampdown pulse shapes), and their optimizations (*).}
+	\caption{Numerical report on simulations with the conventional and the linear rampdown pulse shapes, and based on them optimized * pulse shapes.}
 	\label{tab:rampdown}
 \end{table}
 
@@ -782,9 +782,8 @@ We observe that in both cases, we obtain apparently locally optimal pulse shapes
 
 In the search for obtain better pulse shapes, we now begin with the trivial initial guess $u_\textup{initial} \equiv 0$ with no power radiated by the laser. 
 With this initial guess, the target temperature is clearly not reached and the term $J_\textup{penetration}$, see \eqref{eq:J_penetration_discrete}, drives the pulse shape away from its initial value.
-\Cref{fig:zeroguess} shows the corresponding solutions to the optimal control problem with the vatiable maximal laser power and maximal welding time. 
+\Cref{fig:zeroguess} shows the corresponding solutions to the optimal control problem with the variable maximal laser power $P_\text{YAG}$ and maximal time $T$ until a full solidification.
 The corresponding numerical reports are presented in \cref{tab:zeroguess}.
-\added[id=RH]{\textbf{@DS: Here as well we need to present all problem and algorithm parameters please.}}
 
 \begin{figure} 
 	\centering
