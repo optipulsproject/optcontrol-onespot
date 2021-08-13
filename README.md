@@ -3,7 +3,7 @@ An Optimal Control Problem for Single Spot Laser Pulse Welding
 
 [![pipeline status](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/badges/master/pipeline.svg)](https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding/-/commits/master)
 
-This repository contains a manuscript which is a part of [OptiPuls][projectpage] project.
+This repository contains a fully reproducible manuscript which is a part of [OptiPuls][projectpage] project.
 
 ---
 
@@ -52,6 +52,8 @@ Since it can get quite tricky to install FEniCS, we also provide a bundle of doc
 
 ### Reproducing (local build)
 
+Prebuilt [optipuilsproject](https://hub.docker.com/orgs/optipulsproject) images can be used to reproduce the results provided docker is installed on your system.
+
 Once the depencdencies are satisfied, reproducing of the results is as simple as running `make` in the root of the project:
 ```
 git clone https://gitlab.hrz.tu-chemnitz.de/numapde/Publications/optimal-control-spot-welding
@@ -62,11 +64,11 @@ make -j$(nproc)
 Make will run the computations, produce the plots, the tables, and the final `manuscript-numapde-preprint.pdf` file.
 
 
-### Reproducing (build in docker)
+### Reproducing (local build in docker)
 
 Don't forget to build/pull the `optipuls`, `tabulate`, and `numapde/publications` docker images in advance.
 
-Compute & make plots:
+Make plots (entails making of the numerical artifacts):
 ```
 docker run \
   -v $(pwd):/home/fenics/shared \
@@ -88,7 +90,7 @@ Make paper:
 docker run \
   -u $UID \
   -v $(pwd):/data \
-  numapde/publications:latest \
+  optipulsproject/publications:latest \
   make preprint
 ```
 
