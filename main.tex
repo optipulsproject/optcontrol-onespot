@@ -575,6 +575,7 @@ The unknown coefficient vectors $[\theta_1, \theta_2, \ldots, \theta_{N_t}]$ at 
 
 
 \subsection{Discretization of the Objective Functional}
+\label{subsec:disc_objective}
 
 To derive the discrete version of $J_\textup{penetration}$, we can discretize the $L^p$-norm in \eqref{eq:J_penetration} according to
 \begin{equation*}
@@ -712,46 +713,41 @@ More details can be found in the implementation at \cite[\texttt{optipuls.optimi
 \added[id=RH]{\textbf{@RH: continue revision here}}
 
 In this section we present some optimized laser pulses, \ie, numerical solutions to the discretized counterpart of the single-spot welding optimal control problem \eqref{eq:J}.
-We emphasize that all the numerical results presented in this paper are fully reproducible and hence can be verified by the reader; see \cite{optcontrol_github} for further instructions. 
+We emphasize that all the numerical results presented in this paper are fully reproducible and hence can be verified by the reader; see \cite{optcontrol_github} \added[id=DS]{\textbf{This link must be replaced by the link to the paper repo.}} for further instructions.
 
-The numerical experiments provided in this section share the following parameters (see \cite[\texttt{env/problem.py}]{optcontrol_github}):
+The common problem parameters shared by the numerical experiments presented in this section are provided in \cref{tab:parameters} (see also \cite[\texttt{env/problem.py}]{optcontrol_github}). Notice that the threshold temperature $\theta_\text{threshold}$ in \cref{tab:parameters} is intentionally set significantly higher than the desired maximal temperature at the targer point ($\text{liquidus} = \SI{923}{\K}$), since
+$\|\theta(x_\text{target}, , \cdot)\|_p \le \|\theta(x_\text{target}, \cdot)\|_\infty$ (see \cref{subsec:disc_objective}).
 
-\added[id=DS]{\textbf{I will work on the layout of the listed parameters.}}
+\begin{table}[ht]
+	\begin{tabular}{rl}
+		\textbf{space domain} \\
+		radius of the cylinder $\Omega$ & $\SI{2.5}{\mm}$ \\
+		height of the cylinder $\Omega$ & $\SI{0.5}{\mm}$ \\
+		radius of the laser beam        & $\SI{0.2}{\mm}$\\[0.5em]
 
-\begin{description}
-	\item [space domain] \mbox{} \\
-		\begin{tabular}{rl}
-			radius of the cylinder $\Omega$ & $\SI{2.5}{\mm}$ \\
-			height of the cylinder $\Omega$ & $\SI{0.5}{\mm}$ \\
-			radius of the laser beam $\Omega$ & $\SI{0.2}{\mm}$
-		\end{tabular}
+		\textbf{equation and boundary conditions} \\
+		ambience temperature & $\theta_\text{amb} = \SI{295}{\K}$ \\
+		convective heat transfer coefficient & $h = 20$ \\
+		radiative heat transfer coefficient & $k = 2.26 \cdot 10^{-9}$\\[0.5em]
 
-	\item [equation and boundary conditions] \mbox{} \\
-		\begin{tabular}{rl}
-			ambience temperature & $\theta_\text{amb} = \SI{295}{\K}$ \\
-			convective heat transfer coefficient & $h = 20$ \\
-			radiative heat transfer coefficient & $k = 2.26 \cdot 10^{-9}$
-		\end{tabular}
+		\textbf{objective functional} \\
+		welding penetration penalty coefficient & $\beta_\text{penetration} = 10^{-2}$ \\
+		solidification velocity penalty coefficient & $\beta_\text{velocity} = 1.5 \cdot 10^{-1}$ \\
+		welding completeness penalty coefficient & $\beta_\text{completeness} = 10^{-12}$ \\
+		energy consumption penalty coefficient & $\beta_\text{control} = 10^{2}$ \\
+		target point & $z_\text{target} = 0.00035$ (welding depth \SI{0.00015}{\mm}) \\
+		target maximal temperature at the targer point & $\theta_\text{theshold} = \SI{1000}{\K}$ \\
+		$p$-norm in time domain& $p = 20$\\[0.5em]
 
-	\item [objective functional] \mbox{} \\
-		\begin{tabular}{rl}
-			welding penetration penalty coefficient & $\beta_\text{penetration} = 10^{-2}$ \\
-			solidification velocity penalty coefficient & $\beta_\text{velocity} = 1.5 \cdot 10^{-1}$ \\
-			welding completeness penalty coefficient & $\beta_\text{completeness} = 10^{-12}$ \\
-			energy consumption penalty coefficient & $\beta_\text{control} = 10^{2}$ \\
-			target maximal temperature at the targer point & $\theta_\text{theshold} = \SI{1000}{\K}$ \\
-		    $p$-norm in time domain& $p = 20$
-		\end{tabular}
-
-	\item [material properties] \mbox{} \\
-		\begin{tabular}{rl}
-			solidus point & $\SI{858}{\K}$ \\
-			liquidus point & $\SI{923}{\K}$ \\
-			enthalpy of fusion & $\SI{397000}{\J}$ \\
-			coefficients $s(\theta)$ and $\kappa(\theta)$ & discussed in section~\ref{sec:modelling}, see Figure~\ref{fig:coef}
-		\end{tabular}
-\end{description}
-
+		\textbf{material properties} \\
+		solidus point & $\SI{858}{\K}$ \\
+		liquidus point & $\SI{923}{\K}$ \\
+		enthalpy of fusion & $\SI{397000}{\J}$ \\
+		coefficients $s(\theta)$ and $\kappa(\theta)$ & discussed in \cref{sec:modelling}, see \cref{fig:coef} \\
+	\end{tabular}
+	\caption{Parameters of the numerical experiments}
+	\label{tab:parameters}
+\end{table}
 
 \subsection{Conventional and Linear Rampdown Pulse Shapes}
 
@@ -760,7 +756,7 @@ Unfortunately, this simple strategy often leads to hot-cracking when applied to 
 A so-called linear rampdown pulse shape, \ie when the laser power is decreasing linearly after a short period of working full power, has shown its potential to maintain a crack-free welding of aluminum alloys; see \cite{JiaZhangYuShiLiuWuYeWangTian:2021:1}.
 However, ramp-down pulses are not likely to be optimal with respect to any of the criteria established in \cref{sec:optimal_control_problem}.
 
-In view of this we first consider the convential ($\SI{5}{\ms}$ of $\SI{1500}{\W}$) and the linear rampdown ($\SI{5}{\ms}$ of $\SI{1500}{\W}$, $\SI{5}{\ms}$ of rampdown) pulse shapes as the initial guess $u_\textup{initial}$ for the optimizer. In both of these experiments the maximal laser power is limited by $\SI{2000}{\W}$ and the time is limited by $\SI{12}{\ms}$ (\added[id=DS]{\textbf{see ...}}).
+In view of this we first consider the convential ($\SI{5}{\ms}$ of $\SI{1500}{\W}$) and the linear rampdown ($\SI{5}{\ms}$ of $\SI{1500}{\W}$, $\SI{5}{\ms}$ of rampdown) pulse shapes as the initial guess $u_\textup{initial}$ for the optimizer. In both of these experiments the maximal laser power $P_\text{YAG}$ is limited by $\SI{2000}{\W}$ and the total time $T$ is limited by $\SI{12}{\ms}$.
 \Cref{fig:rampdown} demonstrates the corresponding solutions to the optimal control problem obtained with \cref{alg:projected_gradient_descent}.
 The numerical reports on the corresponing simulations are presented in \cref{tab:rampdown}.
 We observe that in both cases, we obtain apparently locally optimal pulse shapes which differ very little from their respective initial guesses.
@@ -775,7 +771,7 @@ We observe that in both cases, we obtain apparently locally optimal pulse shapes
 \begin{table} 
 	\centering
 	\input{tables/rampdown}
-	\caption{Results for an optimization with conventional and linear rampdown initial guesses.}
+	\caption{Numerical report on simulations with the conventional and the linear rampdown pulse shapes), and their optimizations (*).}
 	\label{tab:rampdown}
 \end{table}
 
@@ -800,7 +796,7 @@ The corresponding numerical reports are presented in \cref{tab:zeroguess}.
 \begin{table} 
 	\centering
 	\input{tables/zeroguess}
-	\caption{Results of the optimization with zero initial guess (sketch)\ldots}
+	\caption{Numerical report on the series of optimizations with zero initial guess.}
 	\label{tab:zeroguess}
 \end{table}
 
