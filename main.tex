@@ -800,6 +800,10 @@ The corresponding numerical reports are presented in \cref{tab:zeroguess}.
 \end{table}
 
 
-\subsection{Optimizations from Zero Initial Guess}
+\subsection{Discussion on the Obtained Numerical Results}
 
-\added[id=RH]{\textbf{@DS: A discussion on optimized laser power profiles needs to be added.}}
+One can see from~\cref{tab:rampdown} that the concentional pulse shape is far from being optimal since it leads to enormous solidification velocity rates. Even its local optimization is not able to solve this issue. Nevertheless the linear rampdown pulse shape seems to essentially reduce the solidification velocity and its local optimization is even able to keep the velocity rates withing the permitted limit $v_{\max}$. A successful crack-free welding of aluminium alloys using the linear rampdown pulse shape was confirmed experimentally \added[id=DS]{\textbf{citation needed}}.
+
+However, the results of optimizations with zero initial guess in \cref{tab:zeroguess} show that the further optimization is still possible and the optimal pulse shapes are quite untrivial to guess them experimentally. One can see on from \cref{tab:zeroguess} and \cref{fig:zeroguess} that the reasonably small penalty values can be obtained only if the optimizer has enough room to adjust the pulse shape in time and power dimensions.
+
+In the pulse shapes limited by $\SI{10}{\ms}$ the small swing-ups close to the end appear as a result of compensation of the too fast solidification velocity. Despite such pulse shapes solve the formal optimization problem they do not seem reasonable for the practical application. For the presented optimization problem setup the most reasonable optimal pulse shape would be the one obtained by limiting the maximal laser's power by $\SI{2100}{\W}$ and the total time by $\SI{15}{\ms}$.
