@@ -78,7 +78,7 @@ docker run \
 
 Make tables:
 ```
-$ docker run \
+docker run \
   -u $UID \
   -v $(pwd):/data \
   optipulsproject/tabulate:latest \
@@ -93,6 +93,29 @@ docker run \
   optipulsproject/publications:latest \
   make preprint
 ```
+
+
+### Reproducing (local build in docker using precomputed artifacts)
+
+In order to not carry the heavy computations locally, you may [download][gitlab-numericals-download] the latest numerical artifacts built by GitLab CI.
+
+1. Clone the repocitory and open its directory:
+```
+git clone git@gitlab.hrz.tu-chemnitz.de:numapde/Publications/optimal-control-spot-welding.git
+cd optimal-control-spot-welding
+```
+
+2. Unpack the downloaded numerical artifacts into `optimal-control-spot-welding` directory:
+```
+unzip -o artifacts.zip
+```
+
+3. Update the modification time of the numerical artifacts so they are treated up-to-date:
+```
+touch numericals/{rampdown,rampdown-noopt,zeroguess}/*
+```
+
+4. Run the steps of the previous section. The numerical artifacts won't be recomputed.
 
 
 ### GitLab CI/CD artifacts
