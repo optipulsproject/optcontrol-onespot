@@ -7,7 +7,7 @@ gradient_descent = {
 
 # parameters for the bundle of experiments based on zero initial guess
 zeroguess = {
-    'powers': [1500, 2000, 2500],
+    'powers': [1500, 1800, 2100],
     'times': [0.010, 0.015, 0.020],
 }
 
