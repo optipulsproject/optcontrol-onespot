@@ -715,8 +715,7 @@ More details can be found in the implementation at \cite[\texttt{optipuls.optimi
 In this section we present some optimized laser pulses, \ie, numerical solutions to the discretized counterpart of the single-spot welding optimal control problem \eqref{eq:J}.
 We emphasize that all the numerical results presented in this paper are fully reproducible and hence can be verified by the reader; see \cite{optcontrol_github} \added[id=DS]{\textbf{This link must be replaced by the link to the paper repo.}} for further instructions.
 
-The common problem parameters shared by the numerical experiments presented in this section are provided in \cref{tab:parameters} (see also \cite[\texttt{env/problem.py}]{optcontrol_github}). Notice that the threshold temperature $\theta_\text{threshold}$ in \cref{tab:parameters} is intentionally set significantly higher than the desired maximal temperature at the targer point ($\text{liquidus} = \SI{923}{\K}$), since
-$\|\theta(x_\text{target}, , \cdot)\|_p \le \|\theta(x_\text{target}, \cdot)\|_\infty$ (see \cref{subsec:disc_objective}).
+The common problem parameters shared by the numerical experiments presented in this section are provided in \cref{tab:parameters} (see also \cite[\texttt{env/problem.py}]{optcontrol_github}). Notice that the threshold temperature $\theta_\text{threshold}$ in \cref{tab:parameters} is intentionally set significantly higher than the desired maximal temperature at the targer point ($\text{liquidus} = \SI{923}{\K}$), since the $p$-norm of $\theta(x_\text{target}, \cdot)$ appears to be smaller than the corresponding $\infty$-norm for the chosen list of parameters (see \cref{subsec:disc_objective}).
 
 \begin{table}[ht]
 	\begin{tabular}{rl}
