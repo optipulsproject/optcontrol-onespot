@@ -21,7 +21,7 @@ RAMPDOWN_NOOPT_REPORTS = $(subst rampdown,rampdown-noopt, $(RAMPDOWN_REPORTS))
 
 # a workaround to make optenv package visible for the python scripts
 # works only if make is called from the project root dir (which is normally the case)
-# export PYTHONPATH = :
+export PYTHONPATH = :
 
 
 preprint: $(MANUSCRIPT_PREPRINT_PDF)
