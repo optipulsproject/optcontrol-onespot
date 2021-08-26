@@ -6,7 +6,6 @@ import numpy as np
 
 from optenv.problem import material
 from optenv.problem import vhc, polynomial_mid
-from parameters import font
 
 
 # parse command line arguments
@@ -25,7 +24,7 @@ density = material.density
 values = [c*d for (c,d,k) in zip(heat_capacity,density,knots)]
 
 # setup the plot
-matplotlib.rc('font', **font)
+plt.style.use('plots/_src/preprint.mplstyle')
 
 fig, ax = plt.subplots()
 

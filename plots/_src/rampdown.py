@@ -5,10 +5,6 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
-# from optipuls.utils.laser import linear_rampdown
-# from optipuls.time import TimeDomain
-
-from parameters import font
 
 import optenv.parameters
 
@@ -33,7 +29,7 @@ controls_noopt = [
         for filename in optenv.parameters.rampdown['optcontrols']
         ]
 
-matplotlib.rc('font', **font)
+plt.style.use('plots/_src/preprint.mplstyle')
 
 fig, axes = plt.subplots(1, 2)
 fig.set_size_inches(5, 2)

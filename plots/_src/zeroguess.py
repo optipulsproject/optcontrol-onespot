@@ -5,7 +5,6 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib import ticker
 
-from parameters import font
 from optenv import parameters
 
 # parse command line arguments
@@ -22,7 +21,7 @@ times =  parameters.zeroguess['times']
 #         for filename in parameters.zeroguess['optcontrols']
 #         ]
 
-matplotlib.rc('font', **font)
+plt.style.use('plots/_src/preprint.mplstyle')
 
 fig = plt.figure()
 fig.set_size_inches(6, 5)

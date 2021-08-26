@@ -6,7 +6,6 @@ import numpy as np
 
 from optenv.problem import material
 from optenv.problem import kappa_rad, kappa_ax
-from parameters import font
 
 
 # parse command line arguments
@@ -22,7 +21,7 @@ values = material.kappa_rad[:7]
 
 
 # setup the plot
-matplotlib.rc('font', **font)
+plt.style.use('plots/_src/preprint.mplstyle')
 
 fig, ax = plt.subplots()
 
