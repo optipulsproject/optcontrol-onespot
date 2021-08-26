@@ -21,8 +21,8 @@ problem.beta_velocity = 10**18
 problem.velocity_max = 0.15
 problem.beta_liquidity = 10**12
 problem.beta_welding = 10**-2
-problem.threshold_temp = 1000.
-problem.target_point = dolfin.Point(0, .7 * problem.space_domain.Z)
+problem.threshold_temp = 1048.
+problem.target_point = dolfin.Point(0, .75 * problem.space_domain.Z)
 problem.pow_ = 20
 
 # initialize FEM spaces

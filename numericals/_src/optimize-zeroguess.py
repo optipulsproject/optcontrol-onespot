@@ -42,7 +42,7 @@ np.save(args.outfile, optimized.control)
 report = {
     'P_YAG': optimized.problem.P_YAG,
     'T': optimized.problem.time_domain.T,
-    'welding_depth_max': optimized.welding_depth_vector.max(),
+    'welding_depth_max': optimized.welding_depth_vector.max() * 1000.,
     'penalty_welding_total': optimized.penalty_welding_total,
     'penalty_velocity_total': optimized.penalty_velocity_total,
     'penalty_liquidity_total': optimized.penalty_liquidity_total,

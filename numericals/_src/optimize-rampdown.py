@@ -67,7 +67,7 @@ if args.optimize:
     pulse_shape += ' *'
 report = {
     'pulse_shape': pulse_shape,
-    'welding_depth_max': optimized.welding_depth_vector.max(),
+    'welding_depth_max': optimized.welding_depth_vector.max() * 1000.,
     'penalty_welding_total': optimized.penalty_welding_total,
     'penalty_velocity_total': optimized.penalty_velocity_total,
     'penalty_liquidity_total': optimized.penalty_liquidity_total,
