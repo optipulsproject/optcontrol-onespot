@@ -54,7 +54,7 @@ table = tabulate.tabulate(
         headers=headers,
         tablefmt='latex_booktabs_raw',
         colalign=('left', 'center', 'center', 'center', 'center', 'center', 'center'),
-        floatfmt=('.3f', '.7f', '.4f', '.4f',  '.4f',  '.4f',  '.4f'),
+        floatfmt=('.3f', '.5f', '.4f', '.4f',  '.4f',  '.4f',  '.4f'),
     )
 
 print(table)
