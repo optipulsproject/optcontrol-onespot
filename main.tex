@@ -111,7 +111,7 @@ Therefore, we construct $s(\theta)$ using the following procedure:
 	\item 
 		We choose a $C^1$ cubic spline by filling the liquidus--solidus temperature gap with the uniquely defined cubic polynomial.
 	\item 
-		In the liquidus--solidus interval, we add without loss of smoothness a cubic spline \added[id=DS]{(consisting of two cubic polynomials)} whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
+		In the liquidus--solidus interval, we add without loss of smoothness a cubic spline (consisting of two cubic polynomials) whose integral over the considered interval is equal to the enthalpy of fusion of the selected alloy.
 \end{enumerate}
 
 We do not present the above procedure in terms of cumbersome formulas but limit ourselves here to a plot of the resulting effective volumetric heat capacity function; see \cref{fig:coef}.
@@ -123,7 +123,7 @@ We do not present the above procedure in terms of cumbersome formulas but limit 
 Convective heat transfer in the liquid phase becomes the next modeling challenge caused by the phase transition. 
 Due to the Marangoni effect, see \cite{MillsKeeneBrooksShirali:1998:1,Saldi:2012:1}, once the solidus point is passed, the heat transfer in the melting pool significantly increases in radial direction and decreases in axial direction (see \cref{fig:cylinder} for the coordinate axes).
 In order to not include the convection term into the core equation we approximate linearly the thermal conductivity coefficient $\kappa(\theta)$ to its measured values in the solid state, and then extrapolate it (separately for the radial and the axial directions) to the temperatures above the liquidus with experimentally selected constants. 
-\added[id=RH]{Convective} heat transfer in the angular direction is assumed to be zero.
+Convective heat transfer in the angular direction is assumed to be zero.
 As a result, we have a matrix-valued effective thermal conductivity function $\kappa(\theta) = \diag(\kappa_\textup{ax}(\theta), \kappa_\textup{rad}(\theta),\; 0)$ in diagonal form in a cylindrical coordinate system.
 
 The exact algorithm used for constructing $\kappa(\theta)$ (and also $s(\theta)$) can be inspected in code in \cite[\texttt{optipuls.coefficients}]{optipuls_github}. 
@@ -307,8 +307,8 @@ Therefore, we can define the \emph{velocity of any isothermal surface} passing t
 
 \begin{figure}
 	\centering
-	\input{plots/tikz/solidification_velocity}
-	\caption{\added[id=DS]{\textbf{Draft:}} solidification interface and its velocity (sectional view).}
+	\input{plots/tikz/solidification-velocity}
+	\caption{Solidification interface and its velocity during the cooling stage (sectional view).}
 	\label{fig:velocity}
 \end{figure}
 
@@ -655,7 +655,7 @@ To this end, we introduce the Lagrangian
 \end{multline}
 The sequence of linear systems governing the discrete adjoint state is obtained from $\partial \cL(\theta,u,p)/\partial \theta_n = 0$.
 We do not provide the explicit formula for the adjoint equation here since in the code we derive it using \fenics' built-in automatic differentiation capabilities.
-The only manual differentiation required is for the penalty term $J_\textup{penetration}$ in \eqref{eq:J_penetration_discrete}, \added[id=DS]{since in contrast to the other terms, it cannot be split into a sum over the time steps}.
+The only manual differentiation required is for the penalty term $J_\textup{penetration}$ in \eqref{eq:J_penetration_discrete}, since in contrast to the other terms, it cannot be split into a sum over the time steps.
 We added the contributions coming from this term manually to the adjoint state's right hand side.
 One can find more details in \cite[\texttt{optipuls.core}]{optipuls_github}.
 
@@ -713,9 +713,16 @@ More details can be found in the implementation at \cite[\texttt{optipuls.optimi
 \added[id=RH]{\textbf{@RH: continue revision here}}
 
 In this section we present some optimized laser pulses, \ie, numerical solutions to the discretized counterpart of the single-spot welding optimal control problem \eqref{eq:J}.
-We emphasize that all the numerical results presented in this paper are fully reproducible and hence can be verified by the reader; see \cite{optcontrol_github} \added[id=DS]{\textbf{This link must be replaced by the link to the paper repo.}} for further instructions.
+We emphasize that all the numerical results presented in this paper are fully reproducible and hence can be verified by the reader; see \cite{optcontrol_github} for further instructions.
 
-The common problem parameters shared by the numerical experiments presented in this section are provided in \cref{tab:parameters} (see also \cite[\texttt{env/problem.py}]{optcontrol_github}). Notice that the threshold temperature $\theta_\text{threshold}$ in \cref{tab:parameters} is intentionally set significantly higher than the desired maximal temperature at the targer point ($\text{liquidus} = \SI{923}{\K}$), since the $p$-norm of $\theta(x_\text{target}, \cdot)$ appears to be smaller than the corresponding $\infty$-norm for the chosen list of parameters (see \cref{subsec:disc_objective}).
+The common problem parameters shared by the numerical experiments presented in this section are provided in \cref{tab:parameters} (see also \cite[\texttt{env/problem.py}]{optcontrol_github}).
+
+
+Notice that the threshold temperature $\theta_\text{threshold}$ in \cref{tab:parameters} is intentionally set higher than the desired maximal temperature at the targer point ($\text{liquidus} = \SI{923}{\K}$), since
+\begin{equation} \label{eq:p-norm_ineq}
+	\|\theta(x_\text{target}, \cdot)\|_p \le T^\frac{1}{p} \|\theta(x_\text{target}, \cdot)\|_{\infty} < \|\theta(x_\text{target}, \cdot)\|_{\infty},
+\end{equation}
+see \cref{subsec:disc_objective}. The exact value was chosen by trial and error.
 
 \begin{table}[ht]
 	\begin{tabular}{rl}
@@ -726,16 +733,16 @@ The common problem parameters shared by the numerical experiments presented in t
 
 		\textbf{equation and boundary conditions} \\
 		ambience temperature & $\theta_\text{amb} = \SI{295}{\K}$ \\
-		convective heat transfer coefficient & $h = 20$ \\
-		radiative heat transfer coefficient & $k = 2.26 \cdot 10^{-9}$\\[0.5em]
+		convective heat transfer coefficient & $h = 20\, \si{\W\per\m^2}$\\
+		radiative heat transfer coefficient & $k = 2.26 \cdot 10^{-9}\, \si{\W\per\m^2\K^4}$\\[0.5em]
 
 		\textbf{objective functional} \\
 		welding penetration penalty coefficient & $\beta_\text{penetration} = 10^{-2}$ \\
 		solidification velocity penalty coefficient & $\beta_\text{velocity} = 1.5 \cdot 10^{-1}$ \\
 		welding completeness penalty coefficient & $\beta_\text{completeness} = 10^{-12}$ \\
 		energy consumption penalty coefficient & $\beta_\text{control} = 10^{2}$ \\
-		target point & $z_\text{target} = 0.00035$ (welding depth \SI{0.00015}{\mm}) \\
-		target maximal temperature at the targer point & $\theta_\text{theshold} = \SI{1000}{\K}$ \\
+		target point & $z_\text{target} = \SI{0.375}{\mm}$ (welding depth $\SI{0.125}{\mm}$) \\
+		target maximal temperature at the targer point & $\theta_\text{theshold} = \SI{1048}{\K}$ \\
 		$p$-norm in time domain& $p = 20$\\[0.5em]
 
 		\textbf{material properties} \\
@@ -755,9 +762,9 @@ Unfortunately, this simple strategy often leads to hot-cracking when applied to 
 A so-called linear rampdown pulse shape, \ie when the laser power is decreasing linearly after a short period of working full power, has shown its potential to maintain a crack-free welding of aluminum alloys; see \cite{JiaZhangYuShiLiuWuYeWangTian:2021:1}.
 However, ramp-down pulses are not likely to be optimal with respect to any of the criteria established in \cref{sec:optimal_control_problem}.
 
-In view of this we first consider the convential ($\SI{5}{\ms}$ of $\SI{1500}{\W}$) and the linear rampdown ($\SI{5}{\ms}$ of $\SI{1500}{\W}$, $\SI{5}{\ms}$ of rampdown) pulse shapes as the initial guess $u_\textup{initial}$ for the optimizer. In both of these experiments the maximal laser power $P_\text{YAG}$ is limited by $\SI{2000}{\W}$ and the total time $T$ is limited by $\SI{12}{\ms}$.
+In view of this we first consider the convential ($\SI{5}{\ms}$ of $\SI{1200}{\W}$) and the linear rampdown ($\SI{5}{\ms}$ of $\SI{1200}{\W}$, $\SI{5}{\ms}$ of rampdown) pulse shapes as the initial guess $u_\textup{initial}$ for the optimizer. In both of these experiments the maximal laser power $P_\text{YAG}$ is limited by $\SI{2000}{\W}$ and the total time $T$ is limited by $\SI{12}{\ms}$.
 \Cref{fig:rampdown} demonstrates the corresponding solutions to the optimal control problem obtained with \cref{alg:projected_gradient_descent}.
-The numerical reports on the corresponing simulations are presented in \cref{tab:rampdown}.
+The numerical reports on the corresponing simulations are presented in \cref{tab:rampdown}. Notice that a not perfect match between the evaluated welding depth and the $J_\text{penetration}$ penalty is due to the $p$-norm approximation to the sup-norm of $\theta(x_\text{target}, \cdot)$, see~\eqref{eq:p-norm_ineq}.
 We observe that in both cases, we obtain apparently locally optimal pulse shapes which differ very little from their respective initial guesses.
 
 \begin{figure} 
@@ -773,8 +780,6 @@ We observe that in both cases, we obtain apparently locally optimal pulse shapes
 	\caption{Numerical report on simulations with the conventional and the linear rampdown pulse shapes, and based on them optimized * pulse shapes.}
 	\label{tab:rampdown}
 \end{table}
-
-\added[id=RH]{\textbf{@DS: the table headers in \cref{tab:rampdown} need to be completed and explained in the text.}}
 
 
 \subsection{Optimizations from Zero Initial Guess}
@@ -801,7 +806,7 @@ The corresponding numerical reports are presented in \cref{tab:zeroguess}.
 
 \subsection{Discussion on the Obtained Numerical Results}
 
-One can see from~\cref{tab:rampdown} that the concentional pulse shape is far from being optimal since it leads to enormous solidification velocity rates. Even its local optimization is not able to solve this issue. Nevertheless the linear rampdown pulse shape seems to essentially reduce the solidification velocity and its local optimization is even able to keep the velocity rates withing the permitted limit $v_{\max}$. A successful crack-free welding of aluminium alloys using the linear rampdown pulse shape was confirmed experimentally \added[id=DS]{\textbf{citation needed}}.
+One can see from~\cref{tab:rampdown} that the concentional pulse shape is far from being optimal since it leads to enormous solidification velocity rates. Even its local optimization is not able to solve this issue. Nevertheless the linear rampdown pulse shape seems to essentially reduce the solidification velocity and its local optimization is even able to keep the velocity rates withing the permitted limit $v_{\max}$. A successful crack-free welding of aluminium alloys using the linear rampdown pulse shape was confirmed experimentally, see \cite{ZhangWeckmanZhou:2008:1,JiaZhangYuShiLiuWuYeWangTian:2021:1}.
 
 However, the results of optimizations with zero initial guess in \cref{tab:zeroguess} show that the further optimization is still possible and the optimal pulse shapes are quite untrivial to guess them experimentally. One can see on from \cref{tab:zeroguess} and \cref{fig:zeroguess} that the reasonably small penalty values can be obtained only if the optimizer has enough room to adjust the pulse shape in time and power dimensions.
 
